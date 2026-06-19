@@ -2,6 +2,11 @@
 // يوفّر أوامر لحفظ مفاتيح API في الـ OS Keychain واختبار الاتصال بالمزوّد.
 
 use keyring::Entry;
+use tauri::{
+    menu::{Menu, MenuItem},
+    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    Manager, WindowEvent,
+};
 
 // اسم الخدمة المستخدَم في الـ Keychain
 const SERVICE_NAME: &str = "prompt-iterator-desktop";
@@ -67,6 +72,59 @@ async fn test_api_connection(base_url: String, api_key: String) -> Result<bool, 
     Ok(response.status().is_success())
 }
 
+/// إظهار النافذة الرئيسية وإعطاؤها التركيز
+fn show_main_window(app: &tauri::AppHandle) {
+    if let Some(window) = app.get_webview_window("main") {
+        let _ = window.show();
+        let _ = window.unminimize();
+        let _ = window.set_focus();
+    }
+}
+
+/// بناء أيقونة شريط النظام (System Tray) مع قائمة: إظهار / إخفاء / خروج
+fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
+    let show = MenuItem::with_id(app, "show", "إظهار", true, None::<&str>)?;
+    let hide = MenuItem::with_id(app, "hide", "إخفاء", true, None::<&str>)?;
+    let quit = MenuItem::with_id(app, "quit", "خروج", true, None::<&str>)?;
+    let menu = Menu::with_items(app, &[&show, &hide, &quit])?;
+
+    TrayIconBuilder::with_id("main-tray")
+        .icon(app.default_window_icon().unwrap().clone())
+        .tooltip("Prompt Iterator")
+        .menu(&menu)
+        .show_menu_on_left_click(false) // القائمة باليمين فقط
+        .on_menu_event(|app, event| match event.id.as_ref() {
+            "show" => show_main_window(app),
+            "hide" => {
+                if let Some(window) = app.get_webview_window("main") {
+                    let _ = window.hide();
+                }
+            }
+            "quit" => app.exit(0),
+            _ => {}
+        })
+        .on_tray_icon_event(|tray, event| {
+            // النقر الأيسر يبدّل ظهور النافذة (إظهار/إخفاء)
+            if let TrayIconEvent::Click {
+                button: MouseButton::Left,
+                button_state: MouseButtonState::Up,
+                ..
+            } = event
+            {
+                let app = tray.app_handle();
+                if let Some(window) = app.get_webview_window("main") {
+                    if window.is_visible().unwrap_or(false) {
+                        let _ = window.hide();
+                    } else {
+                        show_main_window(app);
+                    }
+                }
+            }
+        })
+        .build(app)?;
+    Ok(())
+}
+
 /// تهيئة وتشغيل تطبيق Tauri وتسجيل الأوامر الخمسة
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -78,6 +136,17 @@ pub fn run() {
             has_api_key,
             test_api_connection
         ])
+        .setup(|app| {
+            setup_tray(app)?;
+            Ok(())
+        })
+        // إغلاق النافذة (X) يُخفيها إلى شريط النظام بدل إنهاء التطبيق
+        .on_window_event(|window, event| {
+            if let WindowEvent::CloseRequested { api, .. } = event {
+                let _ = window.hide();
+                api.prevent_close();
+            }
+        })
         .run(tauri::generate_context!())
         .expect("خطأ أثناء تشغيل تطبيق Tauri");
 }

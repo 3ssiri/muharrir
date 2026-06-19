@@ -17,7 +17,6 @@
   "dependencies": {
     "@ai-sdk/openai": "^3.0.9",
     "@ai-sdk/react": "^3.0.35",
-    "@tauri-apps/api": "^2",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-avatar": "^1.1.11",
@@ -35,6 +34,7 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@tauri-apps/api": "^2",
     "ai": "^6.0.33",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

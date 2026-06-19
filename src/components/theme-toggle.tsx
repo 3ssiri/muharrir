@@ -67,12 +67,12 @@ export function ThemeToggle() {
       className="h-9 w-9 relative overflow-hidden"
       onClick={handleThemeChange}
     >
-      <Sun className={`h-4 w-4 absolute transition-all duration-[800ms] ease-in-out ${
+      <Sun className={`h-4 w-4 absolute transition-all [transition-duration:800ms] ease-in-out ${
         theme === 'dark'
           ? 'rotate-0 scale-100 opacity-100'
           : 'rotate-90 scale-0 opacity-0'
       }`} />
-      <Moon className={`h-4 w-4 absolute transition-all duration-[800ms] ease-in-out ${
+      <Moon className={`h-4 w-4 absolute transition-all [transition-duration:800ms] ease-in-out ${
         theme === 'dark'
           ? '-rotate-90 scale-0 opacity-0'
           : 'rotate-0 scale-100 opacity-100'
