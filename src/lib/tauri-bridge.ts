@@ -62,3 +62,17 @@ export async function testApiConnection(baseUrl: string, apiKey: string): Promis
     return false;
   }
 }
+
+/** فتح رابط خارجي: في Tauri عبر متصفّح/تطبيق النظام، وفي المتصفّح عبر علامة <a> */
+export async function openExternal(url: string): Promise<void> {
+  if (isTauriApp()) {
+    const { openUrl } = await import('@tauri-apps/plugin-opener');
+    await openUrl(url);
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.click();
+}

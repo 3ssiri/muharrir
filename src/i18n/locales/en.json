@@ -161,7 +161,13 @@
     "deleteTemplateTitle": "Delete Template",
     "deleteTemplateDescription": "Are you sure you want to delete template \"{name}\"? This action cannot be undone.",
     "confirmDelete": "Confirm Delete",
-    "emptyResponseError": "API returned empty response, please check if your API Key is configured correctly"
+    "emptyResponseError": "API returned empty response, please check if your API Key is configured correctly",
+    "about": "About",
+    "aboutTagline": "Turn your ideas into structured, high-quality prompts",
+    "version": "Version",
+    "developedBy": "Developed by",
+    "email": "Email",
+    "website": "Website"
   },
   "errors": {
     "authFailed": "Authentication Failed",

@@ -152,6 +152,8 @@ fn setup_global_shortcut(app: &tauri::App) -> Result<(), Box<dyn std::error::Err
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        // فتح الروابط الخارجية (قسم «حول») في متصفّح/تطبيق النظام
+        .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             save_api_key,
             get_api_key,
