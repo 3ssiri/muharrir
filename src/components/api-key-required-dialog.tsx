@@ -19,12 +19,12 @@ interface ApiKeyRequiredDialogProps {
 }
 
 /**
- * مربع حوار للتنبيه عند عدم تهيئة مفتاح API
+ * Alert dialog shown when the API key is not configured
  *
- * المميزات:
- * - تأثير ضبابي للخلفية
- * - رسالة تنبيه أنيقة
- * - الانتقال إلى الإعدادات بنقرة واحدة
+ * Features:
+ * - Blurred background effect
+ * - Elegant alert message
+ * - Navigate to settings with a single click
  */
 export function ApiKeyRequiredDialog({
   open,

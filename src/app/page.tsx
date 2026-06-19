@@ -10,7 +10,7 @@ export default function RootPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // الأولوية: اللغة المحفوظة سابقًا ← لغة المتصفح ← اللغة الافتراضية
+    // Priority: previously saved language ← browser language ← default language
     let target: string = defaultLocale;
 
     const stored = localStorage.getItem(STORAGE_KEY);

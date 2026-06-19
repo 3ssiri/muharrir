@@ -1,35 +1,35 @@
 /**
- * محرّك المُزخرِفات - مبني على مشروع prompt-decorators
- * يُستخدم للتحكّم في أسلوب إجابات الذكاء الاصطناعي وشكلها
+ * Decorator engine - built on the prompt-decorators project
+ * Used to control the style and form of AI responses
  */
 
 export interface DecoratorConfig {
-  // عمق التفكير
+  // Thinking depth
   thinking_depth?: 'step_by_step' | 'debate' | 'socratic' | 'reasoning' | 'none';
 
-  // أسلوب النبرة
+  // Tone style
   tone?: 'formal' | 'casual' | 'creative' | 'technical' | 'friendly';
 
-  // صيغة الإخراج
+  // Output format
   output_format?: 'markdown' | 'json' | 'code' | 'structured' | 'plain';
 
-  // التقييم والتحسين
+  // Evaluation and refinement
   evaluation?: ('critique' | 'refine')[];
 
-  // التحقّق
+  // Validation
   validation?: ('fact_check' | 'cite_sources')[];
 
-  // مُزخرِفات مخصّصة
+  // Custom decorators
   custom?: string[];
 }
 
 /**
- * بناء بادئة المُزخرِفات
+ * Build the decorator prefix
  */
 export function buildDecoratorPrefix(config: DecoratorConfig): string {
   const decorators: string[] = [];
 
-  // 1. مُزخرِف عمق التفكير
+  // 1. Thinking depth decorator
   if (config.thinking_depth && config.thinking_depth !== 'none') {
     const thinkingMap: Record<string, string> = {
       'step_by_step': '+++StepByStep',
@@ -41,17 +41,17 @@ export function buildDecoratorPrefix(config: DecoratorConfig): string {
     if (decorator) decorators.push(decorator);
   }
 
-  // 2. مُزخرِف النبرة
+  // 2. Tone decorator
   if (config.tone) {
     decorators.push(`+++Tone(style=${config.tone})`);
   }
 
-  // 3. مُزخرِف صيغة الإخراج
+  // 3. Output format decorator
   if (config.output_format) {
     decorators.push(`+++OutputFormat(format=${config.output_format})`);
   }
 
-  // 4. مُزخرِف التقييم والتحسين
+  // 4. Evaluation and refinement decorator
   if (config.evaluation) {
     if (config.evaluation.includes('critique')) {
       decorators.push('+++Critique');
@@ -61,7 +61,7 @@ export function buildDecoratorPrefix(config: DecoratorConfig): string {
     }
   }
 
-  // 5. مُزخرِف التحقّق
+  // 5. Validation decorator
   if (config.validation) {
     if (config.validation.includes('fact_check')) {
       decorators.push('+++FactCheck');
@@ -71,7 +71,7 @@ export function buildDecoratorPrefix(config: DecoratorConfig): string {
     }
   }
 
-  // 6. المُزخرِفات المخصّصة
+  // 6. Custom decorators
   if (config.custom && config.custom.length > 0) {
     decorators.push(...config.custom);
   }
@@ -80,7 +80,7 @@ export function buildDecoratorPrefix(config: DecoratorConfig): string {
 }
 
 /**
- * تطبيق المُزخرِفات على الموجّه
+ * Apply the decorators to the prompt
  */
 export function applyDecorators(prompt: string, config: DecoratorConfig): string {
   const decoratorPrefix = buildDecoratorPrefix(config);

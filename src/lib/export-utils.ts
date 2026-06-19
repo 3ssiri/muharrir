@@ -1,12 +1,12 @@
 /**
- * أداة تصدير المفضّلة
- * تدعم التصدير بصيغ MD وJSON وDOCX
+ * Favorites export utility
+ * Supports exporting in MD, JSON, and DOCX formats
  */
 
 import type { FavoritePrompt } from './db';
 
 /**
- * التصدير بصيغة Markdown
+ * Export as Markdown
  */
 export function exportToMarkdown(favorites: FavoritePrompt[]): string {
   let markdown = '# الموجّهات المفضّلة\n\n';
@@ -34,7 +34,7 @@ export function exportToMarkdown(favorites: FavoritePrompt[]): string {
 }
 
 /**
- * التصدير بصيغة JSON
+ * Export as JSON
  */
 export function exportToJSON(favorites: FavoritePrompt[]): string {
   const exportData = {

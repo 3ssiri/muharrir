@@ -1,12 +1,12 @@
 /**
- * أداة استيراد المفضّلة
- * تدعم الاستيراد من صيغتي JSON وMD
+ * Favorites import utility
+ * Supports importing from both JSON and MD formats
  */
 
 import type { FavoritePrompt } from './db';
 
 /**
- * الاستيراد من JSON
+ * Import from JSON
  */
 export function importFromJSON(jsonString: string): Omit<FavoritePrompt, 'id'>[] {
   try {
@@ -29,29 +29,29 @@ export function importFromJSON(jsonString: string): Omit<FavoritePrompt, 'id'>[]
 }
 
 /**
- * الاستيراد من Markdown
+ * Import from Markdown
  */
 export function importFromMarkdown(markdown: string): Omit<FavoritePrompt, 'id'>[] {
   const favorites: Omit<FavoritePrompt, 'id'>[] = [];
 
-  // التقسيم حسب العناوين ##
+  // Split by ## headings
   const sections = markdown.split(/^## /m).filter(s => s.trim());
 
   for (const section of sections) {
     const lines = section.split('\n');
 
-    // استخراج العنوان (السطر الأول، مع إزالة الترقيم)
+    // Extract the title (first line, removing numbering)
     const titleLine = lines[0].trim();
     const title = titleLine.replace(/^\d+\.\s*/, '');
 
-    // استخراج الوسوم
+    // Extract the tags
     let tags: string[] = [];
     const tagMatch = section.match(/\*\*الوسوم\*\*:\s*(.+)/);
     if (tagMatch) {
       tags = tagMatch[1].split(',').map(t => t.trim().replace(/`/g, ''));
     }
 
-    // استخراج المحتوى (داخل كتلة الشيفرة ```)
+    // Extract the content (inside the code block ```)
     const contentMatch = section.match(/```\n([\s\S]*?)\n```/);
     const content = contentMatch ? contentMatch[1].trim() : '';
 

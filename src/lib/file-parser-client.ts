@@ -1,10 +1,10 @@
 /**
- * مُحلّل الملفات (client-side)
- * بديل عن مسار الخادم /api/parse-file ليعمل مع static export وTauri.
- * يحلّل ملفات PDF وDOCX مباشرةً في المتصفح:
- *   - PDF: عبر pdfjs-dist
- *   - DOCX: عبر mammoth
- * الواجهة نفسها: يأخذ File ويُعيد { text }.
+ * File parser (client-side)
+ * Replacement for the /api/parse-file server route so it works with static
+ * export and Tauri. Parses PDF and DOCX files directly in the browser:
+ *   - PDF: via pdfjs-dist
+ *   - DOCX: via mammoth
+ * Same interface: takes a File and returns { text }.
  */
 
 export interface ParsedFile {
@@ -13,13 +13,13 @@ export interface ParsedFile {
 }
 
 /**
- * تحليل ملف PDF واستخراج نصّ جميع صفحاته.
+ * Parse a PDF file and extract the text of all its pages.
  */
 async function parsePdf(file: File): Promise<ParsedFile> {
   const arrayBuffer = await file.arrayBuffer();
   const pdfjs = await import('pdfjs-dist');
 
-  // ضبط الـ worker من الملف الثابت في مجلد public
+  // Set the worker from the static file in the public folder
   if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
     pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
   }
@@ -41,7 +41,7 @@ async function parsePdf(file: File): Promise<ParsedFile> {
 }
 
 /**
- * تحليل ملف DOCX واستخراج نصّه الخام.
+ * Parse a DOCX file and extract its raw text.
  */
 async function parseDocx(file: File): Promise<ParsedFile> {
   const arrayBuffer = await file.arrayBuffer();
@@ -51,8 +51,8 @@ async function parseDocx(file: File): Promise<ParsedFile> {
 }
 
 /**
- * الدالة الرئيسية: تحلّل الملف حسب نوعه وتُعيد نصّه.
- * ترمي خطأً لأنواع الملفات غير المدعومة.
+ * Main function: parses the file according to its type and returns its text.
+ * Throws an error for unsupported file types.
  */
 export async function parseFile(file: File): Promise<ParsedFile> {
   if (file.type === 'application/pdf') {

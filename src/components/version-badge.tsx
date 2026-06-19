@@ -15,8 +15,8 @@ export function VersionBadge() {
   const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // جلب الإصدار مباشرةً من GitHub API (client-side) بدلاً من مسار خادم
-  // محذوف. لا تتوفّر مقارنة محلية في وضع static export/Tauri.
+  // Fetch the version directly from the GitHub API (client-side) instead of a server route
+  // (removed). Local comparison is not available in static export/Tauri mode.
   const fetchVersion = async () => {
     try {
       let remoteVersion: string | null = null
@@ -33,7 +33,7 @@ export function VersionBadge() {
           }
         }
       } catch {
-        // تجاهل أخطاء الشبكة عند تعذّر الوصول إلى GitHub
+        // Ignore network errors when GitHub is unreachable
       }
 
       if (remoteVersion) {

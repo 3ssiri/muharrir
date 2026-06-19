@@ -27,7 +27,7 @@ export function FileUpload({
   const [showFullDropZone, setShowFullDropZone] = useState(false)
   const dragCounterRef = useRef(0)
 
-  // مراقبة السحب على مستوى النافذة بالكامل
+  // Monitor dragging across the entire window
   useEffect(() => {
     const handleGlobalDragEnter = (e: DragEvent) => {
       e.preventDefault()
@@ -72,12 +72,12 @@ export function FileUpload({
     const files = e.target.files
     if (!files || files.length === 0) return
 
-    // معالجة جميع الملفات المحددة
+    // Process all selected files
     for (let i = 0; i < files.length; i++) {
       await processFile(files[i])
     }
 
-    // إعادة تعيين input للسماح باختيار الملف نفسه مرة أخرى
+    // Reset the input to allow selecting the same file again
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -89,25 +89,25 @@ export function FileUpload({
     const isDoc = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     const isText = file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md')
 
-    // التحقق من دعم الصور
+    // Check for image support
     if (isImage && !modelSupportsVision) {
       toast.error(t('fileUploadComponent.visionNotSupported'))
       return
     }
 
-    // التحقق من نوع الملف
+    // Check the file type
     if (!isImage && !isPDF && !isDoc && !isText) {
       toast.error(t('fileUploadComponent.unsupportedFormat'))
       return
     }
 
-    // التحقق من حجم الملف (10MB)
+    // Check the file size (10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error(t('fileUploadComponent.fileTooLarge'))
       return
     }
 
-    // معالجة معاينة الصورة
+    // Handle image preview
     if (isImage) {
       const reader = new FileReader()
       reader.onload = (e) => {
@@ -136,7 +136,7 @@ export function FileUpload({
 
     const files = e.dataTransfer.files
     if (files && files.length > 0) {
-      // معالجة جميع الملفات المسحوبة
+      // Process all dropped files
       for (let i = 0; i < files.length; i++) {
         await processFile(files[i])
       }
@@ -145,7 +145,7 @@ export function FileUpload({
 
   return (
     <>
-      {/* منطقة رفع الملفات بالسحب على كامل الشاشة */}
+      {/* Full-screen drag-and-drop file upload area */}
       {showFullDropZone && (
         <div
           className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-200"
@@ -173,9 +173,9 @@ export function FileUpload({
         </div>
       )}
 
-      {/* منطقة الرفع العادية */}
+      {/* Standard upload area */}
       <div className="space-y-3">
-        {/* قائمة الملفات - تُعرض بشكل مستقل في الأعلى */}
+        {/* File list - displayed separately at the top */}
         {currentFiles.length > 0 && (
           <div className="flex flex-wrap gap-2 p-3 bg-muted/30 rounded-lg border">
             {currentFiles.map((item, index) => (
@@ -211,7 +211,7 @@ export function FileUpload({
           </div>
         )}
 
-        {/* زر الرفع - في سطر مستقل */}
+        {/* Upload button - on its own line */}
         <div className="relative">
           <Button
             type="button"

@@ -1,11 +1,11 @@
 /**
- * أداة التحقّق من الصيغة وتصحيحها
- * تُستخدم للتحقّق من صحّة صيغة استدعاء الأدوات في مخرجات النموذج، وتصحيحها عند الحاجة
+ * Format validation and correction utility
+ * Used to validate the format of tool calls in model output, and correct it when needed
  */
 
 import { z } from 'zod';
 
-// تعريف مخطّط (Schema) استدعاء الأدوات
+// Define the schema for tool calls
 const SuggestEnhancementsSchema = z.object({
   dimensions: z.array(z.object({
     key: z.string(),
@@ -31,7 +31,7 @@ const ProposePromptSchema = z.object({
 });
 
 /**
- * التحقّق من صيغة استدعاء الأداة
+ * Validate the format of a tool call
  */
 export function validateToolCall(toolName: string, args: any): { valid: boolean; error?: string } {
   try {
@@ -42,7 +42,7 @@ export function validateToolCall(toolName: string, args: any): { valid: boolean;
       ProposePromptSchema.parse(args);
       return { valid: true };
     }
-    return { valid: true }; // لا يتم التحقّق من الأدوات الأخرى حاليًا
+    return { valid: true }; // Other tools are not validated currently
   } catch (error: any) {
     return {
       valid: false,
@@ -52,7 +52,7 @@ export function validateToolCall(toolName: string, args: any): { valid: boolean;
 }
 
 /**
- * استدعاء grok-beta-fast لتصحيح الصيغة
+ * Call grok-beta-fast to correct the format
  */
 export async function correctFormat(
   toolName: string,
@@ -101,7 +101,7 @@ JSON المصحّح:`;
       throw new Error('أعاد نموذج التصحيح محتوى فارغًا');
     }
 
-    // محاولة تحليل JSON بعد التصحيح
+    // Attempt to parse the JSON after correction
     const correctedArgs = JSON.parse(correctedText);
 
     return { success: true, correctedArgs };

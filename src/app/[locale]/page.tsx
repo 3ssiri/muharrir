@@ -41,37 +41,37 @@ export default function Home() {
   const [sessionId, setSessionId] = useState<number | null>(null)
   const sessionIdRef = useRef(sessionId)
 
-  // إصلاح أساسي: استخدام الحالة المحلية و ref
+  // Core fix: use local state and ref
   const [localInput, setLocalInput] = useState('')
   const aiContentRef = useRef('')
   const aiToolInvocationsRef = useRef<any[]>([])
 
   const [messages, setMessages] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [isToolRendering, setIsToolRendering] = useState(false) // حالة عرض الأداة
+  const [isToolRendering, setIsToolRendering] = useState(false) // tool rendering state
   const abortControllerRef = useRef<AbortController | null>(null)
-  const [activeTab, setActiveTab] = useState<'chat' | 'favorites'>('chat') // حالة علامة التبويب
-  const [spotlightOpen, setSpotlightOpen] = useState(false) // حالة بحث Spotlight
-  const [shortcutsOpen, setShortcutsOpen] = useState(false) // حالة مربع حوار الاختصارات
-  const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false) // حالة مربع حوار تنبيه مفتاح API
-  const [settingsOpen, setSettingsOpen] = useState(false) // حالة مربع حوار الإعدادات
+  const [activeTab, setActiveTab] = useState<'chat' | 'favorites'>('chat') // tab state
+  const [spotlightOpen, setSpotlightOpen] = useState(false) // Spotlight search state
+  const [shortcutsOpen, setShortcutsOpen] = useState(false) // shortcuts dialog state
+  const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false) // API key alert dialog state
+  const [settingsOpen, setSettingsOpen] = useState(false) // settings dialog state
 
-  // حالة رفع الملفات - يدعم ملفات متعددة
+  // File upload state - supports multiple files
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ file: File; preview?: string; text?: string }>>([])
 
-  // حالة الرفع بالسحب والإفلات
+  // Drag and drop upload state
   const [showFullDropZone, setShowFullDropZone] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const dragCounterRef = useRef(0)
 
-  // لم يعد يُقيّد التعرف على الصور حسب النموذج، يُسمح بالرفع للجميع مع تنبيه المستخدم
-  const modelSupportsVision = true // السماح لجميع النماذج برفع الصور، والحكم متروك للمستخدم
+  // Image recognition is no longer restricted by model; uploads are allowed for everyone with a user warning
+  const modelSupportsVision = true // Allow all models to upload images, leaving the judgment to the user
 
   useEffect(() => {
     sessionIdRef.current = sessionId
   }, [sessionId])
 
-  // إلغاء الطلب الجاري عند إلغاء تحميل المكوّن
+  // Abort the in-flight request when the component unmounts
   useEffect(() => {
     return () => {
       if (abortControllerRef.current) {
@@ -81,7 +81,7 @@ export default function Home() {
     }
   }, [])
 
-  // مراقبة السحب والإفلات على مستوى النافذة
+  // Monitor drag and drop at the window level
   useEffect(() => {
     const handleGlobalDragEnter = (e: DragEvent) => {
       e.preventDefault()
@@ -122,18 +122,18 @@ export default function Home() {
     }
   }, [])
 
-  // مراقبة الاختصارات على مستوى النافذة
+  // Monitor keyboard shortcuts at the window level
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // منع سلوك المتصفح الافتراضي لـ Ctrl+T (علامة تبويب جديدة)
+      // Prevent the browser's default behavior for Ctrl+T (new tab)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 't') {
         e.preventDefault()
         e.stopPropagation()
-        // يمكن إضافة وظيفة مخصصة هنا، أو الاكتفاء بمنع السلوك الافتراضي
+        // A custom function can be added here, or just prevent the default behavior
         return
       }
 
-      // Ctrl+K - فتح بحث Spotlight
+      // Ctrl+K - open Spotlight search
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
         e.stopPropagation()
@@ -141,7 +141,7 @@ export default function Home() {
         return
       }
 
-      // Ctrl+N - محادثة جديدة (مع منع مُعزَّز)
+      // Ctrl+N - new conversation (with reinforced prevention)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
         e.preventDefault()
         e.stopPropagation()
@@ -156,11 +156,11 @@ export default function Home() {
         return false
       }
 
-      // Ctrl+/ - التركيز على حقل الإدخال (إصلاح: استخدام محدد أكثر موثوقية)
+      // Ctrl+/ - focus the input field (fix: use a more reliable selector)
       if ((e.ctrlKey || e.metaKey) && e.key === '/') {
         e.preventDefault()
         e.stopPropagation()
-        // استخدام طريقة أكثر موثوقية للعثور على حقل الإدخال
+        // Use a more reliable way to find the input field
         setTimeout(() => {
           const textarea = document.querySelector('textarea') as HTMLTextAreaElement
           if (textarea && !textarea.disabled) {
@@ -171,7 +171,7 @@ export default function Home() {
         return
       }
 
-      // Alt+S - فتح الإعدادات (لتجنب التعارض مع برامج أخرى)
+      // Alt+S - open settings (to avoid conflicts with other software)
       if (e.altKey && e.key.toLowerCase() === 's') {
         e.preventDefault()
         e.stopPropagation()
@@ -182,7 +182,7 @@ export default function Home() {
         return
       }
 
-      // Ctrl+B - تبديل الشريط الجانبي
+      // Ctrl+B - toggle the sidebar
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault()
         e.stopPropagation()
@@ -193,27 +193,27 @@ export default function Home() {
         return
       }
 
-      // Tab - تبديل علامة التبويب (محادثة ⇄ مفضلة)
+      // Tab - switch tab (chat ⇄ favorites)
       if (e.key === 'Tab' && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
-        // التحقق مما إذا كان التركيز داخل حقل إدخال أو عنصر قابل للتحرير
+        // Check whether focus is inside an input field or an editable element
         const activeElement = document.activeElement
         const isInputFocused = activeElement?.tagName === 'TEXTAREA' ||
                               activeElement?.tagName === 'INPUT' ||
                               (activeElement as HTMLElement)?.isContentEditable
 
-        // إذا كان داخل حقل إدخال، اسمح بسلوك Tab الافتراضي (دون تبديل علامة التبويب)
+        // If inside an input field, allow the default Tab behavior (without switching tab)
         if (isInputFocused) {
-          return // اترك المتصفح يعالج السلوك الافتراضي
+          return // Let the browser handle the default behavior
         }
 
-        // إذا لم يكن داخل حقل إدخال، امنع السلوك الافتراضي وبدّل علامة التبويب
+        // If not inside an input field, prevent the default behavior and switch tab
         e.preventDefault()
         e.stopPropagation()
         setActiveTab(prev => prev === 'chat' ? 'favorites' : 'chat')
         return
       }
 
-      // Shift+/ - عرض لوحة الاختصارات
+      // Shift+/ - show the shortcuts panel
       if (e.shiftKey && (e.key === '?' || e.key === '/')) {
         e.preventDefault()
         setShortcutsOpen(true)
@@ -252,24 +252,24 @@ export default function Home() {
     loadHistory()
   }, [sessionId])
 
-  // إصلاح جوهري: تجاوز useChat تمامًا واستخدام fetch مباشرة
+  // Fundamental fix: bypass useChat entirely and use fetch directly
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!localInput.trim()) return
 
-    // التحقق مما إذا كان مفتاح API مُعدًّا (مبدأ KISS - البساطة أولًا!)
+    // Check whether the API key is configured (KISS principle - keep it simple!)
     const defaultApiKey = 'sk-Mdj54E4QkE5dQi6jV4TUli6kEN4fsPQKuIjchrBl6hIjvws1'
     if (!apiKey || apiKey === defaultApiKey) {
       setApiKeyDialogOpen(true)
       return
     }
 
-    // إلغاء الطلب السابق (إن وُجد)
+    // Abort the previous request (if any)
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
 
-    // إنشاء AbortController جديد
+    // Create a new AbortController
     const abortController = new AbortController()
     abortControllerRef.current = abortController
 
@@ -286,7 +286,7 @@ export default function Home() {
       setSessionId(currentId)
     }
 
-    // بناء محتوى رسالة المستخدم (مع تضمين عدة ملفات)
+    // Build the user message content (including multiple files)
     let userContent = localInput
     if (uploadedFiles.length > 0) {
       const fileContents = uploadedFiles.map((item, index) => {
@@ -311,7 +311,7 @@ export default function Home() {
       })) : undefined
     }
 
-    // حفظ رسالة المستخدم في قاعدة البيانات (مع معلومات الملفات والمحتوى الكامل)
+    // Save the user message to the database (with file info and full content)
     await db.messages.add({
       sessionId: currentId,
       role: 'user',
@@ -324,19 +324,19 @@ export default function Home() {
       createdAt: new Date()
     })
 
-    // عرض رسالة المستخدم فورًا
+    // Display the user message immediately
     setMessages(prev => [...prev, userMessage])
     setLocalInput('')
     setIsLoading(true)
 
-    // مسح حالة الملفات
+    // Clear the files state
     setUploadedFiles([])
 
-    // إعادة تعيين مُجمِّع محتوى الذكاء الاصطناعي
+    // Reset the AI content accumulator
     aiContentRef.current = ''
     aiToolInvocationsRef.current = []
 
-    // حفظ رسالة ذكاء اصطناعي فارغة فورًا في قاعدة البيانات (لتجنب الفقدان عند Fast Refresh)
+    // Save an empty AI message to the database immediately (to avoid loss on Fast Refresh)
     const aiDbId = await db.messages.add({
       sessionId: currentId,
       role: 'assistant',
@@ -351,7 +351,7 @@ export default function Home() {
       content: ''
     }
 
-    // إضافة عنصر نائب لرسالة ذكاء اصطناعي فارغة
+    // Add a placeholder for an empty AI message
     setMessages(prev => [...prev, aiMessage])
 
     try {
@@ -379,11 +379,11 @@ export default function Home() {
       console.log('Starting to read stream...')
       let chunkCount = 0
       let lastChunkTime = Date.now()
-      const TIMEOUT_MS = 30000 // مهلة 30 ثانية
+      const TIMEOUT_MS = 30000 // 30 second timeout
       let buffer = ''
 
       while (true) {
-        // إضافة كشف المهلة
+        // Add timeout detection
         if (Date.now() - lastChunkTime > TIMEOUT_MS) {
           console.warn('Stream timeout - no data received for 30s')
           break
@@ -403,9 +403,9 @@ export default function Home() {
           console.log(`Chunk ${chunkCount} raw:`, chunk.substring(0, 100))
           buffer += chunk
 
-          // تحليل بروتوكول دفق بيانات Vercel AI SDK
+          // Parse the Vercel AI SDK data stream protocol
           const lines = buffer.split('\n')
-          buffer = lines.pop() || '' // الاحتفاظ بالسطر الأخير غير المكتمل
+          buffer = lines.pop() || '' // Keep the last incomplete line
 
           for (const line of lines) {
             if (!line.trim()) continue
@@ -413,42 +413,42 @@ export default function Home() {
             console.log('Processing line:', line.substring(0, 100))
 
             try {
-              // يستخدم Vercel AI SDK التنسيق: "0:text" أو "9:{json}" أو "e:{error}"
+              // The Vercel AI SDK uses the format: "0:text" or "9:{json}" or "e:{error}"
               if (line.startsWith('0:')) {
-                // محتوى نصي
+                // Text content
                 const text = JSON.parse(line.slice(2))
                 aiContentRef.current += text
                 console.log('Text added, total length:', aiContentRef.current.length)
               } else if (line.startsWith('9:')) {
-                // استدعاء أداة
+                // Tool call
                 const toolData = JSON.parse(line.slice(2))
                 console.log('Tool call detected:', toolData)
                 aiToolInvocationsRef.current.push(toolData)
-                setIsToolRendering(true) // الإشارة إلى أن الأداة قيد العرض
+                setIsToolRendering(true) // Signal that the tool is being rendered
               } else if (line.startsWith('e:')) {
-                // معلومات الخطأ
+                // Error info
                 const errorData = JSON.parse(line.slice(2))
                 console.error('Stream error detected:', errorData)
 
-                // إيقاف معالجة الدفق فورًا وعرض الخطأ
+                // Stop processing the stream immediately and display the error
                 throw new Error(errorData.message || 'Stream error')
               } else {
-                // قد يكون تنسيقًا آخر، يُجمَّع مباشرة كنص
+                // Might be another format, accumulate it directly as text
                 console.log('Unknown format, treating as text')
                 aiContentRef.current += line
               }
             } catch (parseError) {
               console.warn('Failed to parse line:', line.substring(0, 50), parseError)
-              // إذا كان كائن خطأ، أعد رميه
+              // If it is an error object, re-throw it
               if (parseError instanceof Error && parseError.message.includes('Stream error')) {
                 throw parseError
               }
-              // عند فشل التحليل، يُعالَج كنص عادي
+              // When parsing fails, treat it as plain text
               aiContentRef.current += line
             }
           }
 
-          // تحديث عرض الرسالة
+          // Update the message display
           setMessages(prev => {
             const updated = prev.map(m =>
               m.id === aiMessageId ? {
@@ -460,7 +460,7 @@ export default function Home() {
             return updated
           })
 
-          // تحديث قاعدة البيانات في الوقت الفعلي (مرة كل 10 أجزاء)
+          // Update the database in real time (once every 10 chunks)
           if (chunkCount % 10 === 0) {
             db.messages.update(parseInt(aiMessageId), {
               content: aiContentRef.current,
@@ -476,11 +476,11 @@ export default function Home() {
       console.log('Final AI content length:', aiContentRef.current.length)
       console.log('Tool invocations count:', aiToolInvocationsRef.current.length)
 
-      // كشف الاستجابة الفارغة
+      // Detect an empty response
       if (aiContentRef.current.length === 0 && aiToolInvocationsRef.current.length === 0) {
         console.warn('Empty response detected - treating as authentication error')
 
-        // الاستجابة الفارغة تعني عادةً خطأً في إعداد مفتاح API أو مشكلة صلاحيات
+        // An empty response usually means an error in the API key configuration or a permissions issue
         const errorType = 'auth'
         const errorMessage = t('settings.emptyResponseError')
 
@@ -501,13 +501,13 @@ export default function Home() {
 
         toast.error(`حدث خطأ في الطلب: ${errorMessage}`, { duration: 4000 })
       } else {
-        // التحديث النهائي لرسالة الذكاء الاصطناعي في قاعدة البيانات
+        // Final update of the AI message in the database
         await db.messages.update(parseInt(aiMessageId), {
           content: aiContentRef.current,
           toolInvocations: aiToolInvocationsRef.current.length > 0 ? aiToolInvocationsRef.current : undefined
         })
 
-        // تحديث الجلسة
+        // Update the session
         await db.chatSessions.update(currentId, {
           updatedAt: new Date(),
           previewText: aiContentRef.current.slice(0, 50)
@@ -517,7 +517,7 @@ export default function Home() {
     } catch (error: any) {
       console.error('Chat error:', error)
 
-      // تحديد نوع الخطأ
+      // Determine the error type
       let errorType: 'network' | 'auth' | 'quota' | 'server' | 'unknown' = 'unknown'
       const errorMessage = error.message || 'خطأ غير معروف'
 
@@ -537,7 +537,7 @@ export default function Home() {
         errorType = 'server'
       }
 
-      // تحديث رسالة الذكاء الاصطناعي وإضافة معلومات الخطأ
+      // Update the AI message and add the error info
       await db.messages.update(parseInt(aiMessageId), {
         content: '',
         error: {
@@ -547,7 +547,7 @@ export default function Home() {
         }
       })
 
-      // تحديث الرسالة في الواجهة
+      // Update the message in the UI
       setMessages(prev => prev.map(m =>
         m.id === aiMessageId
           ? { ...m, error: { type: errorType, message: errorMessage, retryCount: 0 } }
@@ -560,7 +560,7 @@ export default function Home() {
       setIsLoading(false)
       console.log('isLoading set to false')
 
-      // تنظيف مرجع AbortController
+      // Clean up the AbortController reference
       if (abortControllerRef.current === abortController) {
         abortControllerRef.current = null
       }
@@ -568,13 +568,13 @@ export default function Home() {
   }
 
   const handleNewChat = async () => {
-    // مسح حالة الواجهة فقط دون حذف سجلات قاعدة البيانات
+    // Clear only the UI state without deleting database records
     setSessionId(null)
     setMessages([])
     setLocalInput('')
     setUploadedFiles([])
 
-    // إذا كان في علامة تبويب المفضلة، انتقل إلى علامة تبويب المحادثة
+    // If on the favorites tab, switch to the chat tab
     if (activeTab === 'favorites') {
       setActiveTab('chat')
     }
@@ -587,14 +587,14 @@ export default function Home() {
     for (let i = 0; i < items.length; i++) {
       const item = items[i]
 
-      // التحقق مما إذا كان صورة
+      // Check whether it is an image
       if (item.type.startsWith('image/')) {
         e.preventDefault()
 
         const file = item.getAsFile()
         if (!file) continue
 
-        // قراءة الصورة وتعيين المعاينة
+        // Read the image and set the preview
         const reader = new FileReader()
         reader.onload = (event) => {
           handleFileSelect(file, event.target?.result as string)
@@ -612,16 +612,16 @@ export default function Home() {
   const handleFileSelect = async (file: File, preview?: string) => {
     let fileText: string | undefined = undefined
 
-    // إذا كان ملف PDF، استخدم التحليل من جهة العميل
+    // If it is a PDF file, use client-side parsing
     if (file.type === 'application/pdf') {
       try {
         toast.info('جارٍ تحليل PDF...', { duration: 3000 })
         const arrayBuffer = await file.arrayBuffer()
 
-        // استيراد pdfjs-dist ديناميكيًا
+        // Import pdfjs-dist dynamically
         const pdfjs = await import('pdfjs-dist')
 
-        // إعداد worker - باستخدام الملف الثابت في مجلد public
+        // Set up the worker - using the static file in the public folder
         if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
           pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
         }
@@ -630,7 +630,7 @@ export default function Home() {
         const pdf = await loadingTask.promise
         let fullText = ''
 
-        // استخراج النص من جميع الصفحات
+        // Extract text from all pages
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i)
           const textContent = await page.getTextContent()
@@ -647,13 +647,13 @@ export default function Home() {
         toast.error(`فشل تحليل PDF: ${error.message || 'خطأ غير معروف'}`)
       }
     }
-    // تحليل ملف DOCX
+    // Parse a DOCX file
     else if (file.type.includes('wordprocessing') || file.name.endsWith('.docx')) {
       try {
         toast.info('جارٍ تحليل DOCX...')
         const arrayBuffer = await file.arrayBuffer()
 
-        // استيراد mammoth ديناميكيًا
+        // Import mammoth dynamically
         const mammoth = await import('mammoth')
 
         const result = await mammoth.extractRawText({ arrayBuffer })
@@ -664,7 +664,7 @@ export default function Home() {
         toast.error(`فشل تحليل DOCX: ${error.message || 'خطأ غير معروف'}`)
       }
     }
-    // تحليل الملف النصي
+    // Parse the text file
     else if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md')) {
       try {
         const text = await file.text()
@@ -676,7 +676,7 @@ export default function Home() {
       }
     }
 
-    // الإضافة إلى قائمة الملفات
+    // Add to the files list
     setUploadedFiles(prev => [...prev, { file, preview, text: fileText }])
   }
 
@@ -684,7 +684,7 @@ export default function Home() {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index))
   }
 
-  // دوال معالجة السحب والإفلات
+  // Drag and drop handler functions
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(true)
@@ -729,22 +729,22 @@ export default function Home() {
   }
 
   const handleRetry = async (messageIndex: number) => {
-    // إيجاد آخر رسالة مستخدم قبل رسالة المساعد الحالية
+    // Find the last user message before the current assistant message
     const userMessages = messages.slice(0, messageIndex).filter((m: any) => m.role === 'user')
     if (userMessages.length === 0) return
 
     const lastUserMessage = userMessages[userMessages.length - 1]
 
-    // حذف جميع الرسائل التي تلي رسالة المستخدم تلك
+    // Delete all messages that follow that user message
     const messagesToKeep = messages.slice(0, messages.indexOf(lastUserMessage) + 1)
     setMessages(messagesToKeep)
 
-    // إعادة إرسال تلك الرسالة
+    // Resend that message
     await append({ content: lastUserMessage.content })
   }
 
   const append = async (message: any) => {
-    // إضافة رسالة المستخدم
+    // Add the user message
     const userMessage = {
       id: Math.random().toString(),
       role: 'user',
@@ -753,7 +753,7 @@ export default function Home() {
 
     setMessages(prev => [...prev, userMessage])
 
-    // الحفظ في قاعدة البيانات
+    // Save to the database
     if (sessionIdRef.current) {
       await db.messages.add({
         sessionId: sessionIdRef.current,
@@ -763,14 +763,14 @@ export default function Home() {
       })
     }
 
-    // إطلاق طلب API
+    // Fire off the API request
     setIsLoading(true)
     aiContentRef.current = ''
     aiToolInvocationsRef.current = []
 
     const currentId = sessionIdRef.current
 
-    // إنشاء عنصر نائب لرسالة الذكاء الاصطناعي
+    // Create a placeholder for the AI message
     const aiDbId = await db.messages.add({
       sessionId: currentId!,
       role: 'assistant',
@@ -787,7 +787,7 @@ export default function Home() {
 
     setMessages(prev => [...prev, aiMessage])
 
-    // إرسال طلب المحادثة
+    // Send the chat request
     try {
       const response = await streamChat({
         messages: [...messages, userMessage],
@@ -842,7 +842,7 @@ export default function Home() {
         ))
       }
 
-      // الحفظ في قاعدة البيانات
+      // Save to the database
       await db.messages.update(parseInt(aiMessageId), {
         content: aiContentRef.current,
         toolInvocations: aiToolInvocationsRef.current.length > 0 ? aiToolInvocationsRef.current : undefined
@@ -864,7 +864,7 @@ export default function Home() {
     setIsLoading(false)
   }
 
-  // معالجة إرسال النموذج (للاختصارات)
+  // Handle form submission (for shortcuts)
   const handleSubmit = () => {
     const form = document.querySelector('form') as HTMLFormElement
     if (form) {
@@ -934,7 +934,7 @@ export default function Home() {
           </div>
         </header>
 
-        {/* تبديل علامات التبويب */}
+        {/* Tab switcher */}
         <div className="border-b bg-background shrink-0">
           <div className="max-w-3xl mx-auto px-4 sm:px-8">
             <div className="flex gap-6 justify-center">
@@ -979,7 +979,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* أمثلة سريعة */}
+                {/* Quick examples */}
                 <div className="max-w-2xl mx-auto">
                   <h3 className="text-sm font-semibold text-muted-foreground mb-4 text-center">{t('welcome.quickStart')}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1052,7 +1052,7 @@ export default function Home() {
                             : 'bg-card text-card-foreground border rounded-tl-sm max-w-[90%]'
                         }`}
                     >
-                      {/* عرض معلومات الخطأ */}
+                      {/* Display the error info */}
                       {m.error && (
                         <div className="mb-3 flex items-start gap-2 p-3 bg-destructive/20 rounded-lg border border-destructive/50">
                           <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
@@ -1072,19 +1072,19 @@ export default function Home() {
                         </div>
                       )}
 
-                      {/* عرض النص فقط عند وجود محتوى وعدم كونه استدعاء أداة خالصًا */}
-                      {/* 🚨 اعتراض من جهة الواجهة: في حال وجود استدعاء أداة، يُخفى المحتوى النصي */}
+                      {/* Display text only when there is content and it is not purely a tool call */}
+                      {/* 🚨 Client-side interception: if there is a tool call, the text content is hidden */}
                       {m.content && !m.content.includes('toolCallId') && !m.content.includes('toolName') && !m.toolInvocations && (
                         <div className="space-y-3">
-                          {/* عرض النص الذي أدخله المستخدم فقط، دون عرض محتوى المرفقات */}
+                          {/* Display only the text entered by the user, without showing the attachment content */}
                           {(() => {
                             const content = m.content
-                            // التحقق من علامات المرفقات بالتنسيق الجديد
+                            // Check for attachment markers in the new format
                             const attachmentPattern = /\[مرفق\d+:/
                             const imagePattern = /\[صورة\d+:/
                             const hasAttachment = attachmentPattern.test(content) || imagePattern.test(content)
 
-                            // في حال وجود علامة مرفق، اعرض فقط النص الذي يسبق أول علامة
+                            // If there is an attachment marker, display only the text preceding the first marker
                             if (hasAttachment) {
                               const firstMarkerIndex = content.search(/\[(مرفق|صورة)\d+:/)
                               if (firstMarkerIndex > 0) {
@@ -1097,7 +1097,7 @@ export default function Home() {
                               }
                             }
 
-                            // التوافق مع التنسيق القديم
+                            // Compatibility with the old format
                             const oldAttachmentIndex = content.indexOf('[محتوى المرفق]')
                             if (oldAttachmentIndex > 0) {
                               const userText = content.substring(0, oldAttachmentIndex).trim()
@@ -1108,7 +1108,7 @@ export default function Home() {
                               )
                             }
 
-                            // لا يوجد محتوى مرفقات، يُعرض بشكل عادي
+                            // No attachment content, display normally
                             return (
                               <div className="whitespace-pre-wrap text-sm leading-relaxed break-words">
                                 {content}
@@ -1116,7 +1116,7 @@ export default function Home() {
                             )
                           })()}
 
-                          {/* رسالة الانتظار أثناء توليد النص */}
+                          {/* Waiting message while generating text */}
                           {m.role === 'assistant' && m.id === messages[messages.length - 1]?.id && isLoading && !m.toolInvocations && (
                             <div className="mt-3 flex items-center gap-2.5 text-xs text-muted-foreground bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
                               <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-spin drop-shadow-sm" style={{ animationDuration: '2s' }} />
@@ -1126,7 +1126,7 @@ export default function Home() {
                         </div>
                       )}
 
-                      {/* معاينة الملفات المتعددة */}
+                      {/* Preview of multiple files */}
                       {m.files && m.files.length > 0 && (
                         <div className="mt-3 flex flex-wrap gap-2">
                           {m.files.map((file: any, index: number) => (
@@ -1145,13 +1145,13 @@ export default function Home() {
                                     const content = m.content
                                     if (!content) return undefined
 
-                                    // محاولة مطابقة التنسيق الجديد: [مرفق1: filename.pdf]
+                                    // Try to match the new format: [مرفق1: filename.pdf]
                                     const attachmentMarker = `[مرفق${index + 1}: ${file.name}]`
                                     const attachmentIndex = content.indexOf(attachmentMarker)
 
                                     if (attachmentIndex >= 0) {
                                       const startIndex = attachmentIndex + attachmentMarker.length
-                                      // البحث عن علامة المرفق التالية أو نهاية المحتوى
+                                      // Look for the next attachment marker or the end of the content
                                       const nextMarkerMatch = content.substring(startIndex).match(/\[(مرفق|صورة)\d+:/)
                                       const endIndex = nextMarkerMatch
                                         ? startIndex + nextMarkerMatch.index!
@@ -1219,10 +1219,10 @@ export default function Home() {
                         return null
                       })}
 
-                      {/* رسالة التحميل - حركة تراكب التعتيم */}
+                      {/* Loading message - blur overlay animation */}
                       {m.role === 'assistant' && m.id === messages[messages.length - 1]?.id && isLoading && (
                         <>
-                          {/* انتظار رد الذكاء الاصطناعي */}
+                          {/* Waiting for the AI response */}
                           {!m.content && !m.toolInvocations && (
                             <div className="mt-3 flex items-center gap-3 text-sm text-muted-foreground animate-in fade-in slide-in-from-bottom-2 duration-300">
                               <div className="flex gap-1.5">
@@ -1234,7 +1234,7 @@ export default function Home() {
                             </div>
                           )}
 
-                          {/* تحميل استدعاء الأداة - تراكب تعتيم (يُعرض حتى مع وجود محتوى نصي) */}
+                          {/* Tool call loading - blur overlay (shown even when there is text content) */}
                           {m.toolInvocations && m.toolInvocations.length > 0 && !m.toolInvocations[0].args && (
                             <div className="mt-3 relative animate-in fade-in slide-in-from-bottom-2 duration-300">
                               <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/15 to-primary/5 animate-pulse rounded-lg backdrop-blur-[2px] z-10" style={{ animationDuration: '2s' }} />
@@ -1288,11 +1288,11 @@ export default function Home() {
           )}
         </div>
 
-        {/* Floating Input Area - يُعرض في علامة تبويب المحادثة فقط */}
+        {/* Floating Input Area - shown only on the chat tab */}
         {activeTab === 'chat' && (
         <div className="p-4 bg-background border-t shrink-0">
           <div className="max-w-3xl mx-auto">
-            {/* قائمة الملفات - تُعرض بشكل مستقل في الأعلى */}
+            {/* Files list - displayed independently at the top */}
             {uploadedFiles.length > 0 && (
               <div className="mb-3 flex flex-wrap gap-2 p-3 bg-muted/30 rounded-lg border">
                 {uploadedFiles.map((item, index) => (
@@ -1328,12 +1328,12 @@ export default function Home() {
               </div>
             )}
 
-            {/* منطقة حقل الإدخال: زر الرفع + حقل الإدخال + زر الإرسال */}
+            {/* Input area: upload button + input field + send button */}
             <form
               onSubmit={onFormSubmit}
               className="relative flex items-end gap-2 p-2 rounded-xl border bg-muted/40 hover:border-primary/50 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all"
             >
-              {/* زر الرفع - على اليسار */}
+              {/* Upload button - on the left */}
               <div className="mb-1 ms-1">
                 <Button
                   type="button"
@@ -1362,7 +1362,7 @@ export default function Home() {
                 />
               </div>
 
-              {/* حقل الإدخال - في الوسط */}
+              {/* Input field - in the middle */}
               <AutoResizeTextarea
                 value={localInput}
                 onChange={setLocalInput}
@@ -1373,7 +1373,7 @@ export default function Home() {
                 autoFocus
               />
 
-              {/* زر الإرسال/الإيقاف - على اليمين */}
+              {/* Send/stop button - on the right */}
               <Button
                 type="submit"
                 size="icon"
@@ -1402,7 +1402,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* منطقة الرفع بالسحب والإفلات بملء الشاشة */}
+      {/* Full-screen drag and drop upload area */}
       {showFullDropZone && (
         <div
           className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-200"
@@ -1430,7 +1430,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* بحث Spotlight */}
+      {/* Spotlight search */}
       <SpotlightSearch
         open={spotlightOpen}
         onOpenChange={setSpotlightOpen}
@@ -1441,13 +1441,13 @@ export default function Home() {
         onNavigateToFavorites={() => setActiveTab('favorites')}
       />
 
-      {/* مربع حوار الاختصارات */}
+      {/* Shortcuts dialog */}
       <KeyboardShortcutsDialog
         open={shortcutsOpen}
         onOpenChange={setShortcutsOpen}
       />
 
-      {/* مربع حوار تنبيه عدم إعداد مفتاح API */}
+      {/* Alert dialog for when the API key is not configured */}
       <ApiKeyRequiredDialog
         open={apiKeyDialogOpen}
         onOpenChange={setApiKeyDialogOpen}

@@ -1,15 +1,16 @@
 /**
- * عميل المحادثة (client-side)
- * بديل عن مسار الخادم /api/chat ليعمل مع static export وTauri.
- * يرسل الطلب مباشرةً من المتصفح إلى مزوّد الذكاء الاصطناعي ({baseUrl}/chat/completions)
- * ويُعيد استجابة ببثّ بنفس البروتوكول المستخدَم سابقًا:
- *   0:"نص"        المحتوى النصّي
- *   9:{...}        استدعاء أداة { toolCallId, toolName, args }
- *   a:{...}        نتيجة أداة
- *   e:{...}        خطأ / حالة تصحيح
+ * Chat client (client-side)
+ * Replacement for the /api/chat server route so the app works with static
+ * export and Tauri. It sends the request straight from the browser to the AI
+ * provider ({baseUrl}/chat/completions) and returns a streamed response using
+ * the same protocol the app already parses:
+ *   0:"text"     text content
+ *   9:{...}      tool call { toolCallId, toolName, args }
+ *   a:{...}      tool result
+ *   e:{...}      error / correction status
  *
- * ملاحظة: في متصفح الويب العادي قد يفشل الطلب بسبب CORS، لكن داخل Tauri
- * (الهدف من التحويل) يعمل الاتصال المباشر بالمزوّد بشكل طبيعي.
+ * Note: in a regular web browser the direct provider request may fail due to
+ * CORS, but inside Tauri (the conversion target) the direct call works fine.
  */
 
 import { validateToolCall, correctFormat } from '@/lib/format-validator';
@@ -23,47 +24,47 @@ export interface StreamChatParams {
   signal?: AbortSignal;
 }
 
-// موجّه النظام الافتراضي عند عدم توفّر موجّه من المستخدم
-const DEFAULT_SYSTEM_PROMPT = `# من أنت
+// Default system prompt used when the user has not provided one
+const DEFAULT_SYSTEM_PROMPT = `# Who you are
 
-أنت **مساعد تحسين الموجّهات العام**، خبير محترف في هندسة الموجّهات (Prompt Engineering).
+You are the **general prompt optimization assistant**, a professional Prompt Engineering expert.
 
-مهمتك الوحيدة هي: **مساعدة المستخدم في تصميم الموجّهات وتحسينها**، وليس تنفيذ المهمة التي يصفها الموجّه.
+Your only job is to **help the user design and optimize prompts**, not to perform the task the prompt describes.
 
-## حدود الدور
+## Role boundaries
 
-✅ ما ينبغي عليك فعله: فهم هدف المستخدم ← **استدعاء أداة suggest_enhancements فورًا** لعرض جدول تفاعلي ← إنشاء موجّه منظّم
+✅ What you should do: understand the user's goal -> **immediately call the suggest_enhancements tool** to show an interactive table -> generate a structured prompt
 
-❌ ما لا ينبغي عليك فعله: تنفيذ المهمة مباشرةً، إنتاج المخرجات النهائية للمهمة، القيام بالعمل نيابةً عن المستخدم، **الاكتفاء باقتراحات نصّية دون استدعاء الأداة**
+❌ What you should not do: perform the task directly, produce the task's final output, do the work on the user's behalf, or **settle for text-only suggestions without calling the tool**
 
-# سير العمل
+# Workflow
 
-## المرحلة 1: فهم سريع (دون إخراج نص)
-- التعرّف بسرعة على نوع المهمة (كتابة، تحليل، إنشاء، ترجمة، تفويض، إدارة، إلخ)
-- **لا تُخرِج نصّ تحليل، انتقل مباشرةً إلى المرحلة 2**
+## Phase 1: Quick understanding (no text output)
+- Quickly identify the task type (writing, analysis, generation, translation, authorization, management, etc.)
+- **Do not output analysis text; go straight to Phase 2**
 
-## المرحلة 2: استدعاء الأداة فورًا لعرض جدول تفاعلي
-**الأهم: يجب استدعاء أداة \`suggest_enhancements\` فورًا، لا تكتفِ بالوصف النصّي**
+## Phase 2: Immediately call the tool to show an interactive table
+**Most important: you must call the \`suggest_enhancements\` tool immediately; do not settle for a text description**
 
-## المرحلة 3: إنشاء الموجّه
-**يجب استدعاء الأداة**: \`propose_prompt\` لإنشاء الموجّه المنظّم النهائي.
+## Phase 3: Generate the prompt
+**You must call the tool**: \`propose_prompt\` to generate the final structured prompt.
 
-# مبادئ مهمة
-1. **الاستدعاء الإلزامي للأداة**: بعد استلام إدخال المستخدم، استدعِ أداة suggest_enhancements فورًا.
-2. **الالتزام بالدور**: أنت مساعد تحسين موجّهات، ولست منفّذًا للمهام.
-3. **لا تحليل نصّي**: لا تُخرِج عبارات مثل "فهمت" أو "دعني أحلّل"، بل استدعِ الأداة مباشرةً.
-4. **ضمان الجودة**: يجب أن يكون الموجّه المُنشأ واضحًا ومنظّمًا وقابلًا للاستخدام مباشرةً.`;
+# Important principles
+1. **Mandatory tool call**: after receiving the user's input, call the suggest_enhancements tool immediately.
+2. **Stay in role**: you are a prompt optimization assistant, not a task executor.
+3. **No text analysis**: do not output phrases like "I understand" or "let me analyze"; call the tool directly.
+4. **Quality assurance**: the generated prompt must be clear, structured, and ready to use directly.`;
 
-// نص الوضع التجريبي
-const DEMO_TEXT = "【الوضع التجريبي】\n\nهذا ردّ تجريبي محاكى. في الوضع الحقيقي، سأستدعي الأدوات لإنشاء موجّه منظّم. وبما أنه لم يُضبط مفتاح API حقيقي حاليًا، يُعرض تأثير بثّ النص فقط.\n\nيمكنك إدخال مفتاح OpenAI أو DeepSeek في الإعدادات لتجربة الميزات الكاملة.";
+// Demo mode text
+const DEMO_TEXT = "[Demo Mode]\n\nThis is a simulated demo response. In real mode, I would call the tools to generate a structured prompt. Since no real API key is currently configured, only the text streaming effect is shown.\n\nYou can enter an OpenAI or DeepSeek key in the settings to try the full features.";
 
-// تعريفات الأدوات بصيغة دوال OpenAI (نفس الأدوات الثلاث)
+// Tool definitions in OpenAI function format (the same three tools)
 const TOOLS = [
   {
     type: 'function',
     function: {
       name: 'ask_questions',
-      description: 'استدعِ هذه الأداة لطرح أسئلة على المستخدم عندما يكون طلبه غير واضح.',
+      description: 'Call this tool to ask the user questions when their request is unclear.',
       parameters: {
         type: 'object',
         properties: {
@@ -89,7 +90,7 @@ const TOOLS = [
     type: 'function',
     function: {
       name: 'suggest_enhancements',
-      description: 'Phase 1: تقديم اقتراحات تحسين متعدّدة الأبعاد ليختار منها المستخدم.',
+      description: 'Phase 1: provide multi-dimensional optimization suggestions for the user to choose from.',
       parameters: {
         type: 'object',
         properties: {
@@ -99,7 +100,7 @@ const TOOLS = [
               type: 'object',
               properties: {
                 key: { type: 'string' },
-                title: { type: 'string', description: 'عنوان البُعد، مثل "أسلوب النبرة"' },
+                title: { type: 'string', description: 'Dimension title, e.g. "Tone style"' },
                 options: {
                   type: 'array',
                   items: {
@@ -111,9 +112,9 @@ const TOOLS = [
                     },
                     required: ['label', 'value'],
                   },
-                  description: 'خيارات جاهزة ينقر عليها المستخدم',
+                  description: 'Preset options the user can click',
                 },
-                allowCustom: { type: 'boolean', description: 'هل يُسمح للمستخدم بإدخال متطلب مخصّص' },
+                allowCustom: { type: 'boolean', description: 'Whether the user is allowed to enter a custom requirement' },
               },
               required: ['key', 'title', 'options'],
             },
@@ -127,18 +128,18 @@ const TOOLS = [
     type: 'function',
     function: {
       name: 'propose_prompt',
-      description: 'Phase 2: إنشاء الموجّه المنظّم النهائي بناءً على اختيار المستخدم.',
+      description: 'Phase 2: generate the final structured prompt based on the user selections.',
       parameters: {
         type: 'object',
         properties: {
-          title: { type: 'string', description: 'عنوان الموجّه' },
-          role: { type: 'string', description: 'تعريف الدور' },
-          objective: { type: 'string', description: 'الهدف الأساسي' },
-          context: { type: 'string', description: 'معلومات الخلفية' },
-          constraints: { type: 'array', items: { type: 'string' }, description: 'قائمة القيود' },
-          workflow: { type: 'array', items: { type: 'string' }, description: 'خطوات سير العمل' },
-          outputFormat: { type: 'string', description: 'متطلبات صيغة الإخراج' },
-          finalPrompt: { type: 'string', description: 'الموجّه النهائي الكامل' },
+          title: { type: 'string', description: 'Prompt title' },
+          role: { type: 'string', description: 'Role definition' },
+          objective: { type: 'string', description: 'Core objective' },
+          context: { type: 'string', description: 'Background information' },
+          constraints: { type: 'array', items: { type: 'string' }, description: 'List of constraints' },
+          workflow: { type: 'array', items: { type: 'string' }, description: 'Workflow steps' },
+          outputFormat: { type: 'string', description: 'Output format requirements' },
+          finalPrompt: { type: 'string', description: 'The complete final prompt' },
         },
         required: ['title', 'role', 'objective', 'constraints', 'finalPrompt'],
       },
@@ -146,12 +147,12 @@ const TOOLS = [
   },
 ];
 
-// تطبيع الـ Base URL (إزالة الشرطة المائلة النهائية)
+// Normalize the Base URL (remove a trailing slash)
 function normalizeBaseUrl(baseUrl: string): string {
   return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 }
 
-// تحويل رسائل التطبيق إلى صيغة المزوّد (role + content فقط)
+// Convert app messages to the provider format (role + content only)
 function toProviderMessages(messages: any[]): Array<{ role: string; content: string }> {
   return messages
     .filter((m) => m && (m.role === 'user' || m.role === 'assistant' || m.role === 'system'))
@@ -161,7 +162,7 @@ function toProviderMessages(messages: any[]): Array<{ role: string; content: str
     }));
 }
 
-// تحويل رمز/رسالة الخطأ إلى رسالة مفهومة (نفس منطق المعالجة السابق)
+// Map a status code / error message to a clear message (same handling logic as before)
 function mapError(status: number, raw: string, modelId?: string): string {
   if (status === 401 || /unauthorized|invalid api key/i.test(raw)) {
     return 'Authentication Failed: Invalid API Key. Please check your API Key in Settings.';
@@ -181,7 +182,7 @@ function mapError(status: number, raw: string, modelId?: string): string {
   return raw || `AI Error: request failed with status ${status}`;
 }
 
-// بثّ الوضع التجريبي
+// Demo mode stream
 function buildDemoResponse(): Response {
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -197,13 +198,14 @@ function buildDemoResponse(): Response {
 }
 
 /**
- * الدالة الرئيسية: تُرسل الطلب وتُعيد Response ببثّ بنفس البروتوكول.
- * صُمّمت لتكون بديلاً مباشرًا عن fetch('/api/chat', ...) في الواجهة.
+ * Main function: sends the request and returns a streamed Response using the
+ * same protocol. Designed as a drop-in replacement for fetch('/api/chat', ...)
+ * in the UI.
  */
 export async function streamChat(params: StreamChatParams): Promise<Response> {
   const { messages, model, systemPrompt, apiKey, baseUrl, signal } = params;
 
-  // الوضع التجريبي
+  // Demo mode
   if (apiKey === 'demo') {
     return buildDemoResponse();
   }
@@ -252,11 +254,11 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
 
   const stream = new ReadableStream({
     async start(controller) {
-      // تجميع استدعاءات الأدوات حسب الفهرس (تصل أجزاؤها تدريجيًا)
+      // Accumulate tool calls by index (their parts arrive incrementally)
       const toolAcc: Record<number, { id: string; name: string; args: string }> = {};
       let buffer = '';
 
-      // إصدار استدعاءات الأدوات المتراكمة بعد التحقّق/التصحيح
+      // Emit the accumulated tool calls after validation/correction
       const flushToolCalls = async () => {
         for (const idx of Object.keys(toolAcc)) {
           const tc = toolAcc[Number(idx)];
@@ -266,10 +268,10 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
           try {
             parsed = tc.args ? JSON.parse(tc.args) : {};
           } catch {
-            parsed = tc.args; // غير صالح؛ سيُكتشف في التحقّق
+            parsed = tc.args; // invalid; will be caught during validation
           }
 
-          // التحقّق من الصيغة، ومحاولة التصحيح عند الفشل (حتى 3 مرّات)
+          // Validate the format, and try to correct it on failure (up to 3 times)
           const validation = validateToolCall(tc.name, parsed);
           if (!validation.valid) {
             controller.enqueue(encoder.encode(`e:{"type":"correction","status":"correcting"}\n`));
@@ -322,12 +324,12 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
             const delta = json?.choices?.[0]?.delta;
             if (!delta) continue;
 
-            // المحتوى النصّي
+            // Text content
             if (typeof delta.content === 'string' && delta.content.length > 0) {
               controller.enqueue(encoder.encode(`0:${JSON.stringify(delta.content)}\n`));
             }
 
-            // أجزاء استدعاءات الأدوات
+            // Tool call fragments
             if (Array.isArray(delta.tool_calls)) {
               for (const part of delta.tool_calls) {
                 const idx = part.index ?? 0;
@@ -340,7 +342,7 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
           }
         }
 
-        // إصدار أي استدعاءات أدوات متراكمة عند انتهاء البثّ
+        // Emit any accumulated tool calls when the stream ends
         await flushToolCalls();
         controller.close();
       } catch (streamError: any) {

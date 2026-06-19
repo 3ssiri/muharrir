@@ -16,7 +16,7 @@ interface FileAttachmentIconProps {
 }
 
 export function FileAttachmentIcon({ fileName, fileType, fileContent, className = '' }: FileAttachmentIconProps) {
-  // إرجاع الأيقونة واللون المناسبين حسب نوع الملف
+  // Return the appropriate icon and color based on the file type
   const getFileIcon = () => {
     if (fileType === 'application/pdf') {
       return (

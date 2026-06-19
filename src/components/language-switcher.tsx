@@ -12,12 +12,12 @@ export function LanguageSwitcher() {
   const pathname = usePathname()
 
   const switchLocale = () => {
-    // التبديل بين العربية والإنجليزية
+    // Switch between Arabic and English
     const currentIndex = locales.indexOf(locale as Locale)
     const nextIndex = (currentIndex + 1) % locales.length
     const newLocale = locales[nextIndex]
 
-    // حفظ التفضيل ليُعتمد عند فتح الجذر "/" لاحقًا
+    // Save the preference so it is used when opening the root "/" later
     try {
       localStorage.setItem('preferred-locale', newLocale)
     } catch {}
@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
     router.push(`/${newLocale}${pathnameWithoutLocale}`)
   }
 
-  // الرمز المختصر للّغة الحالية
+  // Short code for the current language
   const getLanguageCode = (loc: string) => {
     return loc === 'ar' ? 'AR' : 'EN'
   }

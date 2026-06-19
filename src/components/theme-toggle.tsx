@@ -14,13 +14,13 @@ export function ThemeToggle() {
   }, [])
 
   const handleThemeChange = () => {
-    // استخدام View Transitions API (إذا كان المتصفح يدعمها)
+    // Use the View Transitions API (if the browser supports it)
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
       })
     } else {
-      // حل بديل: إضافة طبقة تدرّج
+      // Fallback: add a gradient overlay layer
       const overlay = document.createElement('div')
       overlay.style.cssText = `
         position: fixed;
@@ -36,16 +36,16 @@ export function ThemeToggle() {
       `
       document.body.appendChild(overlay)
 
-      // إظهار الطبقة تدريجيًا
+      // Fade the overlay in gradually
       requestAnimationFrame(() => {
         overlay.style.opacity = '1'
       })
 
-      // تبديل السمة
+      // Switch the theme
       setTimeout(() => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
 
-        // إخفاء الطبقة تدريجيًا
+        // Fade the overlay out gradually
         setTimeout(() => {
           overlay.style.opacity = '0'
           setTimeout(() => {

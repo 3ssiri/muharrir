@@ -36,7 +36,7 @@ export function FavoritesPage() {
     loadFavorites()
   }, [])
 
-  // تصفية البحث
+  // Filter search results
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredFavorites(favorites)
@@ -84,7 +84,7 @@ export function FavoritesPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8">
-      {/* مربع البحث وأزرار الاستيراد والتصدير */}
+      {/* Search box and import/export buttons */}
       <div className="flex gap-2 mb-6">
         <div className="relative flex-1">
           <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -99,7 +99,7 @@ export function FavoritesPage() {
         <ExportFavorites />
       </div>
 
-      {/* قائمة المفضلة */}
+      {/* Favorites list */}
       {filteredFavorites.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
           <Star className="w-12 h-12 mx-auto mb-3 opacity-20" />

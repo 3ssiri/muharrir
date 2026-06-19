@@ -13,7 +13,7 @@ export const localeFlags: Record<Locale, string> = {
   'en': '🇺🇸'
 };
 
-// اللغات التي تُعرض من اليمين إلى اليسار (RTL)
+// Locales that are displayed right-to-left (RTL)
 export const rtlLocales: Locale[] = ['ar'];
 
 export function getLocaleDir(locale: string): 'rtl' | 'ltr' {

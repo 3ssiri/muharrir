@@ -30,7 +30,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // البحث في المحادثات
+  // Search within chats
   useEffect(() => {
     if (!open) return
 
@@ -53,7 +53,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
     searchChats()
   }, [searchQuery, open])
 
-  // البحث في المفضلة
+  // Search within favorites
   useEffect(() => {
     if (!open) return
 
@@ -76,7 +76,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
     searchFavorites()
   }, [searchQuery, open])
 
-  // إعادة تعيين الحالة
+  // Reset the state
   useEffect(() => {
     if (open) {
       setSearchQuery('')
@@ -85,7 +85,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
     }
   }, [open])
 
-  // التنقل عبر لوحة المفاتيح
+  // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const results = activeTab === 'chats' ? chatResults : favoriteResults
 
@@ -125,7 +125,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
           <DialogTitle>{t('spotlight.searchTitle')}</DialogTitle>
         </VisuallyHidden>
 
-        {/* مربع البحث */}
+        {/* Search box */}
         <div className="p-4 border-b">
           <div className="relative">
             <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -140,7 +140,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
           </div>
         </div>
 
-        {/* تبديل علامات التبويب */}
+        {/* Tab switcher */}
         <div className="flex border-b bg-muted/30">
           <button
             onClick={() => { setActiveTab('chats'); setSelectedIndex(0) }}
@@ -166,7 +166,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
           </button>
         </div>
 
-        {/* قائمة النتائج */}
+        {/* Results list */}
         <div className="max-h-96 overflow-y-auto">
           {results.length === 0 ? (
             <div className="p-8 text-center text-muted-foreground">
@@ -208,7 +208,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
           )}
         </div>
 
-        {/* تلميحات اختصارات لوحة المفاتيح */}
+        {/* Keyboard shortcut hints */}
         <div className="p-3 border-t bg-muted/30 flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex gap-4">
             <span><Badge variant="outline" className="me-1">↑↓</Badge>{t('spotlight.navigate')}</span>

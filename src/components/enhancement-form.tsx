@@ -22,7 +22,7 @@ interface EnhancementDimension {
     title: string
     options: EnhancementOption[]
     allowCustom: boolean
-    selectionType?: 'single' | 'multiple' // اختيار مفرد أو متعدد
+    selectionType?: 'single' | 'multiple' // Single or multiple selection
 }
 
 interface EnhancementFormProps {
@@ -34,31 +34,31 @@ interface EnhancementFormProps {
 export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: EnhancementFormProps) {
     const t = useTranslations();
     const { toolCallId, args } = toolInvocation
-    const [selections, setSelections] = useState<Record<string, string | string[]>>({}) // يدعم الاختيار المفرد والمتعدد
+    const [selections, setSelections] = useState<Record<string, string | string[]>>({}) // Supports both single and multiple selection
     const [customInputs, setCustomInputs] = useState<Record<string, string>>({})
     const [submitted, setSubmitted] = useState(false)
-    const [forceMultiSelect, setForceMultiSelect] = useState<Record<string, boolean>>({}) // فرض الاختيار المتعدد
-    const [editingOption, setEditingOption] = useState<{ dimKey: string; optionValue: string } | null>(null) // الخيار قيد التحرير
-    const [editedLabels, setEditedLabels] = useState<Record<string, string>>({}) // التسميات بعد التحرير
+    const [forceMultiSelect, setForceMultiSelect] = useState<Record<string, boolean>>({}) // Force multiple selection
+    const [editingOption, setEditingOption] = useState<{ dimKey: string; optionValue: string } | null>(null) // The option currently being edited
+    const [editedLabels, setEditedLabels] = useState<Record<string, string>>({}) // Labels after editing
 
     // Parse args safely with better error handling
     let formConfig: { dimensions: EnhancementDimension[] } | null = null
     try {
-        // تصحيح الأخطاء: إخراج args الأصلية
+        // Debugging: output the original args
         console.log('EnhancementForm args:', args)
         console.log('EnhancementForm args type:', typeof args)
 
-        // معالجة البيانات المتدفقة: قد تكون args كائناً أو نصاً
+        // Handle streaming data: args may be an object or a string
         let parsed = typeof args === 'string' ? JSON.parse(args) : args
         console.log('EnhancementForm parsed:', parsed)
 
-        // التحقق من بنية نتيجة التحليل
+        // Validate the structure of the parsed result
         if (parsed && typeof parsed === 'object') {
-            // التحقق من وجود حقل dimensions وأنه مصفوفة
+            // Check that a dimensions field exists and is an array
             if (Array.isArray(parsed.dimensions) && parsed.dimensions.length > 0) {
                 console.log('Found dimensions:', parsed.dimensions.length)
 
-                // التحقق الإضافي من بنية كل dimension
+                // Additional validation of each dimension's structure
                 const validDimensions = parsed.dimensions.filter((dim: any) =>
                     dim &&
                     typeof dim === 'object' &&
@@ -78,12 +78,12 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
             }
         }
     } catch (e) {
-        // فشل تحليل JSON، ربما لم تكتمل البيانات المتدفقة بعد
+        // JSON parsing failed, perhaps the streaming data is not complete yet
         console.error('Enhancement form config parsing error:', e)
         console.error('Args value:', args)
     }
 
-    // في حال كان الإعداد غير صالح أو فارغاً، عرض حالة التحميل
+    // If the config is invalid or empty, show a loading state
     if (!formConfig || !formConfig.dimensions || formConfig.dimensions.length === 0) {
         return (
             <Card className="flex items-center justify-center p-6 border-dashed animate-pulse">
@@ -98,10 +98,10 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
             const newSel = { ...prev }
 
             if (isMultiple) {
-                // منطق الاختيار المتعدد
+                // Multiple selection logic
                 const current = Array.isArray(newSel[dimKey]) ? newSel[dimKey] as string[] : []
                 if (current.includes(value)) {
-                    // إلغاء الاختيار
+                    // Deselect
                     const filtered = current.filter(v => v !== value)
                     if (filtered.length === 0) {
                         delete newSel[dimKey]
@@ -109,11 +109,11 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                         newSel[dimKey] = filtered
                     }
                 } else {
-                    // إضافة اختيار
+                    // Add a selection
                     newSel[dimKey] = [...current, value]
                 }
             } else {
-                // منطق الاختيار المفرد
+                // Single selection logic
                 if (newSel[dimKey] === value) {
                     delete newSel[dimKey] // Toggle off
                 } else {
@@ -129,7 +129,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
             ...prev,
             [dimKey]: !prev[dimKey]
         }))
-        // مسح اختيار هذا البُعد عند التبديل
+        // Clear this dimension's selection when toggling
         setSelections(prev => {
             const newSel = { ...prev }
             delete newSel[dimKey]
@@ -137,13 +137,13 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
         })
     }
 
-    // الحصول على تسمية عرض الخيار (تُستخدم التسمية المحرَّرة أولاً)
+    // Get the option's display label (the edited label takes precedence)
     const getOptionLabel = (dimKey: string, optionValue: string, originalLabel: string) => {
         const key = `${dimKey}-${optionValue}`
         return editedLabels[key] || originalLabel
     }
 
-    // معالجة التحرير بالنقر المزدوج
+    // Handle editing via double-click
     const handleDoubleClick = (dimKey: string, optionValue: string, currentLabel: string) => {
         if (submitted) return
         setEditingOption({ dimKey, optionValue })
@@ -153,7 +153,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
         }
     }
 
-    // حفظ التحرير
+    // Save the edit
     const handleSaveEdit = () => {
         setEditingOption(null)
     }
@@ -172,7 +172,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                 feedbackParts.push(`[${dim.title}]: تخصيص المستخدم - ${customVal}`)
             } else if (selectedVal) {
                 if (Array.isArray(selectedVal)) {
-                    // اختيار متعدد - استخدام التسميات المحرَّرة
+                    // Multiple selection - use the edited labels
                     const labels = selectedVal.map(v => {
                         const opt = dim.options.find(o => o.value === v)
                         const editKey = `${dim.key}-${v}`
@@ -180,7 +180,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                     })
                     feedbackParts.push(`[${dim.title}]: ${labels.join('، ')}`)
                 } else {
-                    // اختيار مفرد - استخدام التسميات المحرَّرة
+                    // Single selection - use the edited labels
                     const opt = dim.options.find(o => o.value === selectedVal)
                     const editKey = `${dim.key}-${selectedVal}`
                     const finalLabel = editedLabels[editKey] || opt?.label || selectedVal
@@ -206,7 +206,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
         }
     }
 
-    // إذا تم الإرسال أو وُجدت نتيجة، عرض حالة الاكتمال (دون إمكانية التفاعل)
+    // If submitted or a result exists, show the completed state (non-interactive)
     if (submitted || 'result' in toolInvocation) {
         return (
             <Card className="bg-muted/10 border-dashed">
@@ -245,7 +245,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                             <div className="mb-3 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <Label className="text-sm font-semibold text-foreground/80">{dim.title}</Label>
-                                    {/* أزرار التبديل المسطحة */}
+                                    {/* Flat toggle buttons */}
                                     <div className="inline-flex items-center rounded-md bg-muted p-1 text-xs">
                                         <button
                                             type="button"
@@ -288,7 +288,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                                     const editKey = `${dim.key}-${opt.value}`
 
                                     if (isEditing) {
-                                        // وضع التحرير: عرض مربع الإدخال
+                                        // Editing mode: show the input box
                                         return (
                                             <div key={opt.value} className="flex items-center gap-1">
                                                 <Input
@@ -313,7 +313,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                                         )
                                     }
 
-                                    // الوضع العادي: عرض الزر
+                                    // Normal mode: show the button
                                     return (
                                         <Button
                                             key={opt.value}
@@ -330,7 +330,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                                             title={`${opt.description || ''}\n\n💡 ${t('enhancementForm.doubleClickToEdit')}`}
                                         >
                                             {displayLabel}
-                                            {/* تلميح التحرير بالنقر المزدوج - يظهر عند التمرير */}
+                                            {/* Double-click-to-edit hint - shown on hover */}
                                             {!submitted && (
                                                 <span className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none">
                                                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary/90 text-primary-foreground text-[10px] font-medium whitespace-nowrap shadow-lg">

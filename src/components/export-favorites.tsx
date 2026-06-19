@@ -40,12 +40,12 @@ export function ExportFavorites() {
         filename = `favorites-${Date.now()}.json`
         mimeType = 'application/json'
       } else {
-        // تنسيق DOCX غير متوفر حالياً، إبلاغ المستخدم
+        // DOCX format is not available yet, notify the user
         alert('ميزة التصدير بتنسيق DOCX قيد التطوير')
         return
       }
 
-      // إنشاء رابط التنزيل
+      // Create the download link
       const blob = new Blob([content], { type: mimeType })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')

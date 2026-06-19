@@ -22,7 +22,7 @@ interface PromptProposal {
     workflow?: string | string[]
     outputFormat?: string
     finalPrompt?: string
-    final_prompt?: string  // للتوافق مع الصيغة القديمة
+    final_prompt?: string  // For backward compatibility with the old format
 }
 
 interface PromptProposalCardProps {
@@ -47,7 +47,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
         // Partial JSON during streaming
     }
 
-    // التحقق مما إذا كان مضافاً إلى المفضلة
+    // Check whether it has been added to favorites
     useEffect(() => {
         const checkFavorite = async () => {
             if (!proposal?.finalPrompt && !proposal?.final_prompt) return
@@ -101,13 +101,13 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
         const title = proposal?.title || t('promptProposal.title')
 
         if (favorited && favoriteId) {
-            // إزالة من المفضلة
+            // Remove from favorites
             await db.favoritePrompts.delete(favoriteId)
             setFavorited(false)
             setFavoriteId(null)
             toast.success(t('promptProposal.favoriteRemoved'))
         } else {
-            // إضافة إلى المفضلة
+            // Add to favorites
             const id = await db.favoritePrompts.add({
                 title,
                 content: finalPrompt,
@@ -255,7 +255,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
             </CardFooter>
         </Card>
 
-        {/* نافذة منبثقة بملء الشاشة */}
+        {/* Full-screen modal */}
         {isFullscreen && (
             <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-2">
                 <div className="w-full max-w-[95vw] h-[95vh] flex flex-col bg-card border rounded-lg shadow-2xl">

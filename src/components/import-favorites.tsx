@@ -35,7 +35,7 @@ export function ImportFavorites({ onImportSuccess }: { onImportSuccess?: () => v
         return
       }
 
-      // الاستيراد إلى قاعدة البيانات
+      // Import into the database
       await db.favoritePrompts.bulkAdd(favorites)
       alert(`تم استيراد ${favorites.length} عنصر مفضل بنجاح`)
       onImportSuccess?.()

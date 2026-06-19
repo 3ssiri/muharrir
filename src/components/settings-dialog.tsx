@@ -168,7 +168,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
     const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, autoRetry, maxRetries, setApiKey, setBaseUrl, setModel, setSystemPrompt, setAvailableModels, setCorrectionModel, setAutoRetry, setMaxRetries } = useAppStore()
     const [internalOpen, setInternalOpen] = useState(false)
 
-    // استخدام التحكم الخارجي أو الحالة الداخلية (مبدأ KISS - البساطة أولاً)
+    // Use external control or internal state (KISS principle - simplicity first)
     const open = externalOpen !== undefined ? externalOpen : internalOpen
     const setOpen = onOpenChange || setInternalOpen
     const [localConfig, setLocalConfig] = useState({ apiKey, baseUrl, model, systemPrompt, correctionModel, autoRetry, maxRetries })
@@ -374,25 +374,25 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         navigator.clipboard.writeText(base64String).then(() => {
             alert(t('settings.exportSuccess'))
         }).catch(() => {
-            // في حال فشل النسخ، عرضه في نافذة منبثقة لينسخه المستخدم يدوياً
+            // If copying fails, show it in a prompt so the user can copy it manually
             prompt(t('settings.exportPrompt'), base64String)
         })
     }
 
     const handleImportSettings = async () => {
         try {
-            // محاولة القراءة من الحافظة
+            // Try to read from the clipboard
             const clipboardText = await navigator.clipboard.readText()
             let base64String = clipboardText.trim()
 
-            // في حال كانت الحافظة فارغة أو غير صالحة، العودة إلى الإدخال اليدوي
+            // If the clipboard is empty or invalid, fall back to manual input
             if (!base64String) {
                 const userInput = prompt(t('settings.importPrompt'))
                 if (!userInput) return
                 base64String = userInput.trim()
             }
 
-            // تحليل الإعدادات
+            // Parse the settings
             const jsonString = decodeURIComponent(escape(atob(base64String)))
             const settings = JSON.parse(jsonString)
             setLocalConfig({
@@ -406,7 +406,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
             })
             alert(t('settings.importSuccess'))
         } catch (error) {
-            // في حال فشلت القراءة من الحافظة أو فشل التحليل، العودة إلى الإدخال اليدوي
+            // If reading from the clipboard or parsing fails, fall back to manual input
             const base64String = prompt(t('settings.importError') + '\n' + t('settings.importPrompt'))
             if (!base64String) return
 
@@ -526,10 +526,10 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                             </div>
                         </TabsContent>
 
-                        {/* علامة تبويب الإعدادات المتقدمة */}
+                        {/* Advanced settings tab */}
                         <TabsContent value="advanced" className="space-y-6 mt-0">
                             <div className="space-y-6">
-                                {/* نموذج تصحيح التنسيق - نمط البطاقة */}
+                                {/* Format correction model - card style */}
                                 <div className="p-4 bg-muted/30 rounded-lg border space-y-3">
                                     <div className="space-y-1">
                                         <Label className="text-sm font-semibold">{t('settings.correctionModel')}</Label>
@@ -559,7 +559,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                     </div>
                                 </div>
 
-                                {/* إعداد إعادة المحاولة التلقائية */}
+                                {/* Auto-retry setting */}
                                 <div className="space-y-3 p-4 bg-muted/30 rounded-lg border">
                                     <div className="flex items-center justify-between">
                                         <div className="space-y-0.5">
@@ -592,7 +592,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                     )}
                                 </div>
 
-                                {/* محدد السمة - نمط البطاقة */}
+                                {/* Theme selector - card style */}
                                 <div className="p-4 bg-muted/30 rounded-lg border space-y-3">
                                     <div className="space-y-1">
                                         <Label className="text-sm font-semibold">{t('settings.theme')}</Label>

@@ -18,7 +18,7 @@ export type ChatMessage = {
     toolInvocations?: any[];
     data?: any;
     annotations?: any[];
-    // معلومات الملف المرفق - يدعم ملفات متعدّدة
+    // Attached file info - supports multiple files
     file?: {
         name: string;
         type: string;
@@ -29,7 +29,7 @@ export type ChatMessage = {
         type: string;
         preview?: string;
     }>;
-    // حالة الخطأ
+    // Error state
     error?: {
         type: 'network' | 'auth' | 'quota' | 'server' | 'unknown';
         message: string;

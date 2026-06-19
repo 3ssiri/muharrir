@@ -1,6 +1,6 @@
 /**
- * إعدادات الأوضاع الجاهزة
- * مبنية على تركيبات المُزخرِفات من prompt-decorators
+ * Preset mode configurations
+ * Built on decorator combinations from prompt-decorators
  */
 
 import { DecoratorConfig } from './decorator-engine';

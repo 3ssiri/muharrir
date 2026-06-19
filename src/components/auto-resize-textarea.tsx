@@ -37,7 +37,7 @@ export function AutoResizeTextarea({
   const [showExpandButton, setShowExpandButton] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
-  // التعامل مع أحداث لوحة المفاتيح: Enter للإرسال، Shift+Enter لسطر جديد
+  // Handle keyboard events: Enter to submit, Shift+Enter for a new line
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -47,40 +47,40 @@ export function AutoResizeTextarea({
     }
   }
 
-  // التأكد من تركيب المكوّن لتجنّب أخطاء hydration
+  // Ensure the component is mounted to avoid hydration errors
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // ضبط الارتفاع تلقائيًا
+  // Adjust the height automatically
   useEffect(() => {
     const textarea = textareaRef.current
     if (!textarea) return
 
-    // إعادة تعيين الارتفاع للحصول على قيمة scrollHeight الصحيحة
+    // Reset the height to get the correct scrollHeight value
     textarea.style.height = 'auto'
 
-    // حساب الارتفاع الأقصى (ربع ارتفاع الشاشة، لمساحة عرض أكبر)
+    // Calculate the maximum height (a quarter of the screen height, for a larger display area)
     const maxHeight = Math.max(window.innerHeight / 4, 150)
     const scrollHeight = textarea.scrollHeight
 
-    // تعيين الارتفاع الفعلي
+    // Set the actual height
     if (scrollHeight > maxHeight) {
       textarea.style.height = `${maxHeight}px`
     } else {
       textarea.style.height = `${scrollHeight}px`
     }
 
-    // تحديث حالة زر التوسيع فقط بعد التركيب على جهة العميل
+    // Update the expand button state only after mounting on the client side
     if (isMounted) {
-      // حساب ارتفاع السطر الواحد: minHeight(50px) + padding(3px أعلى وأسفل) = 56px
+      // Calculate the single-line height: minHeight(50px) + padding(3px top and bottom) = 56px
       const singleLineHeight = 56
       const hasMultipleLines = value.includes('\n') || scrollHeight > singleLineHeight
       setShowExpandButton(hasMultipleLines)
     }
   }, [value, isMounted])
 
-  // تجنّب أخطاء hydration
+  // Avoid hydration errors
   if (!isMounted) {
     return (
       <div className="relative flex-1">
@@ -126,7 +126,7 @@ export function AutoResizeTextarea({
           }}
         />
 
-        {/* استخدام visibility بدلاً من العرض الشرطي لتجنّب أخطاء hydration */}
+        {/* Use visibility instead of conditional rendering to avoid hydration errors */}
         <Button
           type="button"
           size="icon"
@@ -144,7 +144,7 @@ export function AutoResizeTextarea({
         </Button>
       </div>
 
-      {/* مربع حوار التكبير */}
+      {/* Enlarge dialog */}
       {isMounted && (
         <Dialog open={isExpanded} onOpenChange={setIsExpanded}>
           <DialogContent className="max-w-5xl w-[90vw] h-[90vh] flex flex-col p-0 border-4">

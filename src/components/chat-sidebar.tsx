@@ -26,21 +26,21 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
     const [sessions, setSessions] = useState<ChatSession[]>([])
     const [isOpen, setIsOpen] = useState(false)
     const [isCollapsed, setIsCollapsed] = useState(false)
-    const [sidebarWidth, setSidebarWidth] = useState(256) // الافتراضي 256px (w-64)
+    const [sidebarWidth, setSidebarWidth] = useState(256) // default 256px (w-64)
     const [isResizing, setIsResizing] = useState(false)
-    const [searchQuery, setSearchQuery] = useState('') // كلمة البحث
-    const [filteredSessions, setFilteredSessions] = useState<ChatSession[]>([]) // الجلسات بعد التصفية
-    const scrollPositionRef = useRef<number>(0) // حفظ موضع التمرير
-    const searchInputRef = useRef<HTMLInputElement>(null) // مرجع حقل البحث
-    const isLoadingRef = useRef(false) // منع التحميل المتكرر
+    const [searchQuery, setSearchQuery] = useState('') // search term
+    const [filteredSessions, setFilteredSessions] = useState<ChatSession[]>([]) // sessions after filtering
+    const scrollPositionRef = useRef<number>(0) // save the scroll position
+    const searchInputRef = useRef<HTMLInputElement>(null) // search field reference
+    const isLoadingRef = useRef(false) // prevent repeated loading
 
     const loadSessions = async (preserveScroll = true) => {
-        // منع التحميل المتكرر
+        // Prevent repeated loading
         if (isLoadingRef.current) return
         isLoadingRef.current = true
 
         try {
-            // حفظ موضع التمرير الحالي
+            // Save the current scroll position
             const viewport = document.querySelector('[data-radix-scroll-area-viewport]')
             if (viewport && preserveScroll) {
                 scrollPositionRef.current = viewport.scrollTop
@@ -50,13 +50,13 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
             setSessions(allSessions)
             setFilteredSessions(allSessions)
 
-            // استعادة التمرير يتم التعامل معها بشكل موحد عبر useLayoutEffect
+            // Scroll restoration is handled uniformly via useLayoutEffect
         } finally {
             isLoadingRef.current = false
         }
     }
 
-    // استخدام useLayoutEffect لاستعادة موضع التمرير بشكل متزامن فور تحديث الـ DOM
+    // Use useLayoutEffect to restore the scroll position synchronously right after the DOM updates
     useLayoutEffect(() => {
         if (scrollPositionRef.current > 0) {
             const viewport = document.querySelector('[data-radix-scroll-area-viewport]')
@@ -66,7 +66,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         }
     }, [sessions, filteredSessions])
 
-    // تصفية البحث
+    // Search filtering
     useEffect(() => {
         if (!searchQuery.trim()) {
             setFilteredSessions(sessions)
@@ -81,7 +81,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         setFilteredSessions(filtered)
     }, [searchQuery, sessions])
 
-    // تحميل حالة الطي والعرض من localStorage
+    // Load the collapsed state and width from localStorage
     useEffect(() => {
         const savedCollapsed = localStorage.getItem('sidebar-collapsed')
         if (savedCollapsed !== null) {
@@ -94,21 +94,21 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         }
     }, [])
 
-    // حفظ حالة الطي في localStorage
+    // Save the collapsed state in localStorage
     const toggleCollapse = () => {
         const newState = !isCollapsed
         setIsCollapsed(newState)
         localStorage.setItem('sidebar-collapsed', String(newState))
     }
 
-    // مراقبة اختصار لوحة المفاتيح: Ctrl+K / Cmd+K للتركيز على حقل البحث
+    // Monitor the keyboard shortcut: Ctrl+K / Cmd+K to focus the search field
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Ctrl+K (Windows/Linux) أو Cmd+K (Mac)
+            // Ctrl+K (Windows/Linux) or Cmd+K (Mac)
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault()
                 searchInputRef.current?.focus()
-                // إذا كان الشريط الجانبي مطويًا، يتم توسيعه
+                // If the sidebar is collapsed, expand it
                 if (isCollapsed) {
                     setIsCollapsed(false)
                     localStorage.setItem('sidebar-collapsed', 'false')
@@ -120,7 +120,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [isCollapsed])
 
-    // التعامل مع السحب لتعديل العرض
+    // Handle dragging to adjust the width
     const handleMouseDown = (e: React.MouseEvent) => {
         e.preventDefault()
         setIsResizing(true)
@@ -131,7 +131,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
             if (!isResizing) return
 
             const newWidth = e.clientX
-            // تقييد العرض بين 200px و 500px
+            // Constrain the width between 200px and 500px
             if (newWidth >= 200 && newWidth <= 500) {
                 setSidebarWidth(newWidth)
             }
@@ -159,10 +159,10 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         loadSessions()
     }, [])
 
-    // مراقبة تغيّر الجلسة الحالية لتحديث القائمة (مع الحفاظ على موضع التمرير)
+    // Monitor changes to the current session to refresh the list (while preserving the scroll position)
     useEffect(() => {
         if (currentSessionId) {
-            // تأخير التحديث لضمان اكتمال حدث النقر
+            // Delay the refresh to ensure the click event has completed
             const timer = setTimeout(() => {
                 loadSessions(true) // preserveScroll = true
             }, 100)
@@ -219,7 +219,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                 )}
             </div>
 
-            {/* حقل البحث */}
+            {/* Search field */}
             {!isCollapsed && (
                 <div className="px-4 mb-3">
                     <div className="relative group">
@@ -272,7 +272,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                                 : 'hover:bg-muted/50 border-transparent'
                                 } ${isCollapsed ? 'overflow-visible' : ''}`}
                             onClick={() => {
-                                // حفظ موضع التمرير قبل النقر
+                                // Save the scroll position before clicking
                                 const viewport = document.querySelector('[data-radix-scroll-area-viewport]')
                                 if (viewport) {
                                     scrollPositionRef.current = viewport.scrollTop
@@ -285,7 +285,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                             {isCollapsed ? (
                                 <>
                                     <MessageSquare className="w-5 h-5" />
-                                    {/* زر الحذف في حالة الطي - يظهر عند التحويم على الجانب الأيمن */}
+                                    {/* Delete button in collapsed state - appears on hover on the right side */}
                                     <Button
                                         variant="ghost"
                                         size="icon"
@@ -348,7 +348,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
             >
                 <SidebarContent showToggle={true} />
 
-                {/* الشريط الفاصل القابل للسحب */}
+                {/* Draggable resize divider */}
                 {!isCollapsed && (
                     <div
                         className={`absolute end-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-primary/50 transition-colors ${

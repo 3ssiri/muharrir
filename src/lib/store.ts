@@ -8,8 +8,8 @@ interface AppSettings {
   systemPrompt: string
   availableModels: string[]
   correctionModel: string
-  autoRetry: boolean // إعداد إعادة المحاولة التلقائية
-  maxRetries: number // أقصى عدد لمحاولات الإعادة
+  autoRetry: boolean // Automatic retry setting
+  maxRetries: number // Maximum number of retry attempts
 }
 
 interface AppState extends AppSettings {
@@ -19,8 +19,8 @@ interface AppState extends AppSettings {
   setSystemPrompt: (prompt: string) => void
   setAvailableModels: (models: string[]) => void
   setCorrectionModel: (model: string) => void
-  setAutoRetry: (enabled: boolean) => void // ضبط إعادة المحاولة التلقائية
-  setMaxRetries: (count: number) => void // ضبط أقصى عدد للمحاولات
+  setAutoRetry: (enabled: boolean) => void // Set automatic retry
+  setMaxRetries: (count: number) => void // Set the maximum number of attempts
   resetSettings: () => void
 }
 
@@ -29,21 +29,21 @@ const defaultSettings: AppSettings = {
   baseUrl: 'https://api.deepseek.com',
   model: 'deepseek-v3.2-exp',
   correctionModel: 'grok-beta-fast',
-  autoRetry: true, // تفعيل إعادة المحاولة التلقائية افتراضيًا
-  maxRetries: 3, // أقصى عدد للمحاولات افتراضيًا هو 3
+  autoRetry: true, // Enable automatic retry by default
+  maxRetries: 3, // The default maximum number of attempts is 3
   systemPrompt: 'أنت مساعد تفاعلي لتحسين الموجّهات. هدفك هو إرشاد المستخدم عبر محادثة متعدّدة الجولات لتوضيح متطلباته، ثم إنشاء موجّه منظّم وعالي الجودة في النهاية.\n\nملاحظات مهمة:\n1. عندما يرفع المستخدم صورة، حلّل محتواها بعناية واربطها بوصفه النصّي لفهم احتياجه الحقيقي\n2. عندما يرفع المستخدم مستندًا (PDF/DOCX)، يُقدَّم محتوى المستند كنصّ؛ حسّن الموجّه بناءً على محتوى المستند وتعليمات المستخدم\n3. ينبغي أن تقدّم اقتراحات بشكل استباقي، مستخدمًا نموذجًا تفاعليًا ليختار المستخدم اتجاهات التحسين',
   availableModels: [
-    // سلسلة OpenAI
+    // OpenAI series
     'gpt-4o',
     'gpt-4o-mini',
     'gpt-4-turbo',
     'o1',
     'o1-mini',
-    // سلسلة Anthropic Claude
+    // Anthropic Claude series
     'claude-3-5-sonnet-20241022',
     'claude-3-5-haiku-20241022',
     'claude-3-opus-20240229',
-    // النماذج الكبيرة المحلية
+    // Local large models
     'deepseek-v3.2-exp',
     'deepseek-chat',
     'deepseek-reasoner',

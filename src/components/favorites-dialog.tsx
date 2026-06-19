@@ -43,7 +43,7 @@ export function FavoritesDialog({ open, onOpenChange }: FavoritesDialogProps) {
     }
   }, [open])
 
-  // تصفية البحث
+  // Filter search results
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredFavorites(favorites)
@@ -99,7 +99,7 @@ export function FavoritesDialog({ open, onOpenChange }: FavoritesDialogProps) {
           </DialogTitle>
         </DialogHeader>
 
-        {/* مربع البحث */}
+        {/* Search box */}
         <div className="relative">
           <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -110,7 +110,7 @@ export function FavoritesDialog({ open, onOpenChange }: FavoritesDialogProps) {
           />
         </div>
 
-        {/* قائمة المفضلة */}
+        {/* Favorites list */}
         <ScrollArea className="flex-1 -mx-6 px-6">
           {filteredFavorites.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
