@@ -11,7 +11,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [windows-latest, macos-latest, ubuntu-22.04]
+        include:
+          # Windows: ينتج tauri-action تلقائيًا مثبّت MSI (WiX) و EXE (NSIS)
+          - platform: windows-latest
+            args: ''
+            rust-targets: ''
+          # macOS: نبني ثنائيًا شاملًا (Intel + Apple Silicon)
+          - platform: macos-latest
+            args: '--target universal-apple-darwin'
+            rust-targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
+          # Linux: ينتج AppImage و deb و rpm
+          - platform: ubuntu-22.04
+            args: ''
+            rust-targets: ''
 
     runs-on: ${{ matrix.platform }}
 
@@ -27,6 +39,8 @@ jobs:
 
       - name: Install Rust (stable)
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-targets }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
@@ -54,6 +68,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          args: ${{ matrix.args }}
           tagName: ${{ github.ref_name }}
           releaseName: 'Prompt Iterator ${{ github.ref_name }}'
           releaseDraft: true
@@ -62,9 +77,9 @@ jobs:
             ## 🖥️ Prompt Iterator — إصدار سطح المكتب
 
             ### ملفات التحميل حسب النظام
-            - **Windows**: ملف `.msi`
-            - **macOS**: ملف `.dmg`
-            - **Linux**: ملف `.AppImage`
+            - **Windows**: مثبّت `.msi` أو `.exe` (NSIS)
+            - **macOS**: ملف `.dmg` (ثنائي شامل: Intel + Apple Silicon)
+            - **Linux**: ملف `.AppImage` أو `.deb` أو `.rpm`
 
             ### خطوات أول تشغيل
             1. حمّل الملف المناسب لنظامك وثبّته.
