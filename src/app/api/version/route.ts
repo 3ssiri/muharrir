@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    // 检测是否为云端部署环境（Vercel）
+    // التحقّق ممّا إذا كانت بيئة نشر سحابية (Vercel)
     const isProduction = process.env.VERCEL === '1' || process.env.NODE_ENV === 'production'
 
-    // 获取远程 GitHub commit 数量
+    // جلب عدد commits البعيدة من GitHub
     let remoteVersion = null
     let localVersion = null
     let hasUpdate = false
@@ -17,7 +17,7 @@ export async function GET() {
           headers: {
             'Accept': 'application/vnd.github.v3+json',
           },
-          next: { revalidate: 300 } // 缓存 5 分钟
+          next: { revalidate: 300 } // التخزين المؤقّت لمدة 5 دقائق
         }
       )
 
@@ -35,7 +35,7 @@ export async function GET() {
       console.error('Failed to fetch remote version:', error)
     }
 
-    // 云端部署：直接显示远程版本
+    // النشر السحابي: عرض الإصدار البعيد مباشرةً
     if (isProduction) {
       return NextResponse.json({
         localVersion: remoteVersion,
@@ -44,7 +44,7 @@ export async function GET() {
       })
     }
 
-    // 本地开发：获取本地 commit 数量并对比
+    // التطوير المحلي: جلب عدد commits المحلية ومقارنتها
     try {
       const { execSync } = require('child_process')
       const localCommitCount = execSync('git rev-list --count HEAD', { encoding: 'utf-8' }).trim()
@@ -57,7 +57,7 @@ export async function GET() {
       }
     } catch (error) {
       console.error('Failed to get local version:', error)
-      localVersion = remoteVersion // 如果获取本地版本失败，使用远程版本
+      localVersion = remoteVersion // في حال فشل جلب الإصدار المحلي، استخدم الإصدار البعيد
     }
 
     return NextResponse.json({

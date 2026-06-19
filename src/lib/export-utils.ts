@@ -1,29 +1,29 @@
 /**
- * 收藏导出工具
- * 支持导出为 MD、JSON、DOCX 格式
+ * أداة تصدير المفضّلة
+ * تدعم التصدير بصيغ MD وJSON وDOCX
  */
 
 import type { FavoritePrompt } from './db';
 
 /**
- * 导出为 Markdown 格式
+ * التصدير بصيغة Markdown
  */
 export function exportToMarkdown(favorites: FavoritePrompt[]): string {
-  let markdown = '# 我的收藏提示词\n\n';
-  markdown += `> 导出时间: ${new Date().toLocaleString('zh-CN')}\n\n`;
-  markdown += `> 共 ${favorites.length} 个收藏\n\n`;
+  let markdown = '# الموجّهات المفضّلة\n\n';
+  markdown += `> وقت التصدير: ${new Date().toLocaleString('ar')}\n\n`;
+  markdown += `> الإجمالي: ${favorites.length} عنصرًا مفضّلًا\n\n`;
   markdown += '---\n\n';
 
   favorites.forEach((fav, index) => {
     markdown += `## ${index + 1}. ${fav.title}\n\n`;
 
     if (fav.tags && fav.tags.length > 0) {
-      markdown += `**标签**: ${fav.tags.map(tag => `\`${tag}\``).join(', ')}\n\n`;
+      markdown += `**الوسوم**: ${fav.tags.map(tag => `\`${tag}\``).join(', ')}\n\n`;
     }
 
-    markdown += `**创建时间**: ${new Date(fav.createdAt).toLocaleString('zh-CN')}\n\n`;
-    markdown += `**更新时间**: ${new Date(fav.updatedAt).toLocaleString('zh-CN')}\n\n`;
-    markdown += '**内容**:\n\n';
+    markdown += `**تاريخ الإنشاء**: ${new Date(fav.createdAt).toLocaleString('ar')}\n\n`;
+    markdown += `**تاريخ التحديث**: ${new Date(fav.updatedAt).toLocaleString('ar')}\n\n`;
+    markdown += '**المحتوى**:\n\n';
     markdown += '```\n';
     markdown += fav.content;
     markdown += '\n```\n\n';
@@ -34,7 +34,7 @@ export function exportToMarkdown(favorites: FavoritePrompt[]): string {
 }
 
 /**
- * 导出为 JSON 格式
+ * التصدير بصيغة JSON
  */
 export function exportToJSON(favorites: FavoritePrompt[]): string {
   const exportData = {

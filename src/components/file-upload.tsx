@@ -27,7 +27,7 @@ export function FileUpload({
   const [showFullDropZone, setShowFullDropZone] = useState(false)
   const dragCounterRef = useRef(0)
 
-  // 全局拖拽监听
+  // مراقبة السحب على مستوى النافذة بالكامل
   useEffect(() => {
     const handleGlobalDragEnter = (e: DragEvent) => {
       e.preventDefault()
@@ -72,12 +72,12 @@ export function FileUpload({
     const files = e.target.files
     if (!files || files.length === 0) return
 
-    // 处理所有选中的文件
+    // معالجة جميع الملفات المحددة
     for (let i = 0; i < files.length; i++) {
       await processFile(files[i])
     }
 
-    // 重置 input 以允许重复选择同一文件
+    // إعادة تعيين input للسماح باختيار الملف نفسه مرة أخرى
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -89,25 +89,25 @@ export function FileUpload({
     const isDoc = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     const isText = file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md')
 
-    // 检查图片支持
+    // التحقق من دعم الصور
     if (isImage && !modelSupportsVision) {
       toast.error(t('fileUploadComponent.visionNotSupported'))
       return
     }
 
-    // 检查文件类型
+    // التحقق من نوع الملف
     if (!isImage && !isPDF && !isDoc && !isText) {
       toast.error(t('fileUploadComponent.unsupportedFormat'))
       return
     }
 
-    // 检查文件大小（10MB）
+    // التحقق من حجم الملف (10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error(t('fileUploadComponent.fileTooLarge'))
       return
     }
 
-    // 处理图片预览
+    // معالجة معاينة الصورة
     if (isImage) {
       const reader = new FileReader()
       reader.onload = (e) => {
@@ -136,7 +136,7 @@ export function FileUpload({
 
     const files = e.dataTransfer.files
     if (files && files.length > 0) {
-      // 处理所有拖拽的文件
+      // معالجة جميع الملفات المسحوبة
       for (let i = 0; i < files.length; i++) {
         await processFile(files[i])
       }
@@ -145,7 +145,7 @@ export function FileUpload({
 
   return (
     <>
-      {/* 全屏拖拽上传区域 */}
+      {/* منطقة رفع الملفات بالسحب على كامل الشاشة */}
       {showFullDropZone && (
         <div
           className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-200"
@@ -173,9 +173,9 @@ export function FileUpload({
         </div>
       )}
 
-      {/* 常规上传区域 - 由傲娇大小姐哈雷酱重新设计 (￣▽￣)／ */}
+      {/* منطقة الرفع العادية */}
       <div className="space-y-3">
-        {/* 文件列表 - 独立显示在上方 */}
+        {/* قائمة الملفات - تُعرض بشكل مستقل في الأعلى */}
         {currentFiles.length > 0 && (
           <div className="flex flex-wrap gap-2 p-3 bg-muted/30 rounded-lg border">
             {currentFiles.map((item, index) => (
@@ -211,7 +211,7 @@ export function FileUpload({
           </div>
         )}
 
-        {/* 上传按钮 - 单独一行 */}
+        {/* زر الرفع - في سطر مستقل */}
         <div className="relative">
           <Button
             type="button"

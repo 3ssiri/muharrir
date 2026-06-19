@@ -13,7 +13,7 @@ interface KeyboardShortcutsDialogProps {
 export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcutsDialogProps) {
   const t = useTranslations()
 
-  // 检测操作系统
+  // اكتشاف نظام التشغيل
   const [isMac, setIsMac] = useState(false)
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcut
         </DialogHeader>
 
         <div className="py-4">
-          {/* 双列布局 */}
+          {/* تخطيط بعمودين */}
           <div className="grid grid-cols-2 gap-6">
             {shortcuts.map((section, idx) => (
               <div key={idx}>

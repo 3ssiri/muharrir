@@ -10,7 +10,7 @@ import { db } from '@/lib/db'
 import type { FavoritePrompt } from '@/lib/db'
 import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
-import { zhCN, enUS } from 'date-fns/locale'
+import { ar, enUS } from 'date-fns/locale'
 import { useTranslations, useLocale } from 'next-intl'
 import { ExportFavorites } from '@/components/export-favorites'
 import { ImportFavorites } from '@/components/import-favorites'
@@ -18,7 +18,7 @@ import { ImportFavorites } from '@/components/import-favorites'
 export function FavoritesPage() {
   const t = useTranslations();
   const locale = useLocale();
-  const dateLocale = locale === 'zh-CN' ? zhCN : enUS;
+  const dateLocale = locale === 'ar' ? ar : enUS;
   const [favorites, setFavorites] = useState<FavoritePrompt[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [filteredFavorites, setFilteredFavorites] = useState<FavoritePrompt[]>([])
@@ -36,7 +36,7 @@ export function FavoritesPage() {
     loadFavorites()
   }, [])
 
-  // 搜索过滤
+  // تصفية البحث
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredFavorites(favorites)
@@ -84,7 +84,7 @@ export function FavoritesPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8">
-      {/* 搜索框和导入导出按钮 */}
+      {/* مربع البحث وأزرار الاستيراد والتصدير */}
       <div className="flex gap-2 mb-6">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -99,7 +99,7 @@ export function FavoritesPage() {
         <ExportFavorites />
       </div>
 
-      {/* 收藏列表 */}
+      {/* قائمة المفضلة */}
       {filteredFavorites.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
           <Star className="w-12 h-12 mx-auto mb-3 opacity-20" />

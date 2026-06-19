@@ -1,11 +1,11 @@
 /**
- * 格式校验和矫正工具
- * 用于检查 LLM 输出的工具调用格式是否正确，并在需要时进行矫正
+ * أداة التحقّق من الصيغة وتصحيحها
+ * تُستخدم للتحقّق من صحّة صيغة استدعاء الأدوات في مخرجات النموذج، وتصحيحها عند الحاجة
  */
 
 import { z } from 'zod';
 
-// 定义工具调用的 Schema
+// تعريف مخطّط (Schema) استدعاء الأدوات
 const SuggestEnhancementsSchema = z.object({
   dimensions: z.array(z.object({
     key: z.string(),
@@ -31,7 +31,7 @@ const ProposePromptSchema = z.object({
 });
 
 /**
- * 校验工具调用格式
+ * التحقّق من صيغة استدعاء الأداة
  */
 export function validateToolCall(toolName: string, args: any): { valid: boolean; error?: string } {
   try {
@@ -42,17 +42,17 @@ export function validateToolCall(toolName: string, args: any): { valid: boolean;
       ProposePromptSchema.parse(args);
       return { valid: true };
     }
-    return { valid: true }; // 其他工具暂不校验
+    return { valid: true }; // لا يتم التحقّق من الأدوات الأخرى حاليًا
   } catch (error: any) {
     return {
       valid: false,
-      error: error.message || '格式校验失败'
+      error: error.message || 'فشل التحقّق من الصيغة'
     };
   }
 }
 
 /**
- * 调用 grok-beta-fast 进行格式矫正
+ * استدعاء grok-beta-fast لتصحيح الصيغة
  */
 export async function correctFormat(
   toolName: string,
@@ -61,19 +61,19 @@ export async function correctFormat(
   baseUrl: string
 ): Promise<{ success: boolean; correctedArgs?: any; error?: string }> {
   try {
-    const correctionPrompt = `你是一个格式矫正专家。你的任务是修正 JSON 格式错误，但不能修改、删除或增加任何语义信息。
+    const correctionPrompt = `أنت خبير في تصحيح الصيغ. مهمتك هي إصلاح أخطاء صيغة JSON دون تعديل أو حذف أو إضافة أي معلومة دلالية.
 
-工具名称: ${toolName}
-错误的 JSON: ${JSON.stringify(invalidArgs, null, 2)}
+اسم الأداة: ${toolName}
+الـ JSON الخاطئ: ${JSON.stringify(invalidArgs, null, 2)}
 
-要求:
-1. 只修正 JSON 格式错误（如缺少引号、逗号、括号等）
-2. 不修改任何字段的值或含义
-3. 不删除任何字段
-4. 不添加任何新字段
-5. 直接输出修正后的 JSON，不要有任何其他文字
+المتطلبات:
+1. أصلح أخطاء صيغة JSON فقط (مثل علامات الاقتباس أو الفواصل أو الأقواس المفقودة)
+2. لا تعدّل قيمة أي حقل أو معناه
+3. لا تحذف أي حقل
+4. لا تضِف أي حقل جديد
+5. أخرِج JSON المصحّح مباشرةً دون أي نص آخر
 
-修正后的 JSON:`;
+JSON المصحّح:`;
 
     const response = await fetch(`${baseUrl}/chat/completions`, {
       method: 'POST',
@@ -91,24 +91,24 @@ export async function correctFormat(
     });
 
     if (!response.ok) {
-      throw new Error(`矫正请求失败: ${response.status}`);
+      throw new Error(`فشل طلب التصحيح: ${response.status}`);
     }
 
     const data = await response.json();
     const correctedText = data.choices[0]?.message?.content?.trim();
 
     if (!correctedText) {
-      throw new Error('矫正模型返回空内容');
+      throw new Error('أعاد نموذج التصحيح محتوى فارغًا');
     }
 
-    // 尝试解析矫正后的 JSON
+    // محاولة تحليل JSON بعد التصحيح
     const correctedArgs = JSON.parse(correctedText);
 
     return { success: true, correctedArgs };
   } catch (error: any) {
     return {
       success: false,
-      error: error.message || '格式矫正失败'
+      error: error.message || 'فشل تصحيح الصيغة'
     };
   }
 }

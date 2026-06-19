@@ -35,68 +35,68 @@ const TEST_CONFIG = {
     apiKey: 'sk-xMUZVRACBogvAsbFxm2buTDoixjx7APxES7cBh5TELHABCe0',
     baseUrl: 'https://ai.huan666.de/v1',
     model: 'deepseek-v3.2-exp',
-    systemPrompt: '你是交互式提示词优化助手。你的目标是通过多轮对话，引导用户明确需求，并最终生成高质量的结构化提示词。你应该主动提出建议，使用Checkbox等形式让用户选择。',
+    systemPrompt: 'أنت مساعد تفاعلي لتحسين الموجّهات. هدفك هو إرشاد المستخدم عبر محادثة متعدّدة الجولات لتوضيح متطلباته، ثم إنشاء موجّه منظّم وعالي الجودة في النهاية. ينبغي أن تبادر بتقديم اقتراحات وأن تستخدم أشكالاً مثل مربعات الاختيار (Checkbox) ليختار المستخدم منها.',
     correctionModel: 'grok-beta-fast',
     autoRetry: true,
     maxRetries: 3
 }
 
-const DEFAULT_SYSTEM_PROMPT_ZH = `你是交互式提示词优化助手。你的目标是通过多轮对话，引导用户明确需求，并最终生成高质量的结构化提示词。
+const DEFAULT_SYSTEM_PROMPT_AR = `أنت مساعد تفاعلي لتحسين الموجّهات (Prompts). هدفك هو إرشاد المستخدم عبر محادثة متعدّدة الجولات لتوضيح متطلباته، ثم إنشاء موجّه منظّم وعالي الجودة في النهاية.
 
-**核心工作流程**:
+**سير العمل الأساسي**:
 
-1. **Phase 1: 理解与总结**
-   - 当用户提出初步需求时，**不要直接生成 Prompt**。
-   - **严格要求**：你必须调用 \`suggest_enhancements\` 工具，提供 3-5 个关键维度的优化建议。
-   - **禁止行为**：绝对不要直接输出 JSON 字符串或文本形式的选项，必须通过工具调用。
-   - 维度示例：
-     - **角色设定**: (e.g., 资深客户、创意总监、严谨学者)
-     - **思考风格**: (e.g., 专业严谨、幽默风趣、简明扼要)
-     - **思考深度**: (e.g., 一步到位、思维链CoT、多角度讨论)
-     - **输出格式**: (e.g., Markdown文档、JSON、表格)
-   - 每个维度提供 2-3 个具体的用户点选项，并允许自定义。
+1. **المرحلة 1: الفهم والتلخيص**
+   - عندما يطرح المستخدم متطلبًا أوّليًا، **لا تُنشئ الموجّه مباشرةً**.
+   - **متطلّب صارم**: يجب أن تستدعي أداة \`suggest_enhancements\` لتقديم 3-5 أبعاد تحسين رئيسية.
+   - **سلوك ممنوع**: لا تُخرِج مطلقًا سلاسل JSON أو خيارات نصّية مباشرةً، بل استخدم استدعاء الأداة دائمًا.
+   - أمثلة على الأبعاد:
+     - **تعريف الدور**: (مثل: مستشار كبير، مدير إبداعي، باحث دقيق)
+     - **أسلوب التفكير**: (مثل: احترافي ودقيق، طريف وذكي، موجز وواضح)
+     - **عمق التفكير**: (مثل: إجابة مباشرة، سلسلة تفكير CoT، نقاش متعدّد الزوايا)
+     - **صيغة الإخراج**: (مثل: مستند Markdown، JSON، جدول)
+   - قدّم 2-3 خيارات محدّدة قابلة للاختيار لكل بُعد، مع السماح بالتخصيص.
 
-2. **Phase 2: 交互生成**
-   - 当收到 \`suggest_enhancements\` 的工具响应（用户的选择）后，生成最终的 Markdown 文档。
-   - **文档格式要求**:
-     - 标题提示词方案 (H1)
-     - 必须包含 ##角色定义 (H2)
-     - 必须包含 ##核心目标 (H2)
-     - 必须包含 ##工作流程 (H2)
-     - 必须包含 ##约束条件 (H2)
-     - 必须包含 ##知识边界 (H2)
+2. **المرحلة 2: الإنشاء التفاعلي**
+   - بعد استلام استجابة الأداة من \`suggest_enhancements\` (اختيارات المستخدم)، أنشئ مستند Markdown النهائي.
+   - **متطلبات صيغة المستند**:
+     - العنوان: مقترح الموجّه (H1)
+     - يجب أن يتضمّن ## تعريف الدور (H2)
+     - يجب أن يتضمّن ## الهدف الأساسي (H2)
+     - يجب أن يتضمّن ## سير العمل (H2)
+     - يجب أن يتضمّن ## القيود (H2)
+     - يجب أن يتضمّن ## حدود المعرفة (H2)
 
-3. **Phase 3: 最终确认**
-   - 调用 \`propose_prompt\` 工具，将生成的 Markdown 提示词展示给用户。
-   - 用户可以：复制使用、继续优化、重新生成
+3. **المرحلة 3: التأكيد النهائي**
+   - استدعِ أداة \`propose_prompt\` لعرض موجّه Markdown المُنشأ على المستخدم.
+   - يمكن للمستخدم: النسخ والاستخدام، أو متابعة التحسين، أو إعادة الإنشاء.
 
-**重要原则**:
-- 不要跳过 Phase 1 直接生成提示词
-- **绝对禁止**：不要输出原始 JSON 或文本形式的选项，必须使用工具调用
-- 生成的提示词必须结构化、可复用
-- 如果工具调用失败，请重试，不要回退到文本输出
+**مبادئ مهمة**:
+- لا تتخطَّ المرحلة 1 وتُنشئ الموجّه مباشرةً.
+- **ممنوع تمامًا**: لا تُخرِج JSON خامًا أو خيارات نصّية. استخدم استدعاء الأداة دائمًا.
+- يجب أن تكون الموجّهات المُنشأة منظّمة وقابلة لإعادة الاستخدام.
+- إذا فشل استدعاء الأداة، أعِد المحاولة بدلًا من العودة إلى الإخراج النصّي.
 
 ---
 
-**One-Shot 示例**:
+**مثال توضيحي (One-Shot)**:
 
-用户输入："帮我写一篇关于 React Server Components 的技术文章"
+إدخال المستخدم: "ساعدني في كتابة مقال تقني عن React Server Components"
 
-助手响应：
-1. 立即调用 suggest_enhancements 工具，展示交互式表格：
-   - 角色设定：资深技术作家 / AI专家 / 科普作者
-   - 语气风格：专业正式 / 轻松易读 / 学术严谨
-   - 内容深度：深度分析 / 适中 / 简明概述
-   - 输出格式：Markdown文档 / 结构化大纲 / 分段式文章
+استجابة المساعد:
+1. استدعاء أداة suggest_enhancements فورًا لعرض جدول تفاعلي:
+   - تعريف الدور: كاتب تقني خبير / خبير ذكاء اصطناعي / مبسّط علمي
+   - النبرة: احترافية ورسمية / سلسة وسهلة القراءة / أكاديمية ودقيقة
+   - عمق المحتوى: تحليل معمّق / متوسّط / نظرة عامة موجزة
+   - صيغة الإخراج: مستند Markdown / مخطط منظّم / مقال مقسّم إلى فقرات
 
-2. 用户选择后（例如：资深技术作家 + 专业正式 + 深度分析 + Markdown文档）
+2. بعد اختيار المستخدم (مثلًا: كاتب تقني خبير + احترافية ورسمية + تحليل معمّق + مستند Markdown)
 
-3. 助手调用 propose_prompt 工具生成完整提示词：
-   - 角色定义：你是一位资深技术作家，擅长深入浅出地解释复杂技术概念
-   - 核心目标：撰写一篇关于 React Server Components 的深度技术分析文章
-   - 工作流程：技术背景介绍 → 核心概念解析 → 实际应用场景 → 最佳实践建议
-   - 约束条件：保持专业严谨的语气、提供代码示例、引用官方文档
-   - 知识边界：基于 React 18+ 版本，涵盖服务端渲染的最新实践`
+3. يستدعي المساعد أداة propose_prompt لإنشاء الموجّه الكامل:
+   - تعريف الدور: أنت كاتب تقني خبير بارع في شرح المفاهيم التقنية المعقّدة بوضوح
+   - الهدف الأساسي: كتابة مقال تحليل تقني معمّق عن React Server Components
+   - سير العمل: مقدّمة الخلفية التقنية ← تحليل المفاهيم الأساسية ← حالات الاستخدام العملية ← توصيات أفضل الممارسات
+   - القيود: الحفاظ على نبرة احترافية ودقيقة، تقديم أمثلة برمجية، الاستشهاد بالوثائق الرسمية
+   - حدود المعرفة: استنادًا إلى React 18+، وتغطية أحدث ممارسات التصيير من جانب الخادم`
 
 const DEFAULT_SYSTEM_PROMPT_EN = `You are an interactive prompt optimization assistant. Your goal is to guide users through multi-turn conversations to clarify their requirements and ultimately generate high-quality, structured prompts.
 
@@ -163,12 +163,12 @@ interface SettingsDialogProps {
 export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDialogProps = {}) {
     const t = useTranslations();
     const locale = useLocale();
-    const { theme, setTheme } = useTheme() // 由傲娇大小姐哈雷酱添加 (￣▽￣)／
-    const DEFAULT_SYSTEM_PROMPT = locale === 'zh-CN' ? DEFAULT_SYSTEM_PROMPT_ZH : DEFAULT_SYSTEM_PROMPT_EN;
+    const { theme, setTheme } = useTheme()
+    const DEFAULT_SYSTEM_PROMPT = locale === 'ar' ? DEFAULT_SYSTEM_PROMPT_AR : DEFAULT_SYSTEM_PROMPT_EN;
     const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, autoRetry, maxRetries, setApiKey, setBaseUrl, setModel, setSystemPrompt, setAvailableModels, setCorrectionModel, setAutoRetry, setMaxRetries } = useAppStore()
     const [internalOpen, setInternalOpen] = useState(false)
 
-    // 使用外部控制或内部状态（KISS原则 - 简洁至上！）
+    // استخدام التحكم الخارجي أو الحالة الداخلية (مبدأ KISS - البساطة أولاً)
     const open = externalOpen !== undefined ? externalOpen : internalOpen
     const setOpen = onOpenChange || setInternalOpen
     const [localConfig, setLocalConfig] = useState({ apiKey, baseUrl, model, systemPrompt, correctionModel, autoRetry, maxRetries })
@@ -191,9 +191,9 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         if (open) {
             // Check if current systemPrompt is one of the default prompts
             // Check by exact match or by starting text to handle old versions
-            const isDefaultPrompt = systemPrompt === DEFAULT_SYSTEM_PROMPT_ZH ||
+            const isDefaultPrompt = systemPrompt === DEFAULT_SYSTEM_PROMPT_AR ||
                                    systemPrompt === DEFAULT_SYSTEM_PROMPT_EN ||
-                                   systemPrompt.startsWith('你是交互式提示词优化助手') ||
+                                   systemPrompt.startsWith('أنت مساعد تفاعلي لتحسين الموجّهات') ||
                                    systemPrompt.startsWith('You are an interactive prompt optimization assistant')
 
             // If it's a default prompt, use the current locale's default
@@ -259,7 +259,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                 setCheckStatus('success')
                 setCheckMessage(t('settings.connectionSuccess', { count: models.length }))
             } else {
-                throw new Error('响应格式不符合 OpenAI 标准 (missing data array)')
+                throw new Error('تنسيق الاستجابة لا يطابق معيار OpenAI (missing data array)')
             }
         } catch (error: any) {
             setCheckStatus('error')
@@ -353,7 +353,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         setModel(localConfig.model)
         setSystemPrompt(localConfig.systemPrompt)
         setCorrectionModel(localConfig.correctionModel)
-        setAutoRetry(localConfig.autoRetry) // 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+        setAutoRetry(localConfig.autoRetry)
         setMaxRetries(localConfig.maxRetries)
         setOpen(false)
     }
@@ -365,7 +365,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
             model: localConfig.model,
             systemPrompt: localConfig.systemPrompt,
             correctionModel: localConfig.correctionModel,
-            autoRetry: localConfig.autoRetry, // 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+            autoRetry: localConfig.autoRetry,
             maxRetries: localConfig.maxRetries,
             exportTime: new Date().toISOString()
         }
@@ -374,25 +374,25 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         navigator.clipboard.writeText(base64String).then(() => {
             alert(t('settings.exportSuccess'))
         }).catch(() => {
-            // 如果复制失败，显示在弹窗中让用户手动复制
+            // في حال فشل النسخ، عرضه في نافذة منبثقة لينسخه المستخدم يدوياً
             prompt(t('settings.exportPrompt'), base64String)
         })
     }
 
     const handleImportSettings = async () => {
         try {
-            // 尝试从剪贴板读取
+            // محاولة القراءة من الحافظة
             const clipboardText = await navigator.clipboard.readText()
             let base64String = clipboardText.trim()
 
-            // 如果剪贴板为空或无效，回退到手动输入
+            // في حال كانت الحافظة فارغة أو غير صالحة، العودة إلى الإدخال اليدوي
             if (!base64String) {
                 const userInput = prompt(t('settings.importPrompt'))
                 if (!userInput) return
                 base64String = userInput.trim()
             }
 
-            // 解析配置
+            // تحليل الإعدادات
             const jsonString = decodeURIComponent(escape(atob(base64String)))
             const settings = JSON.parse(jsonString)
             setLocalConfig({
@@ -406,7 +406,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
             })
             alert(t('settings.importSuccess'))
         } catch (error) {
-            // 如果剪贴板读取失败或解析失败，回退到手动输入
+            // في حال فشلت القراءة من الحافظة أو فشل التحليل، العودة إلى الإدخال اليدوي
             const base64String = prompt(t('settings.importError') + '\n' + t('settings.importPrompt'))
             if (!base64String) return
 
@@ -526,10 +526,10 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                             </div>
                         </TabsContent>
 
-                        {/* 高级设置标签页 - 由傲娇大小姐哈雷酱优化 (￣▽￣)／ */}
+                        {/* علامة تبويب الإعدادات المتقدمة */}
                         <TabsContent value="advanced" className="space-y-6 mt-0">
                             <div className="space-y-6">
-                                {/* 格式矫正模型 - 卡片样式 */}
+                                {/* نموذج تصحيح التنسيق - نمط البطاقة */}
                                 <div className="p-4 bg-muted/30 rounded-lg border space-y-3">
                                     <div className="space-y-1">
                                         <Label className="text-sm font-semibold">{t('settings.correctionModel')}</Label>
@@ -559,7 +559,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                     </div>
                                 </div>
 
-                                {/* 自动重试配置 */}
+                                {/* إعداد إعادة المحاولة التلقائية */}
                                 <div className="space-y-3 p-4 bg-muted/30 rounded-lg border">
                                     <div className="flex items-center justify-between">
                                         <div className="space-y-0.5">
@@ -592,11 +592,11 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                     )}
                                 </div>
 
-                                {/* 主题选择器 - 卡片样式 */}
+                                {/* محدد السمة - نمط البطاقة */}
                                 <div className="p-4 bg-muted/30 rounded-lg border space-y-3">
                                     <div className="space-y-1">
                                         <Label className="text-sm font-semibold">{t('settings.theme')}</Label>
-                                        <p className="text-xs text-muted-foreground">选择您喜欢的主题外观</p>
+                                        <p className="text-xs text-muted-foreground">اختر مظهر السمة الذي تفضّله</p>
                                     </div>
                                     <Select value={theme} onValueChange={setTheme}>
                                         <SelectTrigger className="w-full">

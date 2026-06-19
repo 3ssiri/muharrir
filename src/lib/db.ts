@@ -18,7 +18,7 @@ export type ChatMessage = {
     toolInvocations?: any[];
     data?: any;
     annotations?: any[];
-    // 文件附件信息 - 支持多文件
+    // معلومات الملف المرفق - يدعم ملفات متعدّدة
     file?: {
         name: string;
         type: string;
@@ -29,7 +29,7 @@ export type ChatMessage = {
         type: string;
         preview?: string;
     }>;
-    // 错误状态 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+    // حالة الخطأ
     error?: {
         type: 'network' | 'auth' | 'quota' | 'server' | 'unknown';
         message: string;

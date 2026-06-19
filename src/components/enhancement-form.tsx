@@ -22,7 +22,7 @@ interface EnhancementDimension {
     title: string
     options: EnhancementOption[]
     allowCustom: boolean
-    selectionType?: 'single' | 'multiple' // 单选或多选
+    selectionType?: 'single' | 'multiple' // اختيار مفرد أو متعدد
 }
 
 interface EnhancementFormProps {
@@ -34,31 +34,31 @@ interface EnhancementFormProps {
 export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: EnhancementFormProps) {
     const t = useTranslations();
     const { toolCallId, args } = toolInvocation
-    const [selections, setSelections] = useState<Record<string, string | string[]>>({}) // 支持单选和多选
+    const [selections, setSelections] = useState<Record<string, string | string[]>>({}) // يدعم الاختيار المفرد والمتعدد
     const [customInputs, setCustomInputs] = useState<Record<string, string>>({})
     const [submitted, setSubmitted] = useState(false)
-    const [forceMultiSelect, setForceMultiSelect] = useState<Record<string, boolean>>({}) // 强制多选
-    const [editingOption, setEditingOption] = useState<{ dimKey: string; optionValue: string } | null>(null) // 正在编辑的选项
-    const [editedLabels, setEditedLabels] = useState<Record<string, string>>({}) // 编辑后的标签
+    const [forceMultiSelect, setForceMultiSelect] = useState<Record<string, boolean>>({}) // فرض الاختيار المتعدد
+    const [editingOption, setEditingOption] = useState<{ dimKey: string; optionValue: string } | null>(null) // الخيار قيد التحرير
+    const [editedLabels, setEditedLabels] = useState<Record<string, string>>({}) // التسميات بعد التحرير
 
     // Parse args safely with better error handling
     let formConfig: { dimensions: EnhancementDimension[] } | null = null
     try {
-        // 调试：输出原始 args
+        // تصحيح الأخطاء: إخراج args الأصلية
         console.log('EnhancementForm args:', args)
         console.log('EnhancementForm args type:', typeof args)
 
-        // 处理流式数据：args 可能是对象或字符串
+        // معالجة البيانات المتدفقة: قد تكون args كائناً أو نصاً
         let parsed = typeof args === 'string' ? JSON.parse(args) : args
         console.log('EnhancementForm parsed:', parsed)
 
-        // 验证解析结果的结构
+        // التحقق من بنية نتيجة التحليل
         if (parsed && typeof parsed === 'object') {
-            // 检查是否有 dimensions 字段且为数组
+            // التحقق من وجود حقل dimensions وأنه مصفوفة
             if (Array.isArray(parsed.dimensions) && parsed.dimensions.length > 0) {
                 console.log('Found dimensions:', parsed.dimensions.length)
 
-                // 进一步验证每个 dimension 的结构
+                // التحقق الإضافي من بنية كل dimension
                 const validDimensions = parsed.dimensions.filter((dim: any) =>
                     dim &&
                     typeof dim === 'object' &&
@@ -78,12 +78,12 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
             }
         }
     } catch (e) {
-        // JSON 解析失败，可能是流式数据还未完成
+        // فشل تحليل JSON، ربما لم تكتمل البيانات المتدفقة بعد
         console.error('Enhancement form config parsing error:', e)
         console.error('Args value:', args)
     }
 
-    // 如果配置无效或为空，显示加载状态
+    // في حال كان الإعداد غير صالح أو فارغاً، عرض حالة التحميل
     if (!formConfig || !formConfig.dimensions || formConfig.dimensions.length === 0) {
         return (
             <Card className="flex items-center justify-center p-6 border-dashed animate-pulse">
@@ -98,10 +98,10 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
             const newSel = { ...prev }
 
             if (isMultiple) {
-                // 多选逻辑
+                // منطق الاختيار المتعدد
                 const current = Array.isArray(newSel[dimKey]) ? newSel[dimKey] as string[] : []
                 if (current.includes(value)) {
-                    // 取消选择
+                    // إلغاء الاختيار
                     const filtered = current.filter(v => v !== value)
                     if (filtered.length === 0) {
                         delete newSel[dimKey]
@@ -109,11 +109,11 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                         newSel[dimKey] = filtered
                     }
                 } else {
-                    // 添加选择
+                    // إضافة اختيار
                     newSel[dimKey] = [...current, value]
                 }
             } else {
-                // 单选逻辑
+                // منطق الاختيار المفرد
                 if (newSel[dimKey] === value) {
                     delete newSel[dimKey] // Toggle off
                 } else {
@@ -129,7 +129,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
             ...prev,
             [dimKey]: !prev[dimKey]
         }))
-        // 切换时清空该维度的选择
+        // مسح اختيار هذا البُعد عند التبديل
         setSelections(prev => {
             const newSel = { ...prev }
             delete newSel[dimKey]
@@ -137,13 +137,13 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
         })
     }
 
-    // 获取选项的显示标签（优先使用编辑后的标签）
+    // الحصول على تسمية عرض الخيار (تُستخدم التسمية المحرَّرة أولاً)
     const getOptionLabel = (dimKey: string, optionValue: string, originalLabel: string) => {
         const key = `${dimKey}-${optionValue}`
         return editedLabels[key] || originalLabel
     }
 
-    // 处理双击编辑
+    // معالجة التحرير بالنقر المزدوج
     const handleDoubleClick = (dimKey: string, optionValue: string, currentLabel: string) => {
         if (submitted) return
         setEditingOption({ dimKey, optionValue })
@@ -153,7 +153,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
         }
     }
 
-    // 保存编辑
+    // حفظ التحرير
     const handleSaveEdit = () => {
         setEditingOption(null)
     }
@@ -169,22 +169,22 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
             const customVal = customInputs[dim.key]
 
             if (customVal && customVal.trim()) {
-                feedbackParts.push(`【${dim.title}】: 用户自定义 - ${customVal}`)
+                feedbackParts.push(`[${dim.title}]: تخصيص المستخدم - ${customVal}`)
             } else if (selectedVal) {
                 if (Array.isArray(selectedVal)) {
-                    // 多选 - 使用编辑后的标签
+                    // اختيار متعدد - استخدام التسميات المحرَّرة
                     const labels = selectedVal.map(v => {
                         const opt = dim.options.find(o => o.value === v)
                         const editKey = `${dim.key}-${v}`
                         return editedLabels[editKey] || opt?.label || v
                     })
-                    feedbackParts.push(`【${dim.title}】: ${labels.join('、')}`)
+                    feedbackParts.push(`[${dim.title}]: ${labels.join('، ')}`)
                 } else {
-                    // 单选 - 使用编辑后的标签
+                    // اختيار مفرد - استخدام التسميات المحرَّرة
                     const opt = dim.options.find(o => o.value === selectedVal)
                     const editKey = `${dim.key}-${selectedVal}`
                     const finalLabel = editedLabels[editKey] || opt?.label || selectedVal
-                    feedbackParts.push(`【${dim.title}】: ${finalLabel}`)
+                    feedbackParts.push(`[${dim.title}]: ${finalLabel}`)
                 }
             }
             // If neither, implied "Skip/No Change"
@@ -206,7 +206,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
         }
     }
 
-    // 如果已提交或有结果，显示已完成状态（不可再交互）
+    // إذا تم الإرسال أو وُجدت نتيجة، عرض حالة الاكتمال (دون إمكانية التفاعل)
     if (submitted || 'result' in toolInvocation) {
         return (
             <Card className="bg-muted/10 border-dashed">
@@ -245,7 +245,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                             <div className="mb-3 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <Label className="text-sm font-semibold text-foreground/80">{dim.title}</Label>
-                                    {/* 扁平化切换按钮 */}
+                                    {/* أزرار التبديل المسطحة */}
                                     <div className="inline-flex items-center rounded-md bg-muted p-1 text-xs">
                                         <button
                                             type="button"
@@ -288,7 +288,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                                     const editKey = `${dim.key}-${opt.value}`
 
                                     if (isEditing) {
-                                        // 编辑模式：显示输入框
+                                        // وضع التحرير: عرض مربع الإدخال
                                         return (
                                             <div key={opt.value} className="flex items-center gap-1">
                                                 <Input
@@ -313,7 +313,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                                         )
                                     }
 
-                                    // 正常模式：显示按钮
+                                    // الوضع العادي: عرض الزر
                                     return (
                                         <Button
                                             key={opt.value}
@@ -330,7 +330,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                                             title={`${opt.description || ''}\n\n💡 ${t('enhancementForm.doubleClickToEdit')}`}
                                         >
                                             {displayLabel}
-                                            {/* 双击编辑提示 - 悬停时显示 */}
+                                            {/* تلميح التحرير بالنقر المزدوج - يظهر عند التمرير */}
                                             {!submitted && (
                                                 <span className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none">
                                                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary/90 text-primary-foreground text-[10px] font-medium whitespace-nowrap shadow-lg">

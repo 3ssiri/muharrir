@@ -14,13 +14,13 @@ export function ThemeToggle() {
   }, [])
 
   const handleThemeChange = () => {
-    // 使用 View Transitions API（如果浏览器支持）
+    // استخدام View Transitions API (إذا كان المتصفح يدعمها)
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
       })
     } else {
-      // 降级方案：添加渐变遮罩
+      // حل بديل: إضافة طبقة تدرّج
       const overlay = document.createElement('div')
       overlay.style.cssText = `
         position: fixed;
@@ -36,16 +36,16 @@ export function ThemeToggle() {
       `
       document.body.appendChild(overlay)
 
-      // 淡入遮罩
+      // إظهار الطبقة تدريجيًا
       requestAnimationFrame(() => {
         overlay.style.opacity = '1'
       })
 
-      // 切换主题
+      // تبديل السمة
       setTimeout(() => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
 
-        // 淡出遮罩
+        // إخفاء الطبقة تدريجيًا
         setTimeout(() => {
           overlay.style.opacity = '0'
           setTimeout(() => {

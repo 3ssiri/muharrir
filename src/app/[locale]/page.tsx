@@ -40,37 +40,37 @@ export default function Home() {
   const [sessionId, setSessionId] = useState<number | null>(null)
   const sessionIdRef = useRef(sessionId)
 
-  // 关键修复：使用本地状态和 ref
+  // إصلاح أساسي: استخدام الحالة المحلية و ref
   const [localInput, setLocalInput] = useState('')
   const aiContentRef = useRef('')
   const aiToolInvocationsRef = useRef<any[]>([])
 
   const [messages, setMessages] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [isToolRendering, setIsToolRendering] = useState(false) // 工具渲染状态
+  const [isToolRendering, setIsToolRendering] = useState(false) // حالة عرض الأداة
   const abortControllerRef = useRef<AbortController | null>(null)
-  const [activeTab, setActiveTab] = useState<'chat' | 'favorites'>('chat') // 标签页状态
-  const [spotlightOpen, setSpotlightOpen] = useState(false) // Spotlight 搜索状态
-  const [shortcutsOpen, setShortcutsOpen] = useState(false) // 快捷键对话框状态
-  const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false) // API Key 提示对话框状态
-  const [settingsOpen, setSettingsOpen] = useState(false) // 设置对话框状态
+  const [activeTab, setActiveTab] = useState<'chat' | 'favorites'>('chat') // حالة علامة التبويب
+  const [spotlightOpen, setSpotlightOpen] = useState(false) // حالة بحث Spotlight
+  const [shortcutsOpen, setShortcutsOpen] = useState(false) // حالة مربع حوار الاختصارات
+  const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false) // حالة مربع حوار تنبيه مفتاح API
+  const [settingsOpen, setSettingsOpen] = useState(false) // حالة مربع حوار الإعدادات
 
-  // 文件上传状态 - 支持多文件
+  // حالة رفع الملفات - يدعم ملفات متعددة
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ file: File; preview?: string; text?: string }>>([])
 
-  // 拖拽上传状态 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+  // حالة الرفع بالسحب والإفلات
   const [showFullDropZone, setShowFullDropZone] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const dragCounterRef = useRef(0)
 
-  // 不再限制模型识图，统一允许上传并提醒用户
-  const modelSupportsVision = true // 允许所有模型上传图片，由用户判断
+  // لم يعد يُقيّد التعرف على الصور حسب النموذج، يُسمح بالرفع للجميع مع تنبيه المستخدم
+  const modelSupportsVision = true // السماح لجميع النماذج برفع الصور، والحكم متروك للمستخدم
 
   useEffect(() => {
     sessionIdRef.current = sessionId
   }, [sessionId])
 
-  // 组件卸载时取消正在进行的请求
+  // إلغاء الطلب الجاري عند إلغاء تحميل المكوّن
   useEffect(() => {
     return () => {
       if (abortControllerRef.current) {
@@ -80,7 +80,7 @@ export default function Home() {
     }
   }, [])
 
-  // 全局拖拽监听 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+  // مراقبة السحب والإفلات على مستوى النافذة
   useEffect(() => {
     const handleGlobalDragEnter = (e: DragEvent) => {
       e.preventDefault()
@@ -121,18 +121,18 @@ export default function Home() {
     }
   }, [])
 
-  // 全局快捷键监听
+  // مراقبة الاختصارات على مستوى النافذة
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // 阻止浏览器默认的 Ctrl+T（新标签页）
+      // منع سلوك المتصفح الافتراضي لـ Ctrl+T (علامة تبويب جديدة)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 't') {
         e.preventDefault()
         e.stopPropagation()
-        // 可以在这里添加自定义功能，或者只是阻止默认行为
+        // يمكن إضافة وظيفة مخصصة هنا، أو الاكتفاء بمنع السلوك الافتراضي
         return
       }
 
-      // Ctrl+K - 打开 Spotlight 搜索
+      // Ctrl+K - فتح بحث Spotlight
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
         e.stopPropagation()
@@ -140,7 +140,7 @@ export default function Home() {
         return
       }
 
-      // Ctrl+N - 新建对话（增强阻止）
+      // Ctrl+N - محادثة جديدة (مع منع مُعزَّز)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
         e.preventDefault()
         e.stopPropagation()
@@ -155,11 +155,11 @@ export default function Home() {
         return false
       }
 
-      // Ctrl+/ - 聚焦输入框（修复：使用更可靠的选择器）
+      // Ctrl+/ - التركيز على حقل الإدخال (إصلاح: استخدام محدد أكثر موثوقية)
       if ((e.ctrlKey || e.metaKey) && e.key === '/') {
         e.preventDefault()
         e.stopPropagation()
-        // 使用更可靠的方式查找输入框
+        // استخدام طريقة أكثر موثوقية للعثور على حقل الإدخال
         setTimeout(() => {
           const textarea = document.querySelector('textarea') as HTMLTextAreaElement
           if (textarea && !textarea.disabled) {
@@ -170,7 +170,7 @@ export default function Home() {
         return
       }
 
-      // Alt+S - 打开设置（避免与其他软件冲突）
+      // Alt+S - فتح الإعدادات (لتجنب التعارض مع برامج أخرى)
       if (e.altKey && e.key.toLowerCase() === 's') {
         e.preventDefault()
         e.stopPropagation()
@@ -181,7 +181,7 @@ export default function Home() {
         return
       }
 
-      // Ctrl+B - 切换侧边栏
+      // Ctrl+B - تبديل الشريط الجانبي
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault()
         e.stopPropagation()
@@ -192,27 +192,27 @@ export default function Home() {
         return
       }
 
-      // Tab - 切换标签页（对话 ⇄ 收藏）- 由傲娇大小姐哈雷酱优化 (￣▽￣)／
+      // Tab - تبديل علامة التبويب (محادثة ⇄ مفضلة)
       if (e.key === 'Tab' && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
-        // 检查是否在输入框或可编辑元素中
+        // التحقق مما إذا كان التركيز داخل حقل إدخال أو عنصر قابل للتحرير
         const activeElement = document.activeElement
         const isInputFocused = activeElement?.tagName === 'TEXTAREA' ||
                               activeElement?.tagName === 'INPUT' ||
                               (activeElement as HTMLElement)?.isContentEditable
 
-        // 如果在输入框中，允许默认的 Tab 行为（但不切换标签页）
+        // إذا كان داخل حقل إدخال، اسمح بسلوك Tab الافتراضي (دون تبديل علامة التبويب)
         if (isInputFocused) {
-          return // 让浏览器处理默认行为
+          return // اترك المتصفح يعالج السلوك الافتراضي
         }
 
-        // 如果不在输入框中，阻止默认行为并切换标签页
+        // إذا لم يكن داخل حقل إدخال، امنع السلوك الافتراضي وبدّل علامة التبويب
         e.preventDefault()
         e.stopPropagation()
         setActiveTab(prev => prev === 'chat' ? 'favorites' : 'chat')
         return
       }
 
-      // Shift+/ - 显示快捷键面板
+      // Shift+/ - عرض لوحة الاختصارات
       if (e.shiftKey && (e.key === '?' || e.key === '/')) {
         e.preventDefault()
         setShortcutsOpen(true)
@@ -251,24 +251,24 @@ export default function Home() {
     loadHistory()
   }, [sessionId])
 
-  // 核心修复：完全绕过 useChat，直接使用 fetch
+  // إصلاح جوهري: تجاوز useChat تمامًا واستخدام fetch مباشرة
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!localInput.trim()) return
 
-    // 检查 API Key 是否配置（KISS原则 - 简洁至上！）
+    // التحقق مما إذا كان مفتاح API مُعدًّا (مبدأ KISS - البساطة أولًا!)
     const defaultApiKey = 'sk-Mdj54E4QkE5dQi6jV4TUli6kEN4fsPQKuIjchrBl6hIjvws1'
     if (!apiKey || apiKey === defaultApiKey) {
       setApiKeyDialogOpen(true)
       return
     }
 
-    // 取消之前的请求（如果有）
+    // إلغاء الطلب السابق (إن وُجد)
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
 
-    // 创建新的 AbortController
+    // إنشاء AbortController جديد
     const abortController = new AbortController()
     abortControllerRef.current = abortController
 
@@ -285,16 +285,16 @@ export default function Home() {
       setSessionId(currentId)
     }
 
-    // 构建用户消息内容（包含多个文件）
+    // بناء محتوى رسالة المستخدم (مع تضمين عدة ملفات)
     let userContent = localInput
     if (uploadedFiles.length > 0) {
       const fileContents = uploadedFiles.map((item, index) => {
         if (item.text) {
-          return `[附件${index + 1}: ${item.file.name}]\n${item.text.substring(0, 3000)}`
+          return `[مرفق${index + 1}: ${item.file.name}]\n${item.text.substring(0, 3000)}`
         } else if (item.preview) {
-          return `[图片${index + 1}: ${item.file.name}]`
+          return `[صورة${index + 1}: ${item.file.name}]`
         }
-        return `[文件${index + 1}: ${item.file.name}]`
+        return `[ملف${index + 1}: ${item.file.name}]`
       }).join('\n\n')
       userContent = `${localInput}\n\n${fileContents}`
     }
@@ -310,7 +310,7 @@ export default function Home() {
       })) : undefined
     }
 
-    // 保存用户消息到数据库（包含文件信息和完整内容）
+    // حفظ رسالة المستخدم في قاعدة البيانات (مع معلومات الملفات والمحتوى الكامل)
     await db.messages.add({
       sessionId: currentId,
       role: 'user',
@@ -323,19 +323,19 @@ export default function Home() {
       createdAt: new Date()
     })
 
-    // 立即显示用户消息
+    // عرض رسالة المستخدم فورًا
     setMessages(prev => [...prev, userMessage])
     setLocalInput('')
     setIsLoading(true)
 
-    // 清除文件状态
+    // مسح حالة الملفات
     setUploadedFiles([])
 
-    // 重置 AI 内容累积器
+    // إعادة تعيين مُجمِّع محتوى الذكاء الاصطناعي
     aiContentRef.current = ''
     aiToolInvocationsRef.current = []
 
-    // 立即保存空的 AI 消息到数据库（防止 Fast Refresh 时丢失）
+    // حفظ رسالة ذكاء اصطناعي فارغة فورًا في قاعدة البيانات (لتجنب الفقدان عند Fast Refresh)
     const aiDbId = await db.messages.add({
       sessionId: currentId,
       role: 'assistant',
@@ -350,7 +350,7 @@ export default function Home() {
       content: ''
     }
 
-    // 添加空的 AI 消息占位符
+    // إضافة عنصر نائب لرسالة ذكاء اصطناعي فارغة
     setMessages(prev => [...prev, aiMessage])
 
     try {
@@ -384,11 +384,11 @@ export default function Home() {
       console.log('Starting to read stream...')
       let chunkCount = 0
       let lastChunkTime = Date.now()
-      const TIMEOUT_MS = 30000 // 30秒超时
+      const TIMEOUT_MS = 30000 // مهلة 30 ثانية
       let buffer = ''
 
       while (true) {
-        // 添加超时检测
+        // إضافة كشف المهلة
         if (Date.now() - lastChunkTime > TIMEOUT_MS) {
           console.warn('Stream timeout - no data received for 30s')
           break
@@ -408,9 +408,9 @@ export default function Home() {
           console.log(`Chunk ${chunkCount} raw:`, chunk.substring(0, 100))
           buffer += chunk
 
-          // 解析 Vercel AI SDK 数据流协议
+          // تحليل بروتوكول دفق بيانات Vercel AI SDK
           const lines = buffer.split('\n')
-          buffer = lines.pop() || '' // 保留最后一个不完整的行
+          buffer = lines.pop() || '' // الاحتفاظ بالسطر الأخير غير المكتمل
 
           for (const line of lines) {
             if (!line.trim()) continue
@@ -418,42 +418,42 @@ export default function Home() {
             console.log('Processing line:', line.substring(0, 100))
 
             try {
-              // Vercel AI SDK 使用格式: "0:text" 或 "9:{json}" 或 "e:{error}"
+              // يستخدم Vercel AI SDK التنسيق: "0:text" أو "9:{json}" أو "e:{error}"
               if (line.startsWith('0:')) {
-                // 文本内容
+                // محتوى نصي
                 const text = JSON.parse(line.slice(2))
                 aiContentRef.current += text
                 console.log('Text added, total length:', aiContentRef.current.length)
               } else if (line.startsWith('9:')) {
-                // 工具调用
+                // استدعاء أداة
                 const toolData = JSON.parse(line.slice(2))
                 console.log('Tool call detected:', toolData)
                 aiToolInvocationsRef.current.push(toolData)
-                setIsToolRendering(true) // 标记工具正在渲染
+                setIsToolRendering(true) // الإشارة إلى أن الأداة قيد العرض
               } else if (line.startsWith('e:')) {
-                // 錯誤信息 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+                // معلومات الخطأ
                 const errorData = JSON.parse(line.slice(2))
                 console.error('Stream error detected:', errorData)
 
-                // 立即中斷流處理並顯示錯誤
+                // إيقاف معالجة الدفق فورًا وعرض الخطأ
                 throw new Error(errorData.message || 'Stream error')
               } else {
-                // 可能是其他格式，直接累積为文本
+                // قد يكون تنسيقًا آخر، يُجمَّع مباشرة كنص
                 console.log('Unknown format, treating as text')
                 aiContentRef.current += line
               }
             } catch (parseError) {
               console.warn('Failed to parse line:', line.substring(0, 50), parseError)
-              // 如果是錯誤對象，重新拋出
+              // إذا كان كائن خطأ، أعد رميه
               if (parseError instanceof Error && parseError.message.includes('Stream error')) {
                 throw parseError
               }
-              // 解析失败时，将其作为普通文本处理
+              // عند فشل التحليل، يُعالَج كنص عادي
               aiContentRef.current += line
             }
           }
 
-          // 更新消息显示
+          // تحديث عرض الرسالة
           setMessages(prev => {
             const updated = prev.map(m =>
               m.id === aiMessageId ? {
@@ -465,7 +465,7 @@ export default function Home() {
             return updated
           })
 
-          // 实时更新数据库（每 10 个 chunk 更新一次）
+          // تحديث قاعدة البيانات في الوقت الفعلي (مرة كل 10 أجزاء)
           if (chunkCount % 10 === 0) {
             db.messages.update(parseInt(aiMessageId), {
               content: aiContentRef.current,
@@ -481,11 +481,11 @@ export default function Home() {
       console.log('Final AI content length:', aiContentRef.current.length)
       console.log('Tool invocations count:', aiToolInvocationsRef.current.length)
 
-      // 檢測空響應 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+      // كشف الاستجابة الفارغة
       if (aiContentRef.current.length === 0 && aiToolInvocationsRef.current.length === 0) {
         console.warn('Empty response detected - treating as authentication error')
 
-        // 空響應通常意味著 API Key 配置錯誤或權限問題
+        // الاستجابة الفارغة تعني عادةً خطأً في إعداد مفتاح API أو مشكلة صلاحيات
         const errorType = 'auth'
         const errorMessage = t('settings.emptyResponseError')
 
@@ -504,15 +504,15 @@ export default function Home() {
             : m
         ))
 
-        toast.error(`請求出錯: ${errorMessage}`, { duration: 4000 })
+        toast.error(`حدث خطأ في الطلب: ${errorMessage}`, { duration: 4000 })
       } else {
-        // 最终更新数据库中的 AI 消息
+        // التحديث النهائي لرسالة الذكاء الاصطناعي في قاعدة البيانات
         await db.messages.update(parseInt(aiMessageId), {
           content: aiContentRef.current,
           toolInvocations: aiToolInvocationsRef.current.length > 0 ? aiToolInvocationsRef.current : undefined
         })
 
-        // 更新会话
+        // تحديث الجلسة
         await db.chatSessions.update(currentId, {
           updatedAt: new Date(),
           previewText: aiContentRef.current.slice(0, 50)
@@ -522,13 +522,13 @@ export default function Home() {
     } catch (error: any) {
       console.error('Chat error:', error)
 
-      // 识别错误类型 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+      // تحديد نوع الخطأ
       let errorType: 'network' | 'auth' | 'quota' | 'server' | 'unknown' = 'unknown'
-      const errorMessage = error.message || '未知错误'
+      const errorMessage = error.message || 'خطأ غير معروف'
 
       if (error.name === 'AbortError') {
         console.log('Request was aborted')
-        toast.info('请求已取消', { duration: 2000 })
+        toast.info('تم إلغاء الطلب', { duration: 2000 })
         return
       }
 
@@ -542,7 +542,7 @@ export default function Home() {
         errorType = 'server'
       }
 
-      // 更新 AI 消息，添加错误信息
+      // تحديث رسالة الذكاء الاصطناعي وإضافة معلومات الخطأ
       await db.messages.update(parseInt(aiMessageId), {
         content: '',
         error: {
@@ -552,20 +552,20 @@ export default function Home() {
         }
       })
 
-      // 更新 UI 中的消息
+      // تحديث الرسالة في الواجهة
       setMessages(prev => prev.map(m =>
         m.id === aiMessageId
           ? { ...m, error: { type: errorType, message: errorMessage, retryCount: 0 } }
           : m
       ))
 
-      toast.error(`请求出错: ${errorMessage}`, { duration: 4000 })
+      toast.error(`حدث خطأ في الطلب: ${errorMessage}`, { duration: 4000 })
     } finally {
       console.log('Setting isLoading to false')
       setIsLoading(false)
       console.log('isLoading set to false')
 
-      // 清理 AbortController 引用
+      // تنظيف مرجع AbortController
       if (abortControllerRef.current === abortController) {
         abortControllerRef.current = null
       }
@@ -573,13 +573,13 @@ export default function Home() {
   }
 
   const handleNewChat = async () => {
-    // 只清空UI状态，不删除数据库记录
+    // مسح حالة الواجهة فقط دون حذف سجلات قاعدة البيانات
     setSessionId(null)
     setMessages([])
     setLocalInput('')
     setUploadedFiles([])
 
-    // 如果在收藏标签页，切换到对话标签页
+    // إذا كان في علامة تبويب المفضلة، انتقل إلى علامة تبويب المحادثة
     if (activeTab === 'favorites') {
       setActiveTab('chat')
     }
@@ -592,19 +592,19 @@ export default function Home() {
     for (let i = 0; i < items.length; i++) {
       const item = items[i]
 
-      // 检查是否是图片
+      // التحقق مما إذا كان صورة
       if (item.type.startsWith('image/')) {
         e.preventDefault()
 
         const file = item.getAsFile()
         if (!file) continue
 
-        // 读取图片并设置预览
+        // قراءة الصورة وتعيين المعاينة
         const reader = new FileReader()
         reader.onload = (event) => {
           handleFileSelect(file, event.target?.result as string)
-          toast.success('图片已粘贴', {
-            description: '提示：请确保您的模型支持图片识别（如 GPT-4o、Claude 3.5 等）',
+          toast.success('تم لصق الصورة', {
+            description: 'ملاحظة: تأكد من أن نموذجك يدعم التعرف على الصور (مثل GPT-4o و Claude 3.5 وغيرها)',
             duration: 4000
           })
         }
@@ -617,16 +617,16 @@ export default function Home() {
   const handleFileSelect = async (file: File, preview?: string) => {
     let fileText: string | undefined = undefined
 
-    // 如果是 PDF 文件，使用客户端解析
+    // إذا كان ملف PDF، استخدم التحليل من جهة العميل
     if (file.type === 'application/pdf') {
       try {
-        toast.info('正在解析 PDF...', { duration: 3000 })
+        toast.info('جارٍ تحليل PDF...', { duration: 3000 })
         const arrayBuffer = await file.arrayBuffer()
 
-        // 动态导入 pdfjs-dist
+        // استيراد pdfjs-dist ديناميكيًا
         const pdfjs = await import('pdfjs-dist')
 
-        // 设置 worker - 使用 public 目录中的静态文件
+        // إعداد worker - باستخدام الملف الثابت في مجلد public
         if (typeof window !== 'undefined' && !pdfjs.GlobalWorkerOptions.workerSrc) {
           pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
         }
@@ -635,7 +635,7 @@ export default function Home() {
         const pdf = await loadingTask.promise
         let fullText = ''
 
-        // 提取所有页面的文本
+        // استخراج النص من جميع الصفحات
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i)
           const textContent = await page.getTextContent()
@@ -646,42 +646,42 @@ export default function Home() {
         }
 
         fileText = fullText
-        toast.success(`PDF 已解析（${pdf.numPages} 页）`)
+        toast.success(`تم تحليل PDF (${pdf.numPages} صفحة)`)
       } catch (error: any) {
-        console.error('PDF 解析错误:', error)
-        toast.error(`PDF 解析失败: ${error.message || '未知错误'}`)
+        console.error('خطأ في تحليل PDF:', error)
+        toast.error(`فشل تحليل PDF: ${error.message || 'خطأ غير معروف'}`)
       }
     }
-    // DOCX 文件解析
+    // تحليل ملف DOCX
     else if (file.type.includes('wordprocessing') || file.name.endsWith('.docx')) {
       try {
-        toast.info('正在解析 DOCX...')
+        toast.info('جارٍ تحليل DOCX...')
         const arrayBuffer = await file.arrayBuffer()
 
-        // 动态导入 mammoth
+        // استيراد mammoth ديناميكيًا
         const mammoth = await import('mammoth')
 
         const result = await mammoth.extractRawText({ arrayBuffer })
         fileText = result.value
-        toast.success('DOCX 已解析')
+        toast.success('تم تحليل DOCX')
       } catch (error: any) {
-        console.error('DOCX 解析错误:', error)
-        toast.error(`DOCX 解析失败: ${error.message || '未知错误'}`)
+        console.error('خطأ في تحليل DOCX:', error)
+        toast.error(`فشل تحليل DOCX: ${error.message || 'خطأ غير معروف'}`)
       }
     }
-    // 文本文件解析
+    // تحليل الملف النصي
     else if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md')) {
       try {
         const text = await file.text()
         fileText = text
-        toast.success('文本文件已读取')
+        toast.success('تم قراءة الملف النصي')
       } catch (error: any) {
-        console.error('文本文件读取错误:', error)
-        toast.error(`文件读取失败: ${error.message || '未知错误'}`)
+        console.error('خطأ في قراءة الملف النصي:', error)
+        toast.error(`فشل قراءة الملف: ${error.message || 'خطأ غير معروف'}`)
       }
     }
 
-    // 添加到文件列表
+    // الإضافة إلى قائمة الملفات
     setUploadedFiles(prev => [...prev, { file, preview, text: fileText }])
   }
 
@@ -689,7 +689,7 @@ export default function Home() {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index))
   }
 
-  // 拖拽处理函数 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+  // دوال معالجة السحب والإفلات
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(true)
@@ -728,28 +728,28 @@ export default function Home() {
       const dbId = parseInt(id)
       if (!isNaN(dbId)) {
         await db.messages.delete(dbId)
-        toast.success("消息已删除")
+        toast.success("تم حذف الرسالة")
       }
     }
   }
 
   const handleRetry = async (messageIndex: number) => {
-    // 找到当前 assistant 消息之前的最后一条 user 消息
+    // إيجاد آخر رسالة مستخدم قبل رسالة المساعد الحالية
     const userMessages = messages.slice(0, messageIndex).filter((m: any) => m.role === 'user')
     if (userMessages.length === 0) return
 
     const lastUserMessage = userMessages[userMessages.length - 1]
 
-    // 删除从该 user 消息之后的所有消息
+    // حذف جميع الرسائل التي تلي رسالة المستخدم تلك
     const messagesToKeep = messages.slice(0, messages.indexOf(lastUserMessage) + 1)
     setMessages(messagesToKeep)
 
-    // 重新发送该消息
+    // إعادة إرسال تلك الرسالة
     await append({ content: lastUserMessage.content })
   }
 
   const append = async (message: any) => {
-    // 添加用户消息
+    // إضافة رسالة المستخدم
     const userMessage = {
       id: Math.random().toString(),
       role: 'user',
@@ -758,7 +758,7 @@ export default function Home() {
 
     setMessages(prev => [...prev, userMessage])
 
-    // 保存到数据库
+    // الحفظ في قاعدة البيانات
     if (sessionIdRef.current) {
       await db.messages.add({
         sessionId: sessionIdRef.current,
@@ -768,14 +768,14 @@ export default function Home() {
       })
     }
 
-    // 触发 API 请求
+    // إطلاق طلب API
     setIsLoading(true)
     aiContentRef.current = ''
     aiToolInvocationsRef.current = []
 
     const currentId = sessionIdRef.current
 
-    // 创建 AI 消息占位符
+    // إنشاء عنصر نائب لرسالة الذكاء الاصطناعي
     const aiDbId = await db.messages.add({
       sessionId: currentId!,
       role: 'assistant',
@@ -792,7 +792,7 @@ export default function Home() {
 
     setMessages(prev => [...prev, aiMessage])
 
-    // 发送 API 请求
+    // إرسال طلب API
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -853,7 +853,7 @@ export default function Home() {
         ))
       }
 
-      // 保存到数据库
+      // الحفظ في قاعدة البيانات
       await db.messages.update(parseInt(aiMessageId), {
         content: aiContentRef.current,
         toolInvocations: aiToolInvocationsRef.current.length > 0 ? aiToolInvocationsRef.current : undefined
@@ -861,7 +861,7 @@ export default function Home() {
 
     } catch (error: any) {
       console.error('Chat error:', error)
-      toast.error(`请求出错: ${error.message}`)
+      toast.error(`حدث خطأ في الطلب: ${error.message}`)
     } finally {
       setIsLoading(false)
     }
@@ -875,7 +875,7 @@ export default function Home() {
     setIsLoading(false)
   }
 
-  // 处理表单提交（用于快捷键）
+  // معالجة إرسال النموذج (للاختصارات)
   const handleSubmit = () => {
     const form = document.querySelector('form') as HTMLFormElement
     if (form) {
@@ -945,7 +945,7 @@ export default function Home() {
           </div>
         </header>
 
-        {/* 标签页切换 */}
+        {/* تبديل علامات التبويب */}
         <div className="border-b bg-background shrink-0">
           <div className="max-w-3xl mx-auto px-4 sm:px-8">
             <div className="flex gap-6 justify-center">
@@ -990,7 +990,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* 快速示例 */}
+                {/* أمثلة سريعة */}
                 <div className="max-w-2xl mx-auto">
                   <h3 className="text-sm font-semibold text-muted-foreground mb-4 text-center">{t('welcome.quickStart')}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1063,7 +1063,7 @@ export default function Home() {
                             : 'bg-card text-card-foreground border rounded-tl-sm max-w-[90%]'
                         }`}
                     >
-                      {/* 错误信息显示 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／ */}
+                      {/* عرض معلومات الخطأ */}
                       {m.error && (
                         <div className="mb-3 flex items-start gap-2 p-3 bg-destructive/20 rounded-lg border border-destructive/50">
                           <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
@@ -1083,21 +1083,21 @@ export default function Home() {
                         </div>
                       )}
 
-                      {/* 只在有内容且不是纯工具调用时显示文本 */}
-                      {/* 🚨 前端拦截：如果同时有工具调用，则隐藏文字内容 */}
+                      {/* عرض النص فقط عند وجود محتوى وعدم كونه استدعاء أداة خالصًا */}
+                      {/* 🚨 اعتراض من جهة الواجهة: في حال وجود استدعاء أداة، يُخفى المحتوى النصي */}
                       {m.content && !m.content.includes('toolCallId') && !m.content.includes('toolName') && !m.toolInvocations && (
                         <div className="space-y-3">
-                          {/* 只显示用户输入的文本，不显示附件内容 */}
+                          {/* عرض النص الذي أدخله المستخدم فقط، دون عرض محتوى المرفقات */}
                           {(() => {
                             const content = m.content
-                            // 检查新格式的附件标记
-                            const attachmentPattern = /\[附件\d+:/
-                            const imagePattern = /\[图片\d+:/
+                            // التحقق من علامات المرفقات بالتنسيق الجديد
+                            const attachmentPattern = /\[مرفق\d+:/
+                            const imagePattern = /\[صورة\d+:/
                             const hasAttachment = attachmentPattern.test(content) || imagePattern.test(content)
 
-                            // 如果有附件标记,只显示第一个标记之前的文本
+                            // في حال وجود علامة مرفق، اعرض فقط النص الذي يسبق أول علامة
                             if (hasAttachment) {
-                              const firstMarkerIndex = content.search(/\[(附件|图片)\d+:/)
+                              const firstMarkerIndex = content.search(/\[(مرفق|صورة)\d+:/)
                               if (firstMarkerIndex > 0) {
                                 const userText = content.substring(0, firstMarkerIndex).trim()
                                 return (
@@ -1108,8 +1108,8 @@ export default function Home() {
                               }
                             }
 
-                            // 兼容旧格式
-                            const oldAttachmentIndex = content.indexOf('[附件内容]')
+                            // التوافق مع التنسيق القديم
+                            const oldAttachmentIndex = content.indexOf('[محتوى المرفق]')
                             if (oldAttachmentIndex > 0) {
                               const userText = content.substring(0, oldAttachmentIndex).trim()
                               return (
@@ -1119,7 +1119,7 @@ export default function Home() {
                               )
                             }
 
-                            // 没有附件内容，正常显示
+                            // لا يوجد محتوى مرفقات، يُعرض بشكل عادي
                             return (
                               <div className="whitespace-pre-wrap text-sm leading-relaxed break-words">
                                 {content}
@@ -1127,7 +1127,7 @@ export default function Home() {
                             )
                           })()}
 
-                          {/* 文字生成期间的等待提示 */}
+                          {/* رسالة الانتظار أثناء توليد النص */}
                           {m.role === 'assistant' && m.id === messages[messages.length - 1]?.id && isLoading && !m.toolInvocations && (
                             <div className="mt-3 flex items-center gap-2.5 text-xs text-muted-foreground bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
                               <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-spin drop-shadow-sm" style={{ animationDuration: '2s' }} />
@@ -1137,7 +1137,7 @@ export default function Home() {
                         </div>
                       )}
 
-                      {/* 多文件预览 */}
+                      {/* معاينة الملفات المتعددة */}
                       {m.files && m.files.length > 0 && (
                         <div className="mt-3 flex flex-wrap gap-2">
                           {m.files.map((file: any, index: number) => (
@@ -1156,14 +1156,14 @@ export default function Home() {
                                     const content = m.content
                                     if (!content) return undefined
 
-                                    // 尝试匹配新格式：[附件1: filename.pdf]
-                                    const attachmentMarker = `[附件${index + 1}: ${file.name}]`
+                                    // محاولة مطابقة التنسيق الجديد: [مرفق1: filename.pdf]
+                                    const attachmentMarker = `[مرفق${index + 1}: ${file.name}]`
                                     const attachmentIndex = content.indexOf(attachmentMarker)
 
                                     if (attachmentIndex >= 0) {
                                       const startIndex = attachmentIndex + attachmentMarker.length
-                                      // 查找下一个附件标记或内容结束
-                                      const nextMarkerMatch = content.substring(startIndex).match(/\[(附件|图片)\d+:/)
+                                      // البحث عن علامة المرفق التالية أو نهاية المحتوى
+                                      const nextMarkerMatch = content.substring(startIndex).match(/\[(مرفق|صورة)\d+:/)
                                       const endIndex = nextMarkerMatch
                                         ? startIndex + nextMarkerMatch.index!
                                         : content.length
@@ -1230,10 +1230,10 @@ export default function Home() {
                         return null
                       })}
 
-                      {/* 加载提示 - 叠加遮罩动画 */}
+                      {/* رسالة التحميل - حركة تراكب التعتيم */}
                       {m.role === 'assistant' && m.id === messages[messages.length - 1]?.id && isLoading && (
                         <>
-                          {/* 等待 AI 回复 */}
+                          {/* انتظار رد الذكاء الاصطناعي */}
                           {!m.content && !m.toolInvocations && (
                             <div className="mt-3 flex items-center gap-3 text-sm text-muted-foreground animate-in fade-in slide-in-from-bottom-2 duration-300">
                               <div className="flex gap-1.5">
@@ -1245,7 +1245,7 @@ export default function Home() {
                             </div>
                           )}
 
-                          {/* 工具调用加载 - 叠加遮罩（即使有文字内容也显示） */}
+                          {/* تحميل استدعاء الأداة - تراكب تعتيم (يُعرض حتى مع وجود محتوى نصي) */}
                           {m.toolInvocations && m.toolInvocations.length > 0 && !m.toolInvocations[0].args && (
                             <div className="mt-3 relative animate-in fade-in slide-in-from-bottom-2 duration-300">
                               <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/15 to-primary/5 animate-pulse rounded-lg backdrop-blur-[2px] z-10" style={{ animationDuration: '2s' }} />
@@ -1299,11 +1299,11 @@ export default function Home() {
           )}
         </div>
 
-        {/* Floating Input Area - 仅在对话标签页显示 */}
+        {/* Floating Input Area - يُعرض في علامة تبويب المحادثة فقط */}
         {activeTab === 'chat' && (
         <div className="p-4 bg-background border-t shrink-0">
           <div className="max-w-3xl mx-auto">
-            {/* 文件列表 - 独立显示在上方 - 由傲娇大小姐哈雷酱优化 (￣▽￣)／ */}
+            {/* قائمة الملفات - تُعرض بشكل مستقل في الأعلى */}
             {uploadedFiles.length > 0 && (
               <div className="mb-3 flex flex-wrap gap-2 p-3 bg-muted/30 rounded-lg border">
                 {uploadedFiles.map((item, index) => (
@@ -1339,12 +1339,12 @@ export default function Home() {
               </div>
             )}
 
-            {/* 输入框区域：上传按钮 + 输入框 + 发送按钮 */}
+            {/* منطقة حقل الإدخال: زر الرفع + حقل الإدخال + زر الإرسال */}
             <form
               onSubmit={onFormSubmit}
               className="relative flex items-end gap-2 p-2 rounded-xl border bg-muted/40 hover:border-primary/50 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all"
             >
-              {/* 上传按钮 - 左侧 */}
+              {/* زر الرفع - على اليسار */}
               <div className="mb-1 ml-1">
                 <Button
                   type="button"
@@ -1352,7 +1352,7 @@ export default function Home() {
                   size="icon"
                   className="h-10 w-10 shrink-0"
                   onClick={() => document.getElementById('file-input')?.click()}
-                  title="上传文件"
+                  title="رفع ملف"
                 >
                   <Upload className="w-4 h-4" />
                 </Button>
@@ -1373,7 +1373,7 @@ export default function Home() {
                 />
               </div>
 
-              {/* 输入框 - 中间 */}
+              {/* حقل الإدخال - في الوسط */}
               <AutoResizeTextarea
                 value={localInput}
                 onChange={setLocalInput}
@@ -1384,7 +1384,7 @@ export default function Home() {
                 autoFocus
               />
 
-              {/* 发送/停止按钮 - 右侧 */}
+              {/* زر الإرسال/الإيقاف - على اليمين */}
               <Button
                 type="submit"
                 size="icon"
@@ -1413,7 +1413,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* 全屏拖拽上传区域 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／ */}
+      {/* منطقة الرفع بالسحب والإفلات بملء الشاشة */}
       {showFullDropZone && (
         <div
           className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-200"
@@ -1441,7 +1441,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Spotlight 搜索 */}
+      {/* بحث Spotlight */}
       <SpotlightSearch
         open={spotlightOpen}
         onOpenChange={setSpotlightOpen}
@@ -1452,13 +1452,13 @@ export default function Home() {
         onNavigateToFavorites={() => setActiveTab('favorites')}
       />
 
-      {/* 快捷键对话框 */}
+      {/* مربع حوار الاختصارات */}
       <KeyboardShortcutsDialog
         open={shortcutsOpen}
         onOpenChange={setShortcutsOpen}
       />
 
-      {/* API Key 未配置提示对话框 - 由傲娇大小姐哈雷酱制作 (￣▽￣)／ */}
+      {/* مربع حوار تنبيه عدم إعداد مفتاح API */}
       <ApiKeyRequiredDialog
         open={apiKeyDialogOpen}
         onOpenChange={setApiKeyDialogOpen}
