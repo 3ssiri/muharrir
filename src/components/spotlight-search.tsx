@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { db } from '@/lib/db'
 import type { ChatSession, FavoritePrompt } from '@/lib/db'
 import { formatDistanceToNow } from 'date-fns'
-import { zhCN, enUS } from 'date-fns/locale'
+import { ar, enUS } from 'date-fns/locale'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { useTranslations, useLocale } from 'next-intl'
 
@@ -22,7 +22,7 @@ interface SpotlightSearchProps {
 export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigateToFavorites }: SpotlightSearchProps) {
   const t = useTranslations();
   const locale = useLocale();
-  const dateLocale = locale === 'zh-CN' ? zhCN : enUS;
+  const dateLocale = locale === 'ar' ? ar : enUS;
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState<'chats' | 'favorites'>('chats')
   const [chatResults, setChatResults] = useState<ChatSession[]>([])
@@ -30,7 +30,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // 搜索对话
+  // البحث في المحادثات
   useEffect(() => {
     if (!open) return
 
@@ -53,7 +53,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
     searchChats()
   }, [searchQuery, open])
 
-  // 搜索收藏
+  // البحث في المفضلة
   useEffect(() => {
     if (!open) return
 
@@ -76,7 +76,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
     searchFavorites()
   }, [searchQuery, open])
 
-  // 重置状态
+  // إعادة تعيين الحالة
   useEffect(() => {
     if (open) {
       setSearchQuery('')
@@ -85,7 +85,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
     }
   }, [open])
 
-  // 键盘导航
+  // التنقل عبر لوحة المفاتيح
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const results = activeTab === 'chats' ? chatResults : favoriteResults
 
@@ -125,14 +125,14 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
           <DialogTitle>{t('spotlight.searchTitle')}</DialogTitle>
         </VisuallyHidden>
 
-        {/* 搜索框 */}
+        {/* مربع البحث */}
         <div className="p-4 border-b">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               ref={inputRef}
               placeholder={t('spotlight.searchPlaceholder')}
-              className="pl-10 pr-4 h-12 text-base border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="ps-10 pe-4 h-12 text-base border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -140,7 +140,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
           </div>
         </div>
 
-        {/* 标签页切换 */}
+        {/* تبديل علامات التبويب */}
         <div className="flex border-b bg-muted/30">
           <button
             onClick={() => { setActiveTab('chats'); setSelectedIndex(0) }}
@@ -166,7 +166,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
           </button>
         </div>
 
-        {/* 结果列表 */}
+        {/* قائمة النتائج */}
         <div className="max-h-96 overflow-y-auto">
           {results.length === 0 ? (
             <div className="p-8 text-center text-muted-foreground">
@@ -179,7 +179,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
                 <button
                   key={item.id}
                   onClick={() => handleSelect(item)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors ${
+                  className={`w-full text-start p-3 rounded-lg transition-colors ${
                     index === selectedIndex
                       ? 'bg-primary/10 border border-primary/20'
                       : 'hover:bg-muted/50'
@@ -208,14 +208,14 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
           )}
         </div>
 
-        {/* 快捷键提示 */}
+        {/* تلميحات اختصارات لوحة المفاتيح */}
         <div className="p-3 border-t bg-muted/30 flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex gap-4">
-            <span><Badge variant="outline" className="mr-1">↑↓</Badge>{t('spotlight.navigate')}</span>
-            <span><Badge variant="outline" className="mr-1">Enter</Badge>{t('spotlight.select')}</span>
-            <span><Badge variant="outline" className="mr-1">Tab</Badge>{t('spotlight.switchTab')}</span>
+            <span><Badge variant="outline" className="me-1">↑↓</Badge>{t('spotlight.navigate')}</span>
+            <span><Badge variant="outline" className="me-1">Enter</Badge>{t('spotlight.select')}</span>
+            <span><Badge variant="outline" className="me-1">Tab</Badge>{t('spotlight.switchTab')}</span>
           </div>
-          <span><Badge variant="outline" className="mr-1">Esc</Badge>{t('spotlight.closeDialog')}</span>
+          <span><Badge variant="outline" className="me-1">Esc</Badge>{t('spotlight.closeDialog')}</span>
         </div>
       </DialogContent>
     </Dialog>

@@ -40,12 +40,12 @@ export function ExportFavorites() {
         filename = `favorites-${Date.now()}.json`
         mimeType = 'application/json'
       } else {
-        // DOCX 格式暂不实现，提示用户
-        alert('DOCX 格式导出功能开发中')
+        // تنسيق DOCX غير متوفر حالياً، إبلاغ المستخدم
+        alert('ميزة التصدير بتنسيق DOCX قيد التطوير')
         return
       }
 
-      // 创建下载链接
+      // إنشاء رابط التنزيل
       const blob = new Blob([content], { type: mimeType })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -54,8 +54,8 @@ export function ExportFavorites() {
       a.click()
       URL.revokeObjectURL(url)
     } catch (error) {
-      console.error('导出失败:', error)
-      alert('导出失败，请重试')
+      console.error('فشل التصدير:', error)
+      alert('فشل التصدير، يرجى المحاولة مرة أخرى')
     } finally {
       setIsExporting(false)
     }
@@ -65,19 +65,19 @@ export function ExportFavorites() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" disabled={isExporting}>
-          <Download className="w-4 h-4 mr-2" />
+          <Download className="w-4 h-4 me-2" />
           {t('favoritesDialog.export')}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={() => handleExport('md')}>
-          导出为 Markdown (.md)
+          التصدير إلى Markdown (.md)
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleExport('json')}>
-          导出为 JSON (.json)
+          التصدير إلى JSON (.json)
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleExport('docx')} disabled>
-          导出为 Word (.docx) - 开发中
+          التصدير إلى Word (.docx) - قيد التطوير
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

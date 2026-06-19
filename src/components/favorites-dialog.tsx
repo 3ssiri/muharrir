@@ -12,7 +12,7 @@ import { db } from '@/lib/db'
 import type { FavoritePrompt } from '@/lib/db'
 import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
-import { zhCN, enUS } from 'date-fns/locale'
+import { ar, enUS } from 'date-fns/locale'
 import { useTranslations, useLocale } from 'next-intl'
 
 interface FavoritesDialogProps {
@@ -23,7 +23,7 @@ interface FavoritesDialogProps {
 export function FavoritesDialog({ open, onOpenChange }: FavoritesDialogProps) {
   const t = useTranslations();
   const locale = useLocale();
-  const dateLocale = locale === 'zh-CN' ? zhCN : enUS;
+  const dateLocale = locale === 'ar' ? ar : enUS;
   const [favorites, setFavorites] = useState<FavoritePrompt[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [filteredFavorites, setFilteredFavorites] = useState<FavoritePrompt[]>([])
@@ -43,7 +43,7 @@ export function FavoritesDialog({ open, onOpenChange }: FavoritesDialogProps) {
     }
   }, [open])
 
-  // 搜索过滤
+  // تصفية البحث
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredFavorites(favorites)
@@ -99,18 +99,18 @@ export function FavoritesDialog({ open, onOpenChange }: FavoritesDialogProps) {
           </DialogTitle>
         </DialogHeader>
 
-        {/* 搜索框 */}
+        {/* مربع البحث */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={t('favoritesDialog.searchPlaceholder')}
-            className="pl-9"
+            className="ps-9"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        {/* 收藏列表 */}
+        {/* قائمة المفضلة */}
         <ScrollArea className="flex-1 -mx-6 px-6">
           {filteredFavorites.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">

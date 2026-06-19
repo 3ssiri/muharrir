@@ -1,35 +1,35 @@
 /**
- * 装饰器引擎 - 基于 prompt-decorators 项目
- * 用于控制 AI 回答的风格和形式
+ * محرّك المُزخرِفات - مبني على مشروع prompt-decorators
+ * يُستخدم للتحكّم في أسلوب إجابات الذكاء الاصطناعي وشكلها
  */
 
 export interface DecoratorConfig {
-  // 思考深度
+  // عمق التفكير
   thinking_depth?: 'step_by_step' | 'debate' | 'socratic' | 'reasoning' | 'none';
 
-  // 语气风格
+  // أسلوب النبرة
   tone?: 'formal' | 'casual' | 'creative' | 'technical' | 'friendly';
 
-  // 输出格式
+  // صيغة الإخراج
   output_format?: 'markdown' | 'json' | 'code' | 'structured' | 'plain';
 
-  // 评估改进
+  // التقييم والتحسين
   evaluation?: ('critique' | 'refine')[];
 
-  // 验证
+  // التحقّق
   validation?: ('fact_check' | 'cite_sources')[];
 
-  // 自定义装饰器
+  // مُزخرِفات مخصّصة
   custom?: string[];
 }
 
 /**
- * 构建装饰器前缀
+ * بناء بادئة المُزخرِفات
  */
 export function buildDecoratorPrefix(config: DecoratorConfig): string {
   const decorators: string[] = [];
 
-  // 1. 思考深度装饰器
+  // 1. مُزخرِف عمق التفكير
   if (config.thinking_depth && config.thinking_depth !== 'none') {
     const thinkingMap: Record<string, string> = {
       'step_by_step': '+++StepByStep',
@@ -41,17 +41,17 @@ export function buildDecoratorPrefix(config: DecoratorConfig): string {
     if (decorator) decorators.push(decorator);
   }
 
-  // 2. 语气装饰器
+  // 2. مُزخرِف النبرة
   if (config.tone) {
     decorators.push(`+++Tone(style=${config.tone})`);
   }
 
-  // 3. 输出格式装饰器
+  // 3. مُزخرِف صيغة الإخراج
   if (config.output_format) {
     decorators.push(`+++OutputFormat(format=${config.output_format})`);
   }
 
-  // 4. 评估改进装饰器
+  // 4. مُزخرِف التقييم والتحسين
   if (config.evaluation) {
     if (config.evaluation.includes('critique')) {
       decorators.push('+++Critique');
@@ -61,7 +61,7 @@ export function buildDecoratorPrefix(config: DecoratorConfig): string {
     }
   }
 
-  // 5. 验证装饰器
+  // 5. مُزخرِف التحقّق
   if (config.validation) {
     if (config.validation.includes('fact_check')) {
       decorators.push('+++FactCheck');
@@ -71,7 +71,7 @@ export function buildDecoratorPrefix(config: DecoratorConfig): string {
     }
   }
 
-  // 6. 自定义装饰器
+  // 6. المُزخرِفات المخصّصة
   if (config.custom && config.custom.length > 0) {
     decorators.push(...config.custom);
   }
@@ -80,7 +80,7 @@ export function buildDecoratorPrefix(config: DecoratorConfig): string {
 }
 
 /**
- * 将装饰器应用到提示词
+ * تطبيق المُزخرِفات على الموجّه
  */
 export function applyDecorators(prompt: string, config: DecoratorConfig): string {
   const decoratorPrefix = buildDecoratorPrefix(config);

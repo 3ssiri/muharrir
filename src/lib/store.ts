@@ -8,8 +8,8 @@ interface AppSettings {
   systemPrompt: string
   availableModels: string[]
   correctionModel: string
-  autoRetry: boolean // 自动重试配置 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
-  maxRetries: number // 最大重试次数
+  autoRetry: boolean // إعداد إعادة المحاولة التلقائية
+  maxRetries: number // أقصى عدد لمحاولات الإعادة
 }
 
 interface AppState extends AppSettings {
@@ -19,8 +19,8 @@ interface AppState extends AppSettings {
   setSystemPrompt: (prompt: string) => void
   setAvailableModels: (models: string[]) => void
   setCorrectionModel: (model: string) => void
-  setAutoRetry: (enabled: boolean) => void // 设置自动重试
-  setMaxRetries: (count: number) => void // 设置最大重试次数
+  setAutoRetry: (enabled: boolean) => void // ضبط إعادة المحاولة التلقائية
+  setMaxRetries: (count: number) => void // ضبط أقصى عدد للمحاولات
   resetSettings: () => void
 }
 
@@ -29,21 +29,21 @@ const defaultSettings: AppSettings = {
   baseUrl: 'https://api.deepseek.com',
   model: 'deepseek-v3.2-exp',
   correctionModel: 'grok-beta-fast',
-  autoRetry: true, // 默认启用自动重试 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
-  maxRetries: 3, // 默认最多重试3次
-  systemPrompt: '你是交互式提示词优化助手。你的目标是通过多轮对话，引导用户明确需求，并最终生成高质量的结构化提示词。\n\n重要提示：\n1. 当用户上传图片时，请仔细分析图片内容，并结合用户的文字描述来理解他们的真实需求\n2. 当用户上传文档（PDF/DOCX）时，文档内容会以文本形式提供，请根据文档内容和用户的指令来优化提示词\n3. 你应该主动提出建议，使用交互式表单让用户选择优化方向',
+  autoRetry: true, // تفعيل إعادة المحاولة التلقائية افتراضيًا
+  maxRetries: 3, // أقصى عدد للمحاولات افتراضيًا هو 3
+  systemPrompt: 'أنت مساعد تفاعلي لتحسين الموجّهات. هدفك هو إرشاد المستخدم عبر محادثة متعدّدة الجولات لتوضيح متطلباته، ثم إنشاء موجّه منظّم وعالي الجودة في النهاية.\n\nملاحظات مهمة:\n1. عندما يرفع المستخدم صورة، حلّل محتواها بعناية واربطها بوصفه النصّي لفهم احتياجه الحقيقي\n2. عندما يرفع المستخدم مستندًا (PDF/DOCX)، يُقدَّم محتوى المستند كنصّ؛ حسّن الموجّه بناءً على محتوى المستند وتعليمات المستخدم\n3. ينبغي أن تقدّم اقتراحات بشكل استباقي، مستخدمًا نموذجًا تفاعليًا ليختار المستخدم اتجاهات التحسين',
   availableModels: [
-    // OpenAI 系列
+    // سلسلة OpenAI
     'gpt-4o',
     'gpt-4o-mini',
     'gpt-4-turbo',
     'o1',
     'o1-mini',
-    // Anthropic Claude 系列
+    // سلسلة Anthropic Claude
     'claude-3-5-sonnet-20241022',
     'claude-3-5-haiku-20241022',
     'claude-3-opus-20240229',
-    // 国产大模型
+    // النماذج الكبيرة المحلية
     'deepseek-v3.2-exp',
     'deepseek-chat',
     'deepseek-reasoner',
@@ -67,7 +67,7 @@ export const useAppStore = create<AppState>()(
       setSystemPrompt: (systemPrompt) => set({ systemPrompt }),
       setAvailableModels: (availableModels) => set({ availableModels }),
       setCorrectionModel: (correctionModel) => set({ correctionModel }),
-      setAutoRetry: (autoRetry) => set({ autoRetry }), // 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+      setAutoRetry: (autoRetry) => set({ autoRetry }),
       setMaxRetries: (maxRetries) => set({ maxRetries }),
       resetSettings: () => set(defaultSettings),
     }),

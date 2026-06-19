@@ -1,6 +1,6 @@
 /**
- * 预设模式配置
- * 基于 prompt-decorators 的装饰器组合
+ * إعدادات الأوضاع الجاهزة
+ * مبنية على تركيبات المُزخرِفات من prompt-decorators
  */
 
 import { DecoratorConfig } from './decorator-engine';
@@ -16,9 +16,9 @@ export interface PresetMode {
 export const PRESET_MODES: Record<string, PresetMode> = {
   academic: {
     id: 'academic',
-    name: '学术研究',
+    name: 'البحث الأكاديمي',
     icon: '🎓',
-    description: '适合文献综述、研究方法设计',
+    description: 'مناسب لمراجعة الأدبيات وتصميم منهجية البحث',
     decorators: {
       thinking_depth: 'reasoning',
       tone: 'formal',
@@ -29,9 +29,9 @@ export const PRESET_MODES: Record<string, PresetMode> = {
 
   coding: {
     id: 'coding',
-    name: '代码开发',
+    name: 'تطوير الشيفرة',
     icon: '💻',
-    description: '适合代码生成、代码审查',
+    description: 'مناسب لإنشاء الشيفرة ومراجعتها',
     decorators: {
       thinking_depth: 'step_by_step',
       tone: 'technical',
@@ -42,9 +42,9 @@ export const PRESET_MODES: Record<string, PresetMode> = {
 
   creative: {
     id: 'creative',
-    name: '创意写作',
+    name: 'الكتابة الإبداعية',
     icon: '✨',
-    description: '适合文案撰写、故事创作',
+    description: 'مناسب لكتابة المحتوى وتأليف القصص',
     decorators: {
       thinking_depth: 'none',
       tone: 'creative',
@@ -55,9 +55,9 @@ export const PRESET_MODES: Record<string, PresetMode> = {
 
   data_analysis: {
     id: 'data_analysis',
-    name: '数据分析',
+    name: 'تحليل البيانات',
     icon: '📊',
-    description: '适合数据解读、趋势分析',
+    description: 'مناسب لتفسير البيانات وتحليل الاتجاهات',
     decorators: {
       thinking_depth: 'reasoning',
       tone: 'technical',

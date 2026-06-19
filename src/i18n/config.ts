@@ -1,14 +1,21 @@
-export const locales = ['en', 'zh-CN'] as const;
+export const locales = ['ar', 'en'] as const;
 export type Locale = (typeof locales)[number];
 
-export const defaultLocale: Locale = 'en';
+export const defaultLocale: Locale = 'ar';
 
 export const localeNames: Record<Locale, string> = {
-  'en': 'English',
-  'zh-CN': '简体中文'
+  'ar': 'العربية',
+  'en': 'English'
 };
 
 export const localeFlags: Record<Locale, string> = {
-  'en': '🇺🇸',
-  'zh-CN': '🇨🇳'
+  'ar': '🇸🇦',
+  'en': '🇺🇸'
 };
+
+// اللغات التي تُعرض من اليمين إلى اليسار (RTL)
+export const rtlLocales: Locale[] = ['ar'];
+
+export function getLocaleDir(locale: string): 'rtl' | 'ltr' {
+  return rtlLocales.includes(locale as Locale) ? 'rtl' : 'ltr';
+}

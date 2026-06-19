@@ -22,7 +22,7 @@ interface PromptProposal {
     workflow?: string | string[]
     outputFormat?: string
     finalPrompt?: string
-    final_prompt?: string  // 兼容旧格式
+    final_prompt?: string  // للتوافق مع الصيغة القديمة
 }
 
 interface PromptProposalCardProps {
@@ -47,7 +47,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
         // Partial JSON during streaming
     }
 
-    // 检查是否已收藏
+    // التحقق مما إذا كان مضافاً إلى المفضلة
     useEffect(() => {
         const checkFavorite = async () => {
             if (!proposal?.finalPrompt && !proposal?.final_prompt) return
@@ -69,7 +69,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
     if (!proposal || !proposal.title) {
         return (
             <Card className="flex items-center justify-center p-6 border-dashed animate-pulse">
-                <Sparkles className="w-5 h-5 text-primary animate-spin mr-2" />
+                <Sparkles className="w-5 h-5 text-primary animate-spin me-2" />
                 <span className="text-sm text-muted-foreground">{t('common.loading')}</span>
             </Card>
         )
@@ -101,13 +101,13 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
         const title = proposal?.title || t('promptProposal.title')
 
         if (favorited && favoriteId) {
-            // 取消收藏
+            // إزالة من المفضلة
             await db.favoritePrompts.delete(favoriteId)
             setFavorited(false)
             setFavoriteId(null)
             toast.success(t('promptProposal.favoriteRemoved'))
         } else {
-            // 添加收藏
+            // إضافة إلى المفضلة
             const id = await db.favoritePrompts.add({
                 title,
                 content: finalPrompt,
@@ -126,7 +126,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                 <CardHeader className="py-4">
                     <div className="flex items-center gap-2">
                         <Check className="w-5 h-5 text-primary" />
-                        <CardTitle className="text-base">已采纳提示词方案：{proposal.title}</CardTitle>
+                        <CardTitle className="text-base">تم اعتماد مقترح الموجّه: {proposal.title}</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="py-2">
@@ -136,7 +136,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                 </CardContent>
                 <CardFooter className="py-2 justify-end">
                     <Button variant="ghost" size="sm" onClick={handleCopy}>
-                        {copied ? <Check className="w-4 h-4 mr-1" /> : <Copy className="w-4 h-4 mr-1" />}
+                        {copied ? <Check className="w-4 h-4 me-1" /> : <Copy className="w-4 h-4 me-1" />}
                         {t('promptProposal.copy')}
                     </Button>
                 </CardFooter>
@@ -163,7 +163,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                         >
                             <Star className={`w-4 h-4 transition-all duration-300 ${favorited ? 'fill-white text-white' : ''}`} />
                         </Button>
-                        <Badge variant="outline" className="bg-background">结构化建议</Badge>
+                        <Badge variant="outline" className="bg-background">اقتراح منظّم</Badge>
                     </div>
                 </div>
             </CardHeader>
@@ -190,7 +190,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                                     value={proposal.finalPrompt || proposal.final_prompt || ''}
                                     readOnly
                                 />
-                                <div className="absolute top-2 right-2 flex gap-2">
+                                <div className="absolute top-2 end-2 flex gap-2">
                                     <Button
                                         size="icon"
                                         variant="secondary"
@@ -215,28 +215,28 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                     <TabsContent value="structure" className="m-0 p-6 space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label className="text-xs font-semibold uppercase text-muted-foreground">Role (角色)</Label>
+                                <Label className="text-xs font-semibold uppercase text-muted-foreground">Role (الدور)</Label>
                                 <div className="p-3 bg-muted/30 rounded-md text-sm">{proposal.role}</div>
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-xs font-semibold uppercase text-muted-foreground">Objective (目标)</Label>
+                                <Label className="text-xs font-semibold uppercase text-muted-foreground">Objective (الهدف)</Label>
                                 <div className="p-3 bg-muted/30 rounded-md text-sm">{proposal.objective}</div>
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Context (背景)</Label>
+                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Context (السياق)</Label>
                             <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap">{proposal.context}</div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Workflow (工作流)</Label>
-                            <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap">{proposal.workflow || '无特定步骤'}</div>
+                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Workflow (سير العمل)</Label>
+                            <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap">{proposal.workflow || 'لا توجد خطوات محددة'}</div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Constraints (约束)</Label>
-                            <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap border-l-2 border-destructive pl-3">{proposal.constraints}</div>
+                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Constraints (القيود)</Label>
+                            <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap border-s-2 border-destructive ps-3">{proposal.constraints}</div>
                         </div>
                     </TabsContent>
                 </CardContent>
@@ -255,7 +255,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
             </CardFooter>
         </Card>
 
-        {/* 全屏模态框 */}
+        {/* نافذة منبثقة بملء الشاشة */}
         {isFullscreen && (
             <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-2">
                 <div className="w-full max-w-[95vw] h-[95vh] flex flex-col bg-card border rounded-lg shadow-2xl">
@@ -281,7 +281,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                             {t('common.close')}
                         </Button>
                         <Button onClick={handleCopy}>
-                            {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                            {copied ? <Check className="w-4 h-4 me-2" /> : <Copy className="w-4 h-4 me-2" />}
                             {t('promptProposal.copy')}
                         </Button>
                     </div>

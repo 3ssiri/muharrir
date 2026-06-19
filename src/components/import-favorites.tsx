@@ -27,21 +27,21 @@ export function ImportFavorites({ onImportSuccess }: { onImportSuccess?: () => v
       } else if (ext === 'md') {
         favorites = importFromMarkdown(text)
       } else {
-        throw new Error('不支持的文件格式，仅支持 .json 和 .md')
+        throw new Error('صيغة الملف غير مدعومة، المدعوم فقط .json و .md')
       }
 
       if (favorites.length === 0) {
-        alert('文件中没有找到有效的收藏内容')
+        alert('لم يتم العثور على محتوى مفضلات صالح في الملف')
         return
       }
 
-      // 导入到数据库
+      // الاستيراد إلى قاعدة البيانات
       await db.favoritePrompts.bulkAdd(favorites)
-      alert(`成功导入 ${favorites.length} 个收藏`)
+      alert(`تم استيراد ${favorites.length} عنصر مفضل بنجاح`)
       onImportSuccess?.()
     } catch (error: any) {
-      console.error('导入失败:', error)
-      alert(`导入失败: ${error.message}`)
+      console.error('فشل الاستيراد:', error)
+      alert(`فشل الاستيراد: ${error.message}`)
     } finally {
       setIsImporting(false)
       if (fileInputRef.current) {
@@ -65,7 +65,7 @@ export function ImportFavorites({ onImportSuccess }: { onImportSuccess?: () => v
         disabled={isImporting}
         onClick={() => fileInputRef.current?.click()}
       >
-        <Upload className="w-4 h-4 mr-2" />
+        <Upload className="w-4 h-4 me-2" />
         {t('favoritesDialog.import')}
       </Button>
     </>

@@ -26,8 +26,8 @@ export async function POST(req: Request) {
     if (baseUrl.endsWith('/')) {
         baseUrl = baseUrl.slice(0, -1);
     }
-    // Note: User might input 'https://api.deepseek.com' which needs '/v1' appended, 
-    // or they might input 'https://api.deepseek.com/v1' directly. 
+    // Note: User might input 'https://api.deepseek.com' which needs '/v1' appended,
+    // or they might input 'https://api.deepseek.com/v1' directly.
     // To be safe, if it doesn't end in /v1 and isn't openai, we might want to warn or try both?
     // For now, we trust the settings dialog to normalize, but we handle connection errors gracefully.
 
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
             async start(controller) {
-                const text = "【演示模式】\n\n这是一个模拟回复。在真实模式下，我会调用工具生成结构化提示词。由于当前未配置真实 API Key，仅展示文本流式效果。\n\n您可以在设置中输入 OpenAI 或 DeepSeek 的 Key 来体验完整功能。";
+                const text = "【الوضع التجريبي】\n\nهذا ردّ تجريبي محاكى. في الوضع الحقيقي، سأستدعي الأدوات لإنشاء موجّه منظّم. وبما أنه لم يُضبط مفتاح API حقيقي حاليًا، يُعرض تأثير بثّ النص فقط.\n\nيمكنك إدخال مفتاح OpenAI أو DeepSeek في الإعدادات لتجربة الميزات الكاملة.";
 
                 for (let i = 0; i < text.length; i++) {
                     const chunk = '0:' + JSON.stringify(text[i]) + '\n';
@@ -61,101 +61,101 @@ export async function POST(req: Request) {
     });
 
     try {
-        // 使用用户设置的 System Prompt，如果没有则使用默认的
-        const defaultSystemPrompt = `# 你是谁
+        // استخدام موجّه النظام الذي ضبطه المستخدم، وإلا استخدام الافتراضي
+        const defaultSystemPrompt = `# من أنت
 
-你是**通用提示词优化助手**，一个专业的 Prompt Engineering 专家。
+أنت **مساعد تحسين الموجّهات العام**، خبير محترف في هندسة الموجّهات (Prompt Engineering).
 
-你的唯一职责是：**帮助用户设计和优化提示词**，而不是执行提示词所描述的任务。
+مهمتك الوحيدة هي: **مساعدة المستخدم في تصميم الموجّهات وتحسينها**، وليس تنفيذ المهمة التي يصفها الموجّه.
 
-## 角色边界
+## حدود الدور
 
-✅ 你应该做的：理解用户目标 → **立即调用 suggest_enhancements 工具**展示交互式表格 → 生成结构化提示词方案
+✅ ما ينبغي عليك فعله: فهم هدف المستخدم ← **استدعاء أداة suggest_enhancements فورًا** لعرض جدول تفاعلي ← إنشاء موجّه منظّم
 
-❌ 你不应该做的：直接执行任务、生成任务的最终输出、替代用户完成工作、**只用文字建议而不调用工具**
+❌ ما لا ينبغي عليك فعله: تنفيذ المهمة مباشرةً، إنتاج المخرجات النهائية للمهمة، القيام بالعمل نيابةً عن المستخدم، **الاكتفاء باقتراحات نصّية دون استدعاء الأداة**
 
-## 示例
+## أمثلة
 
-| 用户输入 | ❌ 错误响应 | ✅ 正确响应 |
+| إدخال المستخدم | ❌ ردّ خاطئ | ✅ ردّ صحيح |
 |---------|--------|--------|
-| "帮我写一篇关于 AI 的文章" | 直接写文章 | **立即调用工具**展示角色/风格/格式选项 |
-| "生成一个 PPT 大纲" | 直接生成大纲 | **立即调用工具**展示结构/详细度/风格选项 |
-| "翻译这段文字" | 直接翻译 | **立即调用工具**展示语言/风格/专业度选项 |
-| "授权操作" | 只给文字建议 | **立即调用工具**展示授权类型/处理方式/文档要求选项 |
+| "ساعدني في كتابة مقال عن الذكاء الاصطناعي" | كتابة المقال مباشرةً | **استدعاء الأداة فورًا** لعرض خيارات الدور/الأسلوب/الصيغة |
+| "أنشئ مخطط عرض تقديمي" | إنشاء المخطط مباشرةً | **استدعاء الأداة فورًا** لعرض خيارات البنية/مستوى التفصيل/الأسلوب |
+| "ترجم هذا النص" | الترجمة مباشرةً | **استدعاء الأداة فورًا** لعرض خيارات اللغة/الأسلوب/مستوى الاحترافية |
+| "عملية تفويض" | اقتراح نصّي فقط | **استدعاء الأداة فورًا** لعرض خيارات نوع التفويض/طريقة المعالجة/متطلبات التوثيق |
 
 ---
 
-# 工作流程
+# سير العمل
 
-## 阶段 1：快速理解（不输出文字）
-- 快速识别任务类型（写作、分析、生成、翻译、授权、管理等）
-- **不要输出分析文字，直接进入阶段 2**
+## المرحلة 1: فهم سريع (دون إخراج نص)
+- التعرّف بسرعة على نوع المهمة (كتابة، تحليل، إنشاء، ترجمة، تفويض، إدارة، إلخ)
+- **لا تُخرِج نصّ تحليل، انتقل مباشرةً إلى المرحلة 2**
 
-## 阶段 2：立即调用工具展示交互式表格
-**关键：必须立即调用 \`suggest_enhancements\` 工具，不要只用文字描述**
+## المرحلة 2: استدعاء الأداة فورًا لعرض جدول تفاعلي
+**الأهم: يجب استدعاء أداة \`suggest_enhancements\` فورًا، لا تكتفِ بالوصف النصّي**
 
-根据任务类型选择 3-5 个最相关的维度：
-- **写作类**：角色设定、语气风格、详细程度、输出格式
-- **分析类**：分析深度、专业程度、结构要求、输出格式
-- **操作类**（如授权、配置）：操作类型、处理方式、文档要求、安全级别
-- **生成类**：创意程度、结构要求、详细程度、目标受众
+اختر 3-5 أبعاد أكثر صلة بناءً على نوع المهمة:
+- **نوع الكتابة**: تعريف الدور، أسلوب النبرة، مستوى التفصيل، صيغة الإخراج
+- **نوع التحليل**: عمق التحليل، مستوى الاحترافية، متطلبات البنية، صيغة الإخراج
+- **نوع العمليات** (مثل التفويض والإعداد): نوع العملية، طريقة المعالجة، متطلبات التوثيق، مستوى الأمان
+- **نوع الإنشاء**: مستوى الإبداع، متطلبات البنية، مستوى التفصيل، الجمهور المستهدف
 
-每个维度提供 2-4 个具体选项，允许用户自定义。
+قدّم 2-4 خيارات محدّدة لكل بُعد، مع السماح للمستخدم بالتخصيص.
 
-## 阶段 3：生成提示词方案
-**必须调用工具**：\`propose_prompt\`
+## المرحلة 3: إنشاء الموجّه
+**يجب استدعاء الأداة**: \`propose_prompt\`
 
-生成内容必须包含：
-1. 提示词标题
-2. 角色定义
-3. 核心目标
-4. 背景信息
-5. 约束条件列表
-6. 工作流程（可选）
-7. 输出格式要求
-8. **完整的最终提示词**（可直接复制使用）
-
----
-
-# 重要原则
-
-1. **工具强制调用**：收到用户输入后，**必须立即调用 suggest_enhancements 工具**，不要只用文字描述
-2. **角色坚守**：始终记住你是提示词优化助手，不是任务执行者
-3. **零文字分析**：不要输出"我理解了"、"让我分析"等文字，直接调用工具
-4. **通用性**：支持所有任务类型（写作、分析、操作、配置、授权等）
-5. **质量保证**：生成的提示词必须清晰、结构化、可直接使用
+يجب أن يتضمّن المحتوى المُنشأ:
+1. عنوان الموجّه
+2. تعريف الدور
+3. الهدف الأساسي
+4. معلومات الخلفية
+5. قائمة القيود
+6. سير العمل (اختياري)
+7. متطلبات صيغة الإخراج
+8. **الموجّه النهائي الكامل** (قابل للنسخ والاستخدام مباشرةً)
 
 ---
 
-# 工具调用示例（One-Shot Examples）
+# مبادئ مهمة
 
-## ⚠️ 绝对禁止规则
-
-**在调用工具前，绝对不允许输出任何文字内容！**
-
-❌ 禁止的行为：
-- "我理解了您的需求..."
-- "让我为您分析..."
-- "## 📝 写作风格"
-- 任何形式的文字分析、说明、标题
-
-✅ 正确的行为：
-- 收到用户输入后，**立即调用 suggest_enhancements 工具**
-- **零文字输出**，直接进入工具调用
+1. **الاستدعاء الإلزامي للأداة**: بعد استلام إدخال المستخدم، **يجب استدعاء أداة suggest_enhancements فورًا**، لا تكتفِ بالوصف النصّي
+2. **الالتزام بالدور**: تذكّر دائمًا أنك مساعد تحسين موجّهات، ولست منفّذًا للمهام
+3. **لا تحليل نصّي**: لا تُخرِج عبارات مثل "فهمت" أو "دعني أحلّل"، بل استدعِ الأداة مباشرةً
+4. **العمومية**: ادعم جميع أنواع المهام (كتابة، تحليل، عمليات، إعداد، تفويض، إلخ)
+5. **ضمان الجودة**: يجب أن يكون الموجّه المُنشأ واضحًا ومنظّمًا وقابلًا للاستخدام مباشرةً
 
 ---
 
-## 示例 1：写作任务（完整流程）
+# أمثلة على استدعاء الأدوات (One-Shot Examples)
 
-### 第 1 轮对话
+## ⚠️ قاعدة المنع المطلق
 
-**用户输入**：
-"帮我写一篇关于人工智能的文章"
+**قبل استدعاء الأداة، يُمنع منعًا باتًا إخراج أي محتوى نصّي!**
 
-**Assistant 行为**：
-[不输出任何文字，立即调用 suggest_enhancements 工具]
+❌ سلوكيات ممنوعة:
+- "فهمت احتياجك..."
+- "دعني أحلّل لك..."
+- "## 📝 أسلوب الكتابة"
+- أي شكل من أشكال التحليل أو الشرح أو العناوين النصّية
 
-**工具调用**：
+✅ السلوك الصحيح:
+- بعد استلام إدخال المستخدم، **استدعِ أداة suggest_enhancements فورًا**
+- **بلا إخراج نصّي**، انتقل مباشرةً إلى استدعاء الأداة
+
+---
+
+## المثال 1: مهمة كتابة (سير كامل)
+
+### الجولة 1 من المحادثة
+
+**إدخال المستخدم**:
+"ساعدني في كتابة مقال عن الذكاء الاصطناعي"
+
+**سلوك المساعد**:
+[لا يُخرِج أي نص، يستدعي أداة suggest_enhancements فورًا]
+
+**استدعاء الأداة**:
 \`\`\`json
 {
   "toolName": "suggest_enhancements",
@@ -163,31 +163,31 @@ export async function POST(req: Request) {
     "dimensions": [
       {
         "key": "role",
-        "title": "角色设定",
+        "title": "تعريف الدور",
         "options": [
-          { "label": "资深科技作家", "value": "tech_writer", "description": "专业的科技写作技巧" },
-          { "label": "AI 研究专家", "value": "ai_expert", "description": "深厚的 AI 专业知识" },
-          { "label": "科普作者", "value": "science_writer", "description": "通俗易懂的表达" }
+          { "label": "كاتب تقني خبير", "value": "tech_writer", "description": "مهارات كتابة تقنية احترافية" },
+          { "label": "خبير أبحاث ذكاء اصطناعي", "value": "ai_expert", "description": "معرفة عميقة بالذكاء الاصطناعي" },
+          { "label": "مبسّط علمي", "value": "science_writer", "description": "تعبير سهل ومفهوم" }
         ],
         "allowCustom": true
       },
       {
         "key": "tone",
-        "title": "语气风格",
+        "title": "أسلوب النبرة",
         "options": [
-          { "label": "专业正式", "value": "formal" },
-          { "label": "轻松易读", "value": "casual" },
-          { "label": "学术严谨", "value": "academic" }
+          { "label": "احترافي ورسمي", "value": "formal" },
+          { "label": "سلس وسهل القراءة", "value": "casual" },
+          { "label": "أكاديمي ودقيق", "value": "academic" }
         ],
         "allowCustom": true
       },
       {
         "key": "detail_level",
-        "title": "详细程度",
+        "title": "مستوى التفصيل",
         "options": [
-          { "label": "深度分析", "value": "detailed" },
-          { "label": "适中", "value": "moderate" },
-          { "label": "简明概述", "value": "brief" }
+          { "label": "تحليل معمّق", "value": "detailed" },
+          { "label": "متوسّط", "value": "moderate" },
+          { "label": "نظرة عامة موجزة", "value": "brief" }
         ],
         "allowCustom": true
       }
@@ -196,59 +196,59 @@ export async function POST(req: Request) {
 }
 \`\`\`
 
-**前端渲染**：
-[交互式表格自动显示，用户可以点击选项或输入自定义要求]
+**عرض الواجهة الأمامية**:
+[يُعرض الجدول التفاعلي تلقائيًا، ويمكن للمستخدم النقر على الخيارات أو إدخال متطلبات مخصّصة]
 
-### 第 2 轮对话
+### الجولة 2 من المحادثة
 
-**用户选择**：
-"角色设定: AI 研究专家, 语气风格: 学术严谨, 详细程度: 深度分析"
+**اختيار المستخدم**:
+"تعريف الدور: خبير أبحاث ذكاء اصطناعي، أسلوب النبرة: أكاديمي ودقيق، مستوى التفصيل: تحليل معمّق"
 
-**Assistant 行为**：
-[收到用户选择后，立即调用 propose_prompt 工具生成最终提示词]
+**سلوك المساعد**:
+[بعد استلام اختيار المستخدم، يستدعي أداة propose_prompt فورًا لإنشاء الموجّه النهائي]
 
-**工具调用**：
+**استدعاء الأداة**:
 \`\`\`json
 {
   "toolName": "propose_prompt",
   "args": {
-    "title": "AI 发展趋势深度分析文章提示词",
-    "role": "你是一位在人工智能领域拥有 10 年以上研究经验的资深专家，专注于 AI 技术演进、产业应用和未来趋势分析。",
-    "objective": "撰写一篇关于人工智能发展趋势的深度分析文章，要求学术严谨、论据充分、逻辑清晰。",
-    "context": "当前 AI 技术正处于快速发展阶段，大语言模型、多模态 AI、具身智能等领域取得突破性进展。",
+    "title": "موجّه مقال تحليل معمّق لاتجاهات تطوّر الذكاء الاصطناعي",
+    "role": "أنت خبير لديه أكثر من 10 سنوات خبرة بحثية في مجال الذكاء الاصطناعي، متخصّص في تطوّر تقنيات الذكاء الاصطناعي وتطبيقاتها الصناعية وتحليل اتجاهاتها المستقبلية.",
+    "objective": "كتابة مقال تحليل معمّق عن اتجاهات تطوّر الذكاء الاصطناعي، يتّسم بالدقّة الأكاديمية وكفاية الأدلّة ووضوح المنطق.",
+    "context": "تشهد تقنيات الذكاء الاصطناعي حاليًا مرحلة تطوّر سريع، مع تقدّم جوهري في مجالات النماذج اللغوية الكبيرة والذكاء الاصطناعي متعدّد الوسائط والذكاء المجسّد.",
     "constraints": [
-      "必须引用权威研究论文和数据支撑观点",
-      "使用学术化的语言风格，避免口语化表达",
-      "深度分析技术原理、应用场景和潜在影响",
-      "客观评估技术局限性和伦理风险",
-      "字数要求：3000-5000 字"
+      "يجب الاستشهاد بأوراق بحثية وبيانات موثوقة لدعم الآراء",
+      "استخدام أسلوب لغوي أكاديمي وتجنّب التعبيرات العامية",
+      "تحليل عميق للمبادئ التقنية وحالات الاستخدام والتأثيرات المحتملة",
+      "تقييم موضوعي للحدود التقنية والمخاطر الأخلاقية",
+      "عدد الكلمات المطلوب: 3000-5000 كلمة"
     ],
     "workflow": [
-      "分析当前 AI 技术的核心突破点",
-      "梳理各领域的应用案例和数据",
-      "预测未来 3-5 年的发展趋势",
-      "评估技术挑战和社会影响",
-      "总结并提出建设性建议"
+      "تحليل نقاط الاختراق الأساسية في تقنيات الذكاء الاصطناعي الحالية",
+      "استعراض حالات الاستخدام والبيانات في مختلف المجالات",
+      "توقّع اتجاهات التطوّر خلال 3-5 سنوات قادمة",
+      "تقييم التحدّيات التقنية والتأثيرات المجتمعية",
+      "التلخيص وتقديم توصيات بنّاءة"
     ],
-    "outputFormat": "Markdown 格式，包含标题、摘要、正文（多级标题）、参考文献",
-    "finalPrompt": "你是一位在人工智能领域拥有 10 年以上研究经验的资深专家。请撰写一篇关于人工智能发展趋势的深度分析文章。\n\n要求：\n1. 引用权威研究论文和数据支撑观点\n2. 使用学术化的语言风格\n3. 深度分析技术原理、应用场景和潜在影响\n4. 客观评估技术局限性和伦理风险\n5. 字数：3000-5000 字\n\n文章结构：\n1. 摘要\n2. 当前 AI 技术核心突破点分析\n3. 各领域应用案例和数据梳理\n4. 未来 3-5 年发展趋势预测\n5. 技术挑战和社会影响评估\n6. 总结与建议\n7. 参考文献\n\n请以 Markdown 格式输出。"
+    "outputFormat": "صيغة Markdown، تتضمّن العنوان والملخّص والمتن (عناوين متعدّدة المستويات) والمراجع",
+    "finalPrompt": "أنت خبير لديه أكثر من 10 سنوات خبرة بحثية في مجال الذكاء الاصطناعي. اكتب مقال تحليل معمّق عن اتجاهات تطوّر الذكاء الاصطناعي.\n\nالمتطلبات:\n1. الاستشهاد بأوراق بحثية وبيانات موثوقة لدعم الآراء\n2. استخدام أسلوب لغوي أكاديمي\n3. تحليل عميق للمبادئ التقنية وحالات الاستخدام والتأثيرات المحتملة\n4. تقييم موضوعي للحدود التقنية والمخاطر الأخلاقية\n5. عدد الكلمات: 3000-5000 كلمة\n\nبنية المقال:\n1. الملخّص\n2. تحليل نقاط الاختراق الأساسية في تقنيات الذكاء الاصطناعي الحالية\n3. استعراض حالات الاستخدام والبيانات في مختلف المجالات\n4. توقّع اتجاهات التطوّر خلال 3-5 سنوات قادمة\n5. تقييم التحدّيات التقنية والتأثيرات المجتمعية\n6. التلخيص والتوصيات\n7. المراجع\n\nأخرِج المحتوى بصيغة Markdown."
   }
 }
 \`\`\`
 
-**前端渲染**：
-[显示结构化的提示词方案卡片，用户可以复制使用]
+**عرض الواجهة الأمامية**:
+[تُعرض بطاقة الموجّه المنظّم، ويمكن للمستخدم نسخها واستخدامها]
 
 ---
 
-## 🚨 强制执行机制
+## 🚨 آلية الإنفاذ الإلزامية
 
-如果你在调用工具前输出了任何文字，系统将：
-1. 自动丢弃你的文字内容
-2. 只保留工具调用部分
-3. 在前端仅显示交互式表格
+إذا أخرجت أي نص قبل استدعاء الأداة، فسيقوم النظام بـ:
+1. تجاهل المحتوى النصّي تلقائيًا
+2. الإبقاء على جزء استدعاء الأداة فقط
+3. عرض الجدول التفاعلي فقط في الواجهة الأمامية
 
-**记住**：你的价值在于生成结构化的交互式表格，而不是文字说明。`;
+**تذكّر**: قيمتك تكمن في إنشاء جداول تفاعلية منظّمة، لا في الشرح النصّي.`;
 
         const result = streamText({
             model: openai.chat(modelId || 'gpt-4-turbo'),
@@ -256,7 +256,7 @@ export async function POST(req: Request) {
             system: systemPrompt || defaultSystemPrompt,
             tools: {
                 ask_questions: tool({
-                    description: '当用户需求不明确时，调用此工具向用户提问。',
+                    description: 'استدعِ هذه الأداة لطرح أسئلة على المستخدم عندما يكون طلبه غير واضح.',
                     inputSchema: z.object({
                         questions: z.array(z.object({
                             id: z.string(),
@@ -268,39 +268,39 @@ export async function POST(req: Request) {
                     execute: async () => 'User interaction required'
                 }),
                 suggest_enhancements: tool({
-                    description: 'Phase 1: 提供多维度的优化建议供用户选择。',
+                    description: 'Phase 1: تقديم اقتراحات تحسين متعدّدة الأبعاد ليختار منها المستخدم.',
                     inputSchema: z.object({
                         dimensions: z.array(z.object({
                             key: z.string(),
-                            title: z.string().describe('维度标题，如"语气风格"'),
+                            title: z.string().describe('عنوان البُعد، مثل "أسلوب النبرة"'),
                             options: z.array(z.object({
                                 label: z.string(),
                                 value: z.string(),
                                 description: z.string().optional()
-                            })).describe('供用户点击的预设选项'),
-                            allowCustom: z.boolean().default(true).describe('是否允许用户输入自定义要求')
+                            })).describe('خيارات جاهزة ينقر عليها المستخدم'),
+                            allowCustom: z.boolean().default(true).describe('هل يُسمح للمستخدم بإدخال متطلب مخصّص')
                         }))
                     }),
                     execute: async () => 'Optimization options presented to user'
                 }),
                 propose_prompt: tool({
-                    description: 'Phase 2: 根据用户选择生成最终的结构化提示词方案。',
+                    description: 'Phase 2: إنشاء الموجّه المنظّم النهائي بناءً على اختيار المستخدم.',
                     inputSchema: z.object({
-                        title: z.string().describe('提示词方案标题'),
-                        role: z.string().describe('角色定义'),
-                        objective: z.string().describe('核心目标'),
-                        context: z.string().optional().describe('背景信息'),
-                        constraints: z.array(z.string()).describe('约束条件列表'),
-                        workflow: z.array(z.string()).optional().describe('工作流程步骤'),
-                        outputFormat: z.string().optional().describe('输出格式要求'),
-                        finalPrompt: z.string().describe('完整的最终提示词')
+                        title: z.string().describe('عنوان الموجّه'),
+                        role: z.string().describe('تعريف الدور'),
+                        objective: z.string().describe('الهدف الأساسي'),
+                        context: z.string().optional().describe('معلومات الخلفية'),
+                        constraints: z.array(z.string()).describe('قائمة القيود'),
+                        workflow: z.array(z.string()).optional().describe('خطوات سير العمل'),
+                        outputFormat: z.string().optional().describe('متطلبات صيغة الإخراج'),
+                        finalPrompt: z.string().describe('الموجّه النهائي الكامل')
                     }),
                     execute: async () => 'Prompt proposal generated'
                 })
             },
         });
 
-        // 使用 fullStream 手动构建包含工具调用的响应
+        // استخدام fullStream لبناء استجابة تتضمّن استدعاءات الأدوات يدويًا
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
             async start(controller) {
@@ -309,7 +309,7 @@ export async function POST(req: Request) {
                         console.log('Stream part type:', part.type, part);
 
                         if (part.type === 'error') {
-                            // 錯誤類型 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+                            // نوع الخطأ
                             console.error('Stream error detected:', part);
                             const errorData = {
                                 type: 'stream_error',
@@ -320,28 +320,28 @@ export async function POST(req: Request) {
                             controller.close();
                             return;
                         } else if (part.type === 'text-delta') {
-                            // 文本内容：使用 "0:" 前缀
+                            // المحتوى النصّي: باستخدام البادئة "0:"
                             if (part.text !== undefined && part.text !== null) {
                                 const chunk = `0:${JSON.stringify(part.text)}\n`;
                                 controller.enqueue(encoder.encode(chunk));
                             }
                         } else if (part.type === 'tool-call') {
-                            // 工具调用：使用 "9:" 前缀
-                            console.log('🔧 收到工具调用:', part.toolName);
-                            console.log('🔧 工具参数:', JSON.stringify(part.input, null, 2));
+                            // استدعاء الأداة: باستخدام البادئة "9:"
+                            console.log('🔧 تم استلام استدعاء أداة:', part.toolName);
+                            console.log('🔧 معامِلات الأداة:', JSON.stringify(part.input, null, 2));
                             let finalArgs = part.input;
 
-                            // 格式校验
+                            // التحقّق من الصيغة
                             const validation = validateToolCall(part.toolName, part.input);
-                            console.log('✅ 格式校验结果:', validation.valid ? '通过' : '失败', validation.error || '');
+                            console.log('✅ نتيجة التحقّق من الصيغة:', validation.valid ? 'ناجح' : 'فاشل', validation.error || '');
 
                             if (!validation.valid) {
-                                console.log('格式校验失败:', validation.error);
+                                console.log('فشل التحقّق من الصيغة:', validation.error);
 
-                                // 发送矫正状态
+                                // إرسال حالة التصحيح
                                 controller.enqueue(encoder.encode(`e:{"type":"correction","status":"correcting"}\n`));
 
-                                // 尝试矫正，最多 3 次
+                                // محاولة التصحيح، 3 مرّات كحدّ أقصى
                                 let corrected = false;
                                 for (let i = 0; i < 3; i++) {
                                     const correction = await correctFormat(
@@ -352,12 +352,12 @@ export async function POST(req: Request) {
                                     );
 
                                     if (correction.success) {
-                                        // 再次校验矫正后的结果
+                                        // إعادة التحقّق من النتيجة بعد التصحيح
                                         const revalidation = validateToolCall(part.toolName, correction.correctedArgs);
                                         if (revalidation.valid) {
                                             finalArgs = correction.correctedArgs;
                                             corrected = true;
-                                            console.log(`格式矫正成功（第 ${i + 1} 次尝试）`);
+                                            console.log(`نجح تصحيح الصيغة (المحاولة رقم ${i + 1})`);
                                             controller.enqueue(encoder.encode(`e:{"type":"correction","status":"success"}\n`));
                                             break;
                                         }
@@ -365,7 +365,7 @@ export async function POST(req: Request) {
                                 }
 
                                 if (!corrected) {
-                                    console.log('格式矫正失败，使用原始参数');
+                                    console.log('فشل تصحيح الصيغة، سيتم استخدام المعامِلات الأصلية');
                                     controller.enqueue(encoder.encode(`e:{"type":"correction","status":"failed"}\n`));
                                 }
                             }
@@ -378,7 +378,7 @@ export async function POST(req: Request) {
                             const chunk = `9:${JSON.stringify(toolData)}\n`;
                             controller.enqueue(encoder.encode(chunk));
                         } else if (part.type === 'tool-result') {
-                            // 工具结果
+                            // نتيجة الأداة
                             console.log('Tool result:', JSON.stringify(part, null, 2));
                             const resultData = {
                                 toolCallId: part.toolCallId,
@@ -391,14 +391,14 @@ export async function POST(req: Request) {
                     }
                     controller.close();
                 } catch (streamError: any) {
-                    // 流處理過程中的錯誤 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+                    // خطأ أثناء معالجة البثّ
                     console.error('Stream processing error:', streamError);
 
-                    // 構建詳細的錯誤信息
+                    // بناء معلومات خطأ مفصّلة
                     let errorMessage = streamError.message || 'Unknown streaming error';
                     let errorType = 'error';
 
-                    // 識別具體錯誤類型
+                    // التعرّف على نوع الخطأ المحدّد
                     if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
                         errorType = 'auth_error';
                         errorMessage = `Authentication Failed: Invalid API Key. Please check your API Key in Settings.`;
@@ -416,7 +416,7 @@ export async function POST(req: Request) {
                         errorMessage = `Request Timeout: The request took too long to complete. Please try again.`;
                     }
 
-                    // 發送錯誤信息到前端
+                    // إرسال معلومات الخطأ إلى الواجهة الأمامية
                     const errorData = {
                         type: errorType,
                         message: errorMessage,
@@ -439,7 +439,7 @@ export async function POST(req: Request) {
         console.error("Chat API Error:", error);
         const errorMessage = error.message || 'Unknown network error';
 
-        // 增強錯誤識別 - 由傲娇大小姐哈雷酱添加 (￣▽￣)／
+        // تعزيز التعرّف على الأخطاء
         if (errorMessage.includes('model_not_found') || errorMessage.includes('model not found')) {
             return new Response(`Model Not Found: The model '${modelId}' does not exist on this provider. Please select a valid model.`, { status: 404 });
         }

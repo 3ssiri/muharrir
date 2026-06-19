@@ -16,7 +16,7 @@ interface FileAttachmentIconProps {
 }
 
 export function FileAttachmentIcon({ fileName, fileType, fileContent, className = '' }: FileAttachmentIconProps) {
-  // 根据文件类型返回对应的图标和颜色
+  // إرجاع الأيقونة واللون المناسبين حسب نوع الملف
   const getFileIcon = () => {
     if (fileType === 'application/pdf') {
       return (
@@ -60,7 +60,7 @@ export function FileAttachmentIcon({ fileName, fileType, fileContent, className 
           <TooltipContent side="top" className="max-w-2xl max-h-96 overflow-auto p-4">
             <div className="space-y-2">
               <div className="text-xs font-semibold text-muted-foreground border-b pb-2">
-                文件预览
+                معاينة الملف
               </div>
               <div className="text-sm whitespace-pre-wrap break-words">
                 {fileContent.substring(0, 2000)}

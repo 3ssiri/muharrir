@@ -24,12 +24,12 @@ export function VersionBadge() {
         setVersionInfo(data)
 
         if (data.hasUpdate) {
-          toast.info('发现新版本', {
-            description: `当前版本: ${data.localVersion}, 最新版本: ${data.remoteVersion}`,
+          toast.info('تم العثور على إصدار جديد', {
+            description: `الإصدار الحالي: ${data.localVersion}, أحدث إصدار: ${data.remoteVersion}`,
             duration: 5000,
             action: {
-              label: '查看更新',
-              onClick: () => window.open('https://github.com/systemoutprintlnhelloworld/interactive-prompt-iterator#更新指南', '_blank')
+              label: 'عرض التحديث',
+              onClick: () => window.open('https://github.com/systemoutprintlnhelloworld/interactive-prompt-iterator#دليل-التحديث', '_blank')
             }
           })
         }
@@ -46,7 +46,7 @@ export function VersionBadge() {
   }, [])
 
   if (loading || !versionInfo) {
-    return <Badge variant="outline" className="text-xs font-normal">加载中...</Badge>
+    return <Badge variant="outline" className="text-xs font-normal">جارٍ التحميل...</Badge>
   }
 
   return (
@@ -57,7 +57,7 @@ export function VersionBadge() {
       >
         {versionInfo.localVersion}
         {versionInfo.hasUpdate && (
-          <Download className="w-3 h-3 ml-1 inline" />
+          <Download className="w-3 h-3 ms-1 inline" />
         )}
       </Badge>
     </div>

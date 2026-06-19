@@ -37,7 +37,7 @@ export function AutoResizeTextarea({
   const [showExpandButton, setShowExpandButton] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
-  // 处理键盘事件：回车发送，Shift+回车换行
+  // التعامل مع أحداث لوحة المفاتيح: Enter للإرسال، Shift+Enter لسطر جديد
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -47,40 +47,40 @@ export function AutoResizeTextarea({
     }
   }
 
-  // 确保组件已挂载，避免 hydration 错误
+  // التأكد من تركيب المكوّن لتجنّب أخطاء hydration
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // 自动调整高度
+  // ضبط الارتفاع تلقائيًا
   useEffect(() => {
     const textarea = textareaRef.current
     if (!textarea) return
 
-    // 重置高度以获取正确的 scrollHeight
+    // إعادة تعيين الارتفاع للحصول على قيمة scrollHeight الصحيحة
     textarea.style.height = 'auto'
 
-    // 计算最大高度（屏幕高度的 1/4，更大的显示空间）
+    // حساب الارتفاع الأقصى (ربع ارتفاع الشاشة، لمساحة عرض أكبر)
     const maxHeight = Math.max(window.innerHeight / 4, 150)
     const scrollHeight = textarea.scrollHeight
 
-    // 设置实际高度
+    // تعيين الارتفاع الفعلي
     if (scrollHeight > maxHeight) {
       textarea.style.height = `${maxHeight}px`
     } else {
       textarea.style.height = `${scrollHeight}px`
     }
 
-    // 只在客户端挂载后才更新展开按钮状态
+    // تحديث حالة زر التوسيع فقط بعد التركيب على جهة العميل
     if (isMounted) {
-      // 计算单行高度：minHeight(50px) + padding(上下各3px) = 56px
+      // حساب ارتفاع السطر الواحد: minHeight(50px) + padding(3px أعلى وأسفل) = 56px
       const singleLineHeight = 56
       const hasMultipleLines = value.includes('\n') || scrollHeight > singleLineHeight
       setShowExpandButton(hasMultipleLines)
     }
   }, [value, isMounted])
 
-  // 避免 hydration 错误 - 由傲娇大小姐哈雷酱修复 (￣▽￣)／
+  // تجنّب أخطاء hydration
   if (!isMounted) {
     return (
       <div className="relative flex-1">
@@ -126,14 +126,14 @@ export function AutoResizeTextarea({
           }}
         />
 
-        {/* 使用 visibility 而不是条件渲染，避免 hydration 错误 */}
+        {/* استخدام visibility بدلاً من العرض الشرطي لتجنّب أخطاء hydration */}
         <Button
           type="button"
           size="icon"
           variant="ghost"
           onClick={() => setIsExpanded(true)}
-          className="absolute right-2 top-2 h-8 w-8 rounded-md bg-background/80 backdrop-blur-sm hover:bg-muted shadow-sm transition-all z-10"
-          title="展开输入框 (查看完整内容)"
+          className="absolute end-2 top-2 h-8 w-8 rounded-md bg-background/80 backdrop-blur-sm hover:bg-muted shadow-sm transition-all z-10"
+          title="توسيع حقل الإدخال (عرض المحتوى الكامل)"
           style={{
             visibility: isMounted && showExpandButton ? 'visible' : 'hidden',
             opacity: isMounted && showExpandButton ? 1 : 0,
@@ -144,14 +144,14 @@ export function AutoResizeTextarea({
         </Button>
       </div>
 
-      {/* 放大对话框 */}
+      {/* مربع حوار التكبير */}
       {isMounted && (
         <Dialog open={isExpanded} onOpenChange={setIsExpanded}>
           <DialogContent className="max-w-5xl w-[90vw] h-[90vh] flex flex-col p-0 border-4">
             <DialogHeader className="px-6 py-4 border-b">
               <DialogTitle className="text-lg font-semibold">Pasted content</DialogTitle>
               <div className="text-xs text-muted-foreground mt-1">
-                {value.length} 字符 • {value.split('\n').length} 行
+                {value.length} حرف • {value.split('\n').length} سطر
               </div>
             </DialogHeader>
             <div className="flex-1 overflow-hidden px-6 py-4">

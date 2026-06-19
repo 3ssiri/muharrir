@@ -22,18 +22,18 @@ export default function Error({
                 <div className="p-4 rounded-full bg-destructive/10 text-destructive mb-2">
                     <AlertCircle className="w-8 h-8" />
                 </div>
-                <h2 className="text-2xl font-bold tracking-tight">应用遇到了问题</h2>
+                <h2 className="text-2xl font-bold tracking-tight">واجه التطبيق مشكلة</h2>
                 <p className="text-muted-foreground max-w-[500px]">
-                    {error.message || "发生了一个未知错误，导致页面无法渲染。"}
+                    {error.message || "حدث خطأ غير معروف منع عرض الصفحة."}
                 </p>
                 {process.env.NODE_ENV === 'development' && (
-                    <div className="mt-4 p-4 bg-muted rounded-lg text-left w-full max-w-[600px] overflow-auto max-h-[200px] text-xs font-mono">
+                    <div className="mt-4 p-4 bg-muted rounded-lg text-start w-full max-w-[600px] overflow-auto max-h-[200px] text-xs font-mono">
                         {error.stack}
                     </div>
                 )}
             </div>
             <Button onClick={() => reset()} variant="default" size="lg">
-                尝试恢复
+                إعادة المحاولة
             </Button>
         </div>
     )
