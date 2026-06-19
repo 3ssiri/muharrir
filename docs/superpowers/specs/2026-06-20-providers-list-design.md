@@ -37,7 +37,7 @@ export interface Provider {
   isLocal?: boolean  // محلي (Ollama/LM Studio) — لا يحتاج مفتاحًا
 }
 
-export const BUILTIN_PROVIDERS: Provider[] = [ /* 13 مزوّدًا أدناه */ ]
+export const BUILTIN_PROVIDERS: Provider[] = [ /* 15 مزوّدًا أدناه */ ]
 ```
 
 الكتالوج المدمج (النماذج اقتراحات قابلة للتعديل، والروابط متوافقة مع OpenAI):
@@ -50,6 +50,8 @@ export const BUILTIN_PROVIDERS: Provider[] = [ /* 13 مزوّدًا أدناه *
 | `deepseek` | DeepSeek | `https://api.deepseek.com` | deepseek-chat, deepseek-reasoner |
 | `xai` | xAI (Grok) | `https://api.x.ai/v1` | grok-4, grok-3, grok-3-mini |
 | `openrouter` | OpenRouter | `https://openrouter.ai/api/v1` | openai/gpt-4o, anthropic/claude-sonnet-4, google/gemini-2.5-pro |
+| `huggingface` | Hugging Face | `https://router.huggingface.co/v1` | meta-llama/Llama-3.3-70B-Instruct, Qwen/Qwen2.5-72B-Instruct, deepseek-ai/DeepSeek-V3 |
+| `nvidia` | NVIDIA NIM | `https://integrate.api.nvidia.com/v1` | nvidia/llama-3.1-nemotron-70b-instruct, meta/llama-3.3-70b-instruct, deepseek-ai/deepseek-r1 |
 | `groq` | Groq | `https://api.groq.com/openai/v1` | llama-3.3-70b-versatile, llama-3.1-8b-instant |
 | `mistral` | Mistral | `https://api.mistral.ai/v1` | mistral-large-latest, mistral-small-latest |
 | `qwen` | Alibaba (Qwen) | `https://dashscope-intl.aliyuncs.com/compatible-mode/v1` | qwen-max, qwen-plus, qwen-turbo |
