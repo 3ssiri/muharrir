@@ -29,3 +29,7 @@ serde_json = "1"
 tokio = { version = "1", features = ["full"] }
 # اختصار عام على مستوى النظام (Ctrl+Shift+K) لاستدعاء النافذة
 tauri-plugin-global-shortcut = "2"
+# التحديث التلقائي من إصدارات GitHub الموقّعة
+tauri-plugin-updater = "2"
+# إعادة تشغيل التطبيق بعد تثبيت التحديث
+tauri-plugin-process = "2"
