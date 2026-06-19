@@ -1,0 +1,4 @@
+# مخرجات بناء Rust/Tauri
+/target
+# المخطّطات المولّدة
+/gen/schemas

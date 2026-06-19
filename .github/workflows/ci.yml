@@ -1,0 +1,65 @@
+name: CI
+
+# يعمل على كل pull request وعلى الدفع إلى master للتحقق من سلامة البناء
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  # بناء الواجهة الأمامية (Next.js static export → out/)
+  web:
+    name: Web build (Next.js)
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build static export
+        run: npm run build
+
+  # فحص كود Rust الخاص بـ Tauri (cargo check)
+  rust:
+    name: Rust check (Tauri)
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libssl-dev \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            libsecret-1-dev \
+            pkg-config
+
+      # نوفّر مجلد out/ فارغًا حتى لا يعترض tauri-build على frontendDist
+      - name: Stub frontend dist
+        run: mkdir -p out
+
+      - name: Cargo check
+        working-directory: src-tauri
+        run: cargo check

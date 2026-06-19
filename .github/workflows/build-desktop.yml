@@ -1,0 +1,76 @@
+name: Build Desktop
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [windows-latest, macos-latest, ubuntu-22.04]
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libssl-dev \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            libsecret-1-dev \
+            pkg-config
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Prompt Iterator ${{ github.ref_name }}'
+          releaseDraft: true
+          prerelease: false
+          releaseBody: |
+            ## 🖥️ Prompt Iterator — إصدار سطح المكتب
+
+            ### ملفات التحميل حسب النظام
+            - **Windows**: ملف `.msi`
+            - **macOS**: ملف `.dmg`
+            - **Linux**: ملف `.AppImage`
+
+            ### خطوات أول تشغيل
+            1. حمّل الملف المناسب لنظامك وثبّته.
+            2. افتح التطبيق ثم اذهب إلى **الإعدادات (⚙️)**.
+            3. أدخل **مفتاح API** و**Base URL** للمزوّد، ثم احفظ.
+            4. تُحفظ المفاتيح بأمان في مخزن النظام (Keychain / Credential Manager / Secret Service).
+
+            ### المزوّدون المدعومون
+            - OpenAI، Anthropic Claude، DeepSeek، GLM، Qwen، Moonshot، وأي واجهة متوافقة مع OpenAI.
