@@ -73,5 +73,6 @@ next-intl باللغتين `['ar','en']`، الافتراضية `ar`، `localePr
 | ازدواجية المتصفّح/Tauri | لا تفترض وجود واجهات Tauri — احمِها بـ `isTauriApp()` ووفّر بديل متصفّح. |
 | CORS | النداء المباشر للمزوّد يعمل في Tauri لكنه قد يفشل في متصفّح عادي؛ لذا `test_api_connection` يُنفَّذ في Rust. |
 | بناء Linux | يتطلب `libwebkit2gtk-4.1-dev`, `libgtk-3-dev`, `libayatana-appindicator3-dev`, `librsvg2-dev`, `libsecret-1-dev`, `libssl-dev`, `pkg-config` (مثبَّتة في [ci.yml](.github/workflows/ci.yml)). |
+| `tauri build` محليًّا | ينتهي بـ `Error: ...no private key` عند خطوة توقيع التحديث التلقائي، لأن `createUpdaterArtifacts: true` + `pubkey` يتطلّبان `TAURI_SIGNING_PRIVATE_KEY` (سرّ CI). **هذا ليس فشل بناء**: المثبّتات (`.msi`/`.exe`) تُنتَج قبل التوقيع وتكون صالحة. للنشر الموقَّع (مع `.sig` للتحديث) استخدم دفع تاج `v*` عبر Actions. |
 | المزوّدون | أي واجهة متوافقة مع OpenAI. الافتراضي في المتجر DeepSeek (`https://api.deepseek.com`)؛ المفتاح `'demo'` يفعّل وضعًا تجريبيًا بلا نداء فعلي. |
 | الاعتماديات | لا تحذف أيًّا من اعتماديات `package.json`؛ القائمة مقصودة. |
