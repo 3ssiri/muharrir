@@ -36,7 +36,7 @@ import { isTauriApp } from '@/lib/tauri-bridge'
 
 export default function Home() {
   const t = useTranslations();
-  const { apiKey, baseUrl, model, systemPrompt, availableModels, setModel, hydrateApiKey } = useAppStore()
+  const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, setModel, hydrateApiKey } = useAppStore()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // عند بدء التطبيق على سطح المكتب: حمّل مفتاح API من الـ OS Keychain
@@ -373,6 +373,7 @@ export default function Home() {
         systemPrompt: systemPrompt,
         apiKey: apiKey,
         baseUrl: baseUrl,
+        correctionModel: correctionModel,
         signal: abortController.signal
       })
 
@@ -836,7 +837,8 @@ export default function Home() {
         model: model,
         systemPrompt: systemPrompt,
         apiKey: apiKey,
-        baseUrl: baseUrl
+        baseUrl: baseUrl,
+        correctionModel: correctionModel
       })
 
       if (!response.ok) {
