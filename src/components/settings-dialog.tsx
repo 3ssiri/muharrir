@@ -28,19 +28,10 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useAppStore } from '@/lib/store'
 import { openExternal } from '@/lib/tauri-bridge'
+import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/providers'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslations, useLocale } from 'next-intl'
-
-const TEST_CONFIG = {
-    apiKey: '',
-    baseUrl: 'https://ai.huan666.de/v1',
-    model: 'deepseek-v3.2-exp',
-    systemPrompt: 'أنت مساعد تفاعلي لتحسين الموجّهات. هدفك هو إرشاد المستخدم عبر محادثة متعدّدة الجولات لتوضيح متطلباته، ثم إنشاء موجّه منظّم وعالي الجودة في النهاية. ينبغي أن تبادر بتقديم اقتراحات وأن تستخدم أشكالاً مثل مربعات الاختيار (Checkbox) ليختار المستخدم منها.',
-    correctionModel: 'grok-beta-fast',
-    autoRetry: true,
-    maxRetries: 3
-}
 
 const DEFAULT_SYSTEM_PROMPT_AR = `أنت مساعد تفاعلي لتحسين الموجّهات (Prompts). هدفك هو إرشاد المستخدم عبر محادثة متعدّدة الجولات لتوضيح متطلباته، ثم إنشاء موجّه منظّم وعالي الجودة في النهاية.
 
@@ -169,13 +160,18 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
     const locale = useLocale();
     const { theme, setTheme } = useTheme()
     const DEFAULT_SYSTEM_PROMPT = locale === 'ar' ? DEFAULT_SYSTEM_PROMPT_AR : DEFAULT_SYSTEM_PROMPT_EN;
-    const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, autoRetry, maxRetries, setApiKey, setBaseUrl, setModel, setSystemPrompt, setAvailableModels, setCorrectionModel, setAutoRetry, setMaxRetries } = useAppStore()
+    const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, autoRetry, maxRetries, customProviders, addCustomProvider, removeCustomProvider, setApiKey, setBaseUrl, setModel, setSystemPrompt, setAvailableModels, setCorrectionModel, setAutoRetry, setMaxRetries } = useAppStore()
     const [internalOpen, setInternalOpen] = useState(false)
 
     // Use external control or internal state (KISS principle - simplicity first)
     const open = externalOpen !== undefined ? externalOpen : internalOpen
     const setOpen = onOpenChange || setInternalOpen
     const [localConfig, setLocalConfig] = useState({ apiKey, baseUrl, model, systemPrompt, correctionModel, autoRetry, maxRetries })
+    // حالة منتقي المزوّد ونموذج الإضافة اليدوية
+    const [isAddingProvider, setIsAddingProvider] = useState(false)
+    const [newProvider, setNewProvider] = useState({ name: '', baseUrl: '', models: '' })
+    const selectedProvider = findProviderByBaseUrl(localConfig.baseUrl, customProviders)
+    const selectedProviderId = selectedProvider?.id ?? 'custom'
 
     // Connection Test State
     const [isChecking, setIsChecking] = useState(false)
@@ -273,34 +269,6 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         }
     }
 
-    const applyPreset = (type: 'deepseek' | 'openai' | 'demo') => {
-        let newConfig = { ...localConfig }
-        if (type === 'deepseek') {
-            newConfig = {
-                ...newConfig,
-                baseUrl: 'https://ai.huan666.de/v1',
-                apiKey: '',
-                model: 'deepseek-v3.2-exp'
-            }
-        } else if (type === 'openai') {
-            newConfig = {
-                ...newConfig,
-                baseUrl: 'https://api.openai.com/v1',
-                apiKey: '',
-                model: 'gpt-4-turbo'
-            }
-        } else if (type === 'demo') {
-            newConfig = {
-                ...newConfig,
-                baseUrl: 'https://api.openai.com/v1',
-                apiKey: 'demo',
-                model: 'gpt-3.5-turbo'
-            }
-        }
-        setLocalConfig(newConfig)
-        setCheckStatus('idle')
-    }
-
     const handleTemplateChange = (val: string) => {
         setSelectedTemplate(val)
         if (val === 'default') {
@@ -314,10 +282,31 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         }
     }
 
-    const loadTestConfig = () => {
-        setLocalConfig(TEST_CONFIG)
+    // تطبيق مزوّد: ملء Base URL + النماذج + النموذج الافتراضي
+    const applyProvider = (provider: Provider) => {
+        setLocalConfig(prev => ({ ...prev, baseUrl: provider.baseUrl, model: provider.models[0] ?? prev.model }))
+        setAvailableModels(provider.models)
         setCheckStatus('idle')
         setCheckMessage('')
+    }
+
+    const handleProviderChange = (value: string) => {
+        if (value === '__add__') { setIsAddingProvider(true); return }
+        if (value === 'custom') return // عنصر عرض فقط
+        const provider = [...BUILTIN_PROVIDERS, ...customProviders].find(p => p.id === value)
+        if (provider) applyProvider(provider)
+    }
+
+    const handleSaveProvider = () => {
+        const name = newProvider.name.trim()
+        const url = newProvider.baseUrl.trim()
+        if (!name || !url) return
+        const models = newProvider.models.split(',').map(m => m.trim()).filter(Boolean)
+        const provider: Provider = { id: `custom-${Date.now()}`, name, baseUrl: url, models }
+        addCustomProvider(provider)
+        applyProvider(provider)
+        setNewProvider({ name: '', baseUrl: '', models: '' })
+        setIsAddingProvider(false)
     }
 
     const handleAddTemplate = () => {
@@ -460,10 +449,47 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
 
                     <div className="flex-1 overflow-y-auto p-6 pt-4">
                         <TabsContent value="connection" className="space-y-6 mt-0">
-                            <div className="flex gap-2">
-                                <Button variant="outline" size="sm" onClick={loadTestConfig} className="flex-1">
-                                    {t('settings.testPreset')}
-                                </Button>
+                            <div className="space-y-2">
+                                <Label>{t('settings.provider')}</Label>
+                                <div className="flex gap-2">
+                                    <Select value={selectedProviderId} onValueChange={handleProviderChange}>
+                                        <SelectTrigger className="flex-1">
+                                            <SelectValue placeholder={t('settings.provider')} />
+                                        </SelectTrigger>
+                                        <SelectContent position="popper" sideOffset={5} className="max-h-[320px] z-50">
+                                            {BUILTIN_PROVIDERS.map(p => (
+                                                <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                                            ))}
+                                            {customProviders.map(p => (
+                                                <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                                            ))}
+                                            <SelectItem value="custom" disabled>{t('settings.customProvider')}</SelectItem>
+                                            <SelectItem value="__add__">{t('settings.addProviderManually')}</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {selectedProvider && customProviders.some(p => p.id === selectedProvider.id) && (
+                                        <Button variant="ghost" size="sm" onClick={() => removeCustomProvider(selectedProvider.id)}>
+                                            {t('settings.deleteProvider')}
+                                        </Button>
+                                    )}
+                                </div>
+                                <p className="text-xs text-muted-foreground">{t('settings.providerHint')}</p>
+
+                                {isAddingProvider && (
+                                    <div className="space-y-2 p-3 bg-muted/30 rounded-lg border">
+                                        <Input placeholder={t('settings.providerName')} value={newProvider.name} onChange={e => setNewProvider({ ...newProvider, name: e.target.value })} />
+                                        <Input placeholder="https://api.example.com/v1" value={newProvider.baseUrl} onChange={e => setNewProvider({ ...newProvider, baseUrl: e.target.value })} className="font-mono text-sm" />
+                                        <Input placeholder={t('settings.providerModels')} value={newProvider.models} onChange={e => setNewProvider({ ...newProvider, models: e.target.value })} className="font-mono text-sm" />
+                                        <div className="flex gap-2">
+                                            <Button size="sm" onClick={handleSaveProvider} disabled={!newProvider.name.trim() || !newProvider.baseUrl.trim()}>
+                                                {t('settings.saveProvider')}
+                                            </Button>
+                                            <Button size="sm" variant="ghost" onClick={() => { setIsAddingProvider(false); setNewProvider({ name: '', baseUrl: '', models: '' }) }}>
+                                                {t('settings.cancel')}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="space-y-4">
