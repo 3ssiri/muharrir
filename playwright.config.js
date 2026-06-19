@@ -20,7 +20,7 @@ module.exports = defineConfig({
     },
   ],
 
-  // 注释掉 webServer，因为开发服务器已经在运行
+  // تم تعطيل webServer لأن خادم التطوير قيد التشغيل بالفعل
   // webServer: {
   //   command: 'npm run dev',
   //   url: 'http://localhost:3000',

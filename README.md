@@ -1,28 +1,12 @@
 <div align="center">
-  <img src="icon.png" alt="Prompt Iterator Logo"  style="max-width: 100%;" />
+  <img src="icon.png" alt="شعار Prompt Iterator" style="max-width: 100%;" />
 
-
-  # 🚀 Interactive Prompt Iterator
+  # 🚀 مُحسِّن الموجّهات التفاعلي
 
   ### Interactive Prompt Iterator
 
   <p align="center">
-    <strong>Transform vague ideas into structured, high-quality AI prompts through multi-turn interactive dialogue</strong>
-  </p>
-
-  <p align="center">
-    <a href="https://github.com/systemoutprintlnhelloworld/interactive-prompt-iterator/stargazers">
-      <img src="https://img.shields.io/github/stars/systemoutprintlnhelloworld/interactive-prompt-iterator?style=for-the-badge&logo=github&color=yellow" alt="GitHub Stars" />
-    </a>
-    <a href="https://github.com/systemoutprintlnhelloworld/interactive-prompt-iterator/network/members">
-      <img src="https://img.shields.io/github/forks/systemoutprintlnhelloworld/interactive-prompt-iterator?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks" />
-    </a>
-    <a href="https://github.com/systemoutprintlnhelloworld/interactive-prompt-iterator/blob/master/LICENSE">
-      <img src="https://img.shields.io/github/license/systemoutprintlnhelloworld/interactive-prompt-iterator?style=for-the-badge&color=green" alt="License" />
-    </a>
-    <a href="https://interactive-prompt-iterator.vercel.app">
-      <img src="https://img.shields.io/badge/Demo-Live-brightgreen?style=for-the-badge&logo=vercel" alt="Live Demo" />
-    </a>
+    <strong>حوِّل الأفكار الغامضة إلى موجّهات ذكاء اصطناعي منظّمة وعالية الجودة عبر حوار تفاعلي متعدّد الجولات</strong>
   </p>
 
   <p align="center">
@@ -35,516 +19,261 @@
     <a href="https://tailwindcss.com/">
       <img src="https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=flat-square&logo=tailwind-css" alt="Tailwind CSS" />
     </a>
-    <img src="https://img.shields.io/github/last-commit/systemoutprintlnhelloworld/interactive-prompt-iterator?style=flat-square" alt="Last Commit" />
-    <img src="https://img.shields.io/github/issues/systemoutprintlnhelloworld/interactive-prompt-iterator?style=flat-square" alt="Issues" />
+    <a href="https://tauri.app/">
+      <img src="https://img.shields.io/badge/Tauri-v2-FFC131?style=flat-square&logo=tauri" alt="Tauri" />
+    </a>
   </p>
 
   <p align="center">
-    <a href="README_ZH.md">简体中文</a> •
-    <a href="README.md">English</a> •
-    <a href="#-feature-demos">Feature Demos</a> •
-    <a href="#-quick-start">Quick Start</a> •
-    <a href="TODO.md">Roadmap</a>
-  </p>
-
-  <p align="center">
-    <a href="https://interactive-prompt-iterator.vercel.app" style="margin-right: 20px;">
-      <img src="https://img.shields.io/badge/🎯_Live_Demo-Try_Now-brightgreen?style=for-the-badge&logo=vercel" alt="Live Demo" />
-    </a>
-    <a href="https://vercel.com/new/clone?repository-url=https://github.com/systemoutprintlnhelloworld/interactive-prompt-iterator">
-      <img src="https://img.shields.io/badge/🚀_One_Click_Deploy-Deploy-blue?style=for-the-badge&logo=vercel" alt="Deploy with Vercel" />
-    </a>
+    <strong>العربية</strong> • <a href="#-البدء-السريع">البدء السريع</a> • <a href="docs/GUIDE_AR.md">الدليل بالعربية</a>
   </p>
 
 </div>
 
 ---
 
-## 📑 Table of Contents
+## 📑 المحتويات
 
-- [Feature Demos](#-feature-demos)
-- [User Interaction Flow](#-user-interaction-flow)
-- [Core Features](#-core-features)
-- [Tech Stack](#️-tech-stack)
-- [Quick Start](#-local-development)
-- [Keyboard Shortcuts](#️-keyboard-shortcuts)
-- [Project Structure](#-project-structure)
-- [Development Guide](#-development-guide)
-- [FAQ](#-faq)
-- [Contributing](#-contributing)
-- [Changelog](#-changelog)
-
----
-
-## 🎯 Why Choose Interactive Prompt Iterator?
-
-| Traditional Approach | This Project |
-|---------------------|--------------|
-| ❌ Need to figure out prompt structure yourself | ✅ AI-guided interaction, auto-generate structured prompts |
-| ❌ Trial and error, low efficiency | ✅ Multi-dimensional options to quickly clarify requirements |
-| ❌ Prompts are hard to reuse | ✅ Template management, one-click application |
-| ❌ Cannot handle complex documents | ✅ Support PDF/image parsing |
-| ❌ Need to memorize complex syntax | ✅ Visual forms, zero learning curve |
+- [نبذة عن المشروع](#-نبذة-عن-المشروع)
+- [لماذا هذا المشروع؟](#-لماذا-هذا-المشروع)
+- [الميزات الأساسية](#-الميزات-الأساسية)
+- [التقنيات المستخدمة](#️-التقنيات-المستخدمة)
+- [البدء السريع](#-البدء-السريع)
+- [الإعداد](#️-الإعداد)
+- [البناء لسطح المكتب (Tauri)](#-البناء-لسطح-المكتب-tauri)
+- [اختصارات لوحة المفاتيح](#️-اختصارات-لوحة-المفاتيح)
+- [بنية المشروع](#-بنية-المشروع)
+- [البنية المعمارية](#️-البنية-المعمارية)
+- [الأسئلة الشائعة](#-الأسئلة-الشائعة)
+- [المساهمة](#-المساهمة)
+- [الرخصة](#-الرخصة)
 
 ---
 
-## 📺 Feature Demos
+## 📖 نبذة عن المشروع
 
-### Application Overview
+**مُحسِّن الموجّهات التفاعلي** تطبيق يساعدك على تحويل فكرة غامضة إلى **موجّه (Prompt) منظّم وعالي الجودة** للذكاء الاصطناعي، عبر إرشادك بحوار تفاعلي وخيارات متعدّدة الأبعاد بدلاً من كتابة الموجّه يدويًا من الصفر.
 
-<div align="center">
-  <img src="overview-eng.png" alt="Application Overview" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" />
-  <p><em>Interactive Prompt Iterator - Generate structured AI prompts through multi-dimensional option guidance</em></p>
-</div>
-
-### 1. Interactive Prompt Generation Flow
-> **Scenario**: From vague requirements to precise prompts
->
-> Demo: User inputs "Help me write an article about AI" → AI provides multi-dimensional options (role, style, depth, format) → User selects preferences → Generate structured prompt
-
-![Interactive Generation Flow - Single Round](docs/screenshots/demo-interactive-flow.gif)
-
-#### Multi-turn Interactive Optimization
-> Demo: Gradually refine requirements through multi-turn dialogue to generate high-quality prompts
-
-![Interactive Generation Flow - Multi-turn](docs/screenshots/demo-interactive-flow-2turn.gif)
-
-### 2. File Upload and Parsing
-> **Scenario**: Generate prompts based on document content
->
-> Demo: Upload PDF papers/DOCX reports/image screenshots → Automatic content parsing → AI provides optimization suggestions based on file content → Generate targeted prompts
-
-![File Upload Demo](docs/screenshots/demo-file-upload.gif)
-
-### 3. Multi-Scenario Application Examples
-
-#### 📝 Scenario 1: Technical Blog Writing
-
-<details>
-<summary><kbd>User Input</kbd>: "Help me write a technical article about React Server Components"</summary>
-
-**AI Response**: Immediately displays interactive form
-
-| Dimension | Options |
-|------|------|
-| **Role Definition** | Senior Frontend Engineer / React Core Contributor / Tech Evangelist |
-| **Target Audience** | Beginners / Intermediate Developers / Architects |
-| **Content Depth** | Introduction Overview / Practical Tutorial / Architecture Deep Dive |
-| **Output Format** | Markdown Blog / Presentation Script / Tutorial Series |
-
-**Generated Prompt Example**:
-```
-You are a senior frontend engineer with 5 years of React development experience. Please write a technical article for intermediate developers that deeply explains the working principles, use cases, and best practices of React Server Components.
-
-Requirements:
-1. Include actual code examples and performance comparison data
-2. Explain the differences between RSC and traditional SSR
-3. Provide migration guide and common pitfalls
-4. Output format: Markdown, including table of contents and code highlighting
-5. Word count: 2000-3000 words
-```
-</details>
+الواجهة تدعم **العربية والإنجليزية** مع اتجاه RTL كامل للعربية، وكل البيانات تُحفظ **محليًا** في متصفّحك. المشروع جاهز للعمل كتطبيق ويب أو كتطبيق **سطح مكتب عبر Tauri v2** (Static Export).
 
 ---
 
-#### 💼 Scenario 2: Data Analysis Report
+## 🎯 لماذا هذا المشروع؟
 
-<details>
-<summary><kbd>User Input</kbd>: "Analyze this sales data and generate a report" + Upload CSV file</summary>
-
-**AI Response**: Displays interactive form after parsing file
-
-| Dimension | Options |
-|------|------|
-| **Analysis Perspective** | Trend Analysis / Comparative Analysis / Predictive Analysis |
-| **Report Audience** | Technical Team / Management / Clients |
-| **Visualization Needs** | Chart Suggestions / Pivot Tables / Dashboard Design |
-| **Output Format** | PPT Outline / Word Report / HTML Interactive Report |
-
-**Generated Prompt Example**:
-```
-You are a data analysis expert. Based on the provided sales data CSV file, generate a quarterly sales analysis report for management.
-
-Analysis Requirements:
-1. Identify sales trends and anomalies
-2. Compare performance across different product lines/regions
-3. Provide actionable business recommendations
-4. Include 3-5 key visualizations (line charts, bar charts, pie charts)
-5. Output format: PPT outline, including page titles, key points, and chart descriptions
-```
-</details>
+| الطريقة التقليدية | هذا المشروع |
+|---|---|
+| ❌ تحتاج لتصميم بنية الموجّه بنفسك | ✅ إرشاد تفاعلي يولّد موجّهات منظّمة تلقائيًا |
+| ❌ تجربة وخطأ بكفاءة منخفضة | ✅ خيارات متعدّدة الأبعاد لتوضيح المتطلبات بسرعة |
+| ❌ صعوبة إعادة استخدام الموجّهات | ✅ إدارة قوالب وتطبيقها بنقرة واحدة |
+| ❌ لا يتعامل مع المستندات المعقّدة | ✅ دعم تحليل PDF وWord والصور |
+| ❌ تحتاج لحفظ صياغات معقّدة | ✅ نماذج مرئية بلا منحنى تعلّم |
 
 ---
 
-#### 🎓 Scenario 3: Academic Paper Polishing
+## ✨ الميزات الأساسية
 
-<details>
-<summary><kbd>User Input</kbd>: "Help me optimize this paper abstract" + Paste text</summary>
-
-**AI Response**: Displays interactive form after analyzing text
-
-| Dimension | Options |
-|------|------|
-| **Academic Field** | Computer Science / Biomedical / Social Sciences / Engineering |
-| **Optimization Focus** | Academic Standards / Logical Clarity / Language Refinement / Innovation Highlight |
-| **Target Journal** | Top Conference (e.g., NeurIPS) / SCI Q1 / Chinese Core |
-| **Output Content** | Revision Suggestions / Direct Rewrite / Comparison Version |
-
-**Generated Prompt Example**:
-```
-You are a senior academic editor in the field of computer science, specializing in machine learning paper polishing. Please optimize the following paper abstract to meet the submission standards of NeurIPS top conference.
-
-Optimization Requirements:
-1. Maintain original technical content and innovation points
-2. Optimize academic expression using standard field terminology
-3. Highlight research innovation and experimental results
-4. Control word count to 150-200 words
-5. Provide before/after comparison and revision rationale
-```
-</details>
+- **🎯 إرشاد تفاعلي ذكي**: توضيح المتطلبات تدريجيًا عبر نماذج تفاعلية وحوار متعدّد الجولات.
+- **💾 محلي أولاً (Local-First)**:
+  - الإعدادات: `Zustand` + `LocalStorage` لحفظ مفتاح API وتفضيلات النماذج.
+  - السجلّ: `Dexie.js` (IndexedDB) لحفظ المحادثات والوصول دون اتصال.
+- **🌍 تعدّد اللغات**: دعم كامل للتبديل بين **العربية والإنجليزية** مع واجهة RTL للعربية.
+- **🎨 واجهة حديثة**: مبنية بـ Tailwind CSS + shadcn/ui، مع وضع ليلي/نهاري وتصميم متجاوب.
+- **📁 دعم الملفات**: رفع ولصق الصور (PNG/JPG/WebP)، وتحليل PDF وDOCX مباشرةً في المتصفح.
+- **🔧 إعداد مرن**: دعم مزوّدين متعدّدين (OpenAI، Claude، DeepSeek وغيرها)، و`Base URL` مخصّص، وموجّه نظام قابل للتعديل، واستيراد/تصدير الإعدادات.
+- **⌨️ اختصارات لوحة المفاتيح**: مجموعة شاملة لتسريع العمل (اضغط `Shift+/` لعرضها كلها).
+- **🖥️ جاهز لسطح المكتب**: يُصدَّر كملفات ثابتة (Static Export) ليعمل داخل Tauri v2.
 
 ---
 
-#### 🎨 Scenario 4: UI Design Requirements Document
+## 🛠️ التقنيات المستخدمة
 
-<details>
-<summary><kbd>User Input</kbd>: "I need to design a shopping cart page for an e-commerce website"</summary>
-
-**AI Response**: Immediately displays interactive form
-
-| Dimension | Options |
-|------|------|
-| **Design Style** | Minimalist Modern / Business Professional / Vibrant Young / Luxury Premium |
-| **Target Users** | Young People (18-30) / Family Users / Enterprise Procurement |
-| **Core Features** | Quick Checkout / Coupon System / Batch Operations / Product Recommendations |
-| **Output Format** | PRD Document / Figma Design Specs / Development Requirements |
-
-**Generated Prompt Example**:
-```
-You are a UX designer with 8 years of experience, specializing in e-commerce. Please design a requirements document for a shopping cart page for a fashion e-commerce website targeting young users (18-30 years old).
-
-Design Requirements:
-1. Adopt minimalist modern design style
-2. Core features: Quick checkout, coupon system, product recommendations
-3. Mobile-first, responsive design
-4. Output content:
-   - Page layout and information architecture
-   - Interaction flow diagram
-   - Key component design specifications (buttons, forms, cards)
-   - Accessibility and performance considerations
-5. Format: Markdown PRD document, including Mermaid flow diagrams
-```
-</details>
-
-> 💡 **Tip**: Each scenario demonstrates the complete transformation process from vague requirements to structured prompts, quickly clarifying user intent through interactive forms
-### 4. Custom Template Management
-> **Scenario**: Save and reuse common prompt templates
->
-> Demo: Create custom prompt template → Save locally → Switch between different templates → Quickly apply to new conversations
-
-![Template Management Demo](docs/screenshots/demo-template-management.gif)
+- **الإطار**: Next.js 14.2 (App Router) مع `output: 'export'`
+- **الواجهة**: Tailwind CSS 3.4، shadcn/ui، Lucide React
+- **إدارة الحالة**: Zustand 5.0
+- **قاعدة البيانات**: Dexie.js 4.2 (غلاف لـ IndexedDB)
+- **تكامل الذكاء الاصطناعي**: نداء مباشر من المتصفح لواجهة متوافقة مع OpenAI (`/chat/completions`) مع بثّ (streaming)
+- **معالجة الملفات**: pdfjs-dist (PDF) وmammoth (DOCX)
+- **التدويل**: next-intl 3.26 (عربي/إنجليزي)
+- **سطح المكتب**: Tauri v2 (مستهدَف)
 
 ---
 
-## 🔄 User Interaction Flow
+## 🚀 البدء السريع
 
-### Complete Usage Flow
-
-![User Interaction Flow Diagram](interact-eng.png)
-
-### Core Interactive Features
-
-- **🎯 Smart Guidance**: Gradually clarify requirements through multi-dimensional option forms
-- **📁 Drag & Drop Upload**: Drag files anywhere on the page, full-screen upload area display
-- **⭐ One-Click Favorite**: Click favorite button to toggle favorite status, yellow indicates favorited
-- **🔍 Quick Search**: `Ctrl+K` opens Spotlight search, quickly find conversations and favorites
-- **🎨 Smooth Animations**: Smooth animations for tab switching, favorite status, and file uploads
-
-> 📖 **Detailed Flow Diagram**: See [User Interaction Flow Documentation](docs/user-interaction-flow.md) for complete interaction flow and sequence diagrams
-
----
-
-## ✨ Core Features
-
-- **🎯 Smart Interactive Guidance**: Gradually clarify user requirements through interactive forms and multi-turn dialogue
-- **💾 Local-First**:
-  - Configuration Storage: Use `Zustand` + `LocalStorage` to store API Key and model preferences
-  - History: Use `Dexie.js` (IndexedDB) to store conversation history, supports offline access
-- **🎨 Modern UI**:
-  - Built with Tailwind CSS + Shadcn/UI design system
-  - Supports dark mode
-  - Responsive design, mobile-friendly
-- **📁 File Support**:
-  - Support image upload and paste (PNG, JPG, WebP)
-  - Support PDF document parsing
-  - Support multimodal models (GPT-4o, Claude 3.5, Gemini, etc.)
-- **🔧 Flexible Configuration**:
-  - Support multiple AI models (OpenAI, Claude, domestic large models)
-  - Custom API Base URL
-  - Adjustable system prompts
-  - Settings import/export for easy configuration migration
-- **🌍 Internationalization**: Full support for English and Simplified Chinese interface switching
-- **⌨️ Keyboard Shortcuts**: Comprehensive keyboard shortcuts for efficient operation (press `Shift+/` to view all shortcuts)
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14.2.16 (App Router)
-- **UI**: Tailwind CSS 3.4, Shadcn/UI, Lucide React
-- **State Management**: Zustand 5.0
-- **Database**: Dexie.js 4.2 (IndexedDB wrapper)
-- **AI Integration**: Vercel AI SDK 6.0 (@ai-sdk/react, @ai-sdk/openai)
-- **File Processing**: pdfjs-dist 5.4 (PDF parsing)
-
-## 💻 Local Development
-
-1. **Clone Repository**
+1. **استنساخ المستودع**
 ```bash
-git clone https://github.com/systemoutprintlnhelloworld/interactive-prompt-iterator.git
+git clone https://github.com/3ssiri/interactive-prompt-iterator.git
 cd interactive-prompt-iterator
 ```
 
-2. **Install Dependencies**
+2. **تثبيت الاعتماديات**
 ```bash
 npm install
 ```
 
-3. **Start Development Server**
+3. **تشغيل خادم التطوير**
 ```bash
 npm run dev
 ```
 
-4. **Access Application**
-Open your browser and visit [http://localhost:3000](http://localhost:3000)
+4. **فتح التطبيق**
+افتح المتصفح على [http://localhost:3000](http://localhost:3000)
 
-### ⚙️ Configuration Instructions
+---
 
-1. Click the **Settings Icon (⚙️)** in the top right corner
-2. Enter your AI API configuration:
-   - **API Key**: Your OpenAI/Claude/other compatible API key
-   - **Base URL**: API endpoint address (default: `https://api.openai.com/v1`)
-   - **Model**: Select the model to use
-   - **Correction Model**: Model for automatic format correction (default: `grok-beta-fast`)
-   - **System Prompt**: Custom system prompt (optional)
+## ⚙️ الإعداد
 
-3. Click save to start using
+1. انقر على أيقونة **الإعدادات (⚙️)** أعلى الواجهة.
+2. أدخل إعدادات الذكاء الاصطناعي:
+   - **مفتاح API**: مفتاح OpenAI/Claude أو أي مزوّد متوافق.
+   - **Base URL**: عنوان واجهة المزوّد (الافتراضي: `https://api.openai.com/v1`).
+   - **النموذج**: اختر النموذج المطلوب.
+   - **نموذج التصحيح**: نموذج تصحيح الصيغة تلقائيًا (الافتراضي: `grok-beta-fast`).
+   - **موجّه النظام**: موجّه نظام مخصّص (اختياري).
+3. احفظ لتبدأ الاستخدام.
 
-> 💡 **Tip**: All configurations are stored locally in the browser and are not uploaded to the server
->
-> 💡 **Import/Export**: Use the import/export buttons to backup or migrate your settings across devices
+> 💡 جميع الإعدادات تُحفظ محليًا في المتصفّح ولا تُرفع لأي خادم.
 
-### 🔄 Update Guide
+### النماذج المدعومة
 
-The application automatically detects version updates. When a new version is available, the version number next to the title will turn orange and display a download icon.
+- **OpenAI**: gpt-4o، gpt-4o-mini، gpt-4-turbo، o1، o1-mini
+- **Anthropic Claude**: claude-3-5-sonnet، claude-3-5-haiku، claude-3-opus
+- **نماذج أخرى متوافقة**: deepseek-chat، deepseek-reasoner، GLM-4-Plus، Qwen-Max، moonshot-v1-128k وغيرها
 
-#### Update Steps
+---
 
-1. **Pull Latest Code**
+## 🖥️ البناء لسطح المكتب (Tauri)
+
+التطبيق مُهيّأ للتصدير الثابت (`output: 'export'`) ليعمل داخل Tauri v2 بلا خادم.
+
 ```bash
-git pull origin master
+# توليد الواجهة الثابتة في مجلد out/
+npm run build
+
+# تشغيل نافذة Tauri في وضع التطوير (بعد تهيئة src-tauri/)
+npm run tauri dev
+
+# بناء حزمة سطح المكتب للتوزيع
+npm run tauri build
 ```
 
-2. **Install New Dependencies** (if any)
-```bash
-npm install
-```
+> 📌 لأن التصدير الثابت لا يدعم مسارات الخادم، يتم استدعاء الذكاء الاصطناعي وتحليل الملفات **من جانب المتصفح مباشرةً** عبر `src/lib/chat-client.ts` و`src/lib/file-parser-client.ts`. راجع [الدليل بالعربية](docs/GUIDE_AR.md) لتفاصيل التحويل والإعداد.
 
-3. **Restart Development Server**
-```bash
-npm run dev
-```
+---
 
-> 💡 **Version Number Description**: Version number format is `v1.{commit count}`, automatically calculated based on GitHub commit count
+## ⌨️ اختصارات لوحة المفاتيح
 
-### Supported Models
+| الاختصار | الوظيفة |
+|---|---|
+| `Ctrl+K` / `⌘+K` | فتح بحث Spotlight |
+| `Ctrl+N` / `⌘+N` | محادثة جديدة |
+| `Ctrl+/` / `⌘+/` | التركيز على حقل الإدخال |
+| `Alt+S` | فتح الإعدادات |
+| `Ctrl+B` / `⌘+B` | إظهار/إخفاء الشريط الجانبي |
+| `Tab` | التبديل بين المحادثة والمفضّلة |
+| `Shift+/` | عرض لوحة الاختصارات |
+| `Enter` | إرسال الرسالة |
+| `Shift+Enter` | سطر جديد |
 
-- **OpenAI**: gpt-4o, gpt-4o-mini, gpt-4-turbo, o1, o1-mini
-- **Anthropic Claude**: claude-3-5-sonnet, claude-3-5-haiku, claude-3-opus
-- **Domestic Large Models**: deepseek-chat, deepseek-reasoner, GLM-4-Plus, Qwen-Max, moonshot-v1-128k, etc.
-## 📁 Project Structure
+---
+
+## 📁 بنية المشروع
 
 ```
 ├── src/
-│   ├── app/                 # Next.js App Router
-│   │   ├── api/chat/       # AI chat API route
-│   │   │   └── route.ts    # Streaming response + tool calls
-│   │   ├── [locale]/       # Internationalization routing
-│   │   │   └── page.tsx    # Main page
-│   ├── components/          # React components
-│   │   ├── ui/             # Shadcn UI base components
-│   │   ├── chat-sidebar.tsx
-│   │   ├── settings-dialog.tsx
-│   │   └── ...
-│   └── lib/                # Utility libraries
-│       ├── store.ts        # Zustand state management
-│       ├── db.ts           # Dexie.js database
-│       └── utils.ts
-├── public/                 # Static resources
+│   ├── app/
+│   │   ├── [locale]/          # صفحات التدويل (عربي/إنجليزي)
+│   │   │   ├── layout.tsx     # التخطيط + RTL + generateStaticParams
+│   │   │   └── page.tsx       # الصفحة الرئيسية للمحادثة
+│   │   ├── layout.tsx
+│   │   └── page.tsx           # إعادة توجيه الجذر حسب اللغة
+│   ├── components/            # مكوّنات React (وui/ من shadcn)
+│   ├── i18n/                  # إعداد next-intl + ملفات الترجمة (ar/en)
+│   └── lib/
+│       ├── chat-client.ts     # نداء الذكاء الاصطناعي client-side (بديل /api/chat)
+│       ├── file-parser-client.ts # تحليل PDF/DOCX في المتصفح
+│       ├── store.ts           # حالة Zustand
+│       └── db.ts              # قاعدة Dexie.js
+├── public/                    # موارد ثابتة (مع pdf.worker)
+├── next.config.mjs            # output: 'export' + إعداد next-intl
 └── package.json
 ```
 
 ---
 
-## 🏗️ System Architecture
-
-### Core Architecture Flow
+## 🏗️ البنية المعمارية
 
 ```mermaid
 graph TB
-    A[User Input] --> B{Input Type}
-    B -->|Text| C[Text Processing]
-    B -->|File| D[File Parsing]
-    D -->|PDF| E[PDF.js Parsing]
-    D -->|Image| F[Base64 Encoding]
-    C --> G[API Route]
+    A[إدخال المستخدم] --> B{نوع الإدخال}
+    B -->|نص| C[معالجة النص]
+    B -->|ملف| D[تحليل الملف في المتصفح]
+    D -->|PDF| E[pdfjs-dist]
+    D -->|DOCX| F[mammoth]
+    C --> G[chat-client.ts]
     E --> G
     F --> G
-    G --> H[AI SDK]
-    H --> I{Tool Call?}
-    I -->|Yes| J[suggest_enhancements]
-    I -->|Yes| K[propose_prompt]
-    I -->|No| L[Streaming Text Response]
-    J --> M[Interactive Form]
-    M --> N[User Selection]
+    G --> H[مزوّد الذكاء الاصطناعي]
+    H --> I{استدعاء أداة؟}
+    I -->|نعم| J[suggest_enhancements]
+    I -->|نعم| K[propose_prompt]
+    I -->|لا| L[بثّ نصّي]
+    J --> M[نموذج تفاعلي]
+    M --> N[اختيار المستخدم]
     N --> G
-    K --> O[Structured Prompt]
-    L --> P[Display Response]
+    K --> O[موجّه منظّم]
+    L --> P[عرض الرد]
     O --> P
 ```
 
-> 💡 **Architecture Diagram Note**: It is recommended to use Mermaid or Excalidraw to generate a visual version of the above flow diagram
-### Data Flow
+---
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant UI as Frontend Interface
-    participant API as API Route
-    participant AI as AI Model
-    participant DB as IndexedDB
+## ❓ الأسئلة الشائعة
 
-    U->>UI: Input requirement
-    UI->>API: POST /api/chat
-    API->>AI: streamText + tools
-    AI->>API: Call suggest_enhancements
-    API->>UI: Return tool call
-    UI->>U: Display interactive form
-    U->>UI: Select options
-    UI->>API: Send selection results
-    API->>AI: Continue conversation
-    AI->>API: Call propose_prompt
-    API->>UI: Return final prompt
-    UI->>DB: Save conversation history
-    UI->>U: Display results
-```
+**١) كيف أضبط مفتاح API؟**
+انقر أيقونة الإعدادات، أدخل المفتاح و`Base URL`، ثم احفظ.
 
-> 💡 **Suggestion**: You can use [Excalidraw](https://excalidraw.com/) to draw more refined architecture diagrams, including:
-> - Frontend component interaction diagram
-> - State management flow diagram
-> - AI tool call sequence diagram
+**٢) هل تُدعَم المزوّدات الأخرى؟**
+نعم، أي واجهة متوافقة مع OpenAI (DeepSeek، GLM، Qwen وغيرها).
+
+**٣) هل بياناتي آمنة؟**
+كل البيانات تُحفظ محليًا في المتصفح (IndexedDB)، ولا يُرفع مفتاح API لأي خادم.
+
+**٤) هل تعمل على الجوال؟**
+نعم، الواجهة متجاوبة وتدعم متصفّحات الجوال.
+
+**٥) كيف أبني نسخة سطح المكتب؟**
+راجع قسم [البناء لسطح المكتب](#-البناء-لسطح-المكتب-tauri) و[الدليل بالعربية](docs/GUIDE_AR.md).
 
 ---
 
-## 🔧 Development Guide
+## 🤝 المساهمة
 
-### Build Production Version
+المساهمات مُرحَّب بها:
 
-```bash
-npm run build
-npm run start
-```
-
-### Code Linting
-
-```bash
-npm run lint
-```
-
-### Technical Highlights
-
-- **Streaming Response**: Use Vercel AI SDK's `streamText` for real-time responses
-- **Tool Calls**: Support AI proactively calling tools to generate interactive forms
-- **State Persistence**: Zustand + localStorage for configuration persistence
-- **Database**: Dexie.js wraps IndexedDB, supports complex queries
----
-
-## ⌨️ Keyboard Shortcuts
-
-Boost your productivity with these keyboard shortcuts:
-
-| Shortcut | Function | Description |
-|----------|----------|-------------|
-| `Ctrl+K` / `⌘+K` | Open Search | Open Spotlight search to quickly find conversations and favorites |
-| `Ctrl+N` / `⌘+N` | New Chat | Start a new conversation |
-| `Ctrl+/` / `⌘+/` | Focus Input | Jump to the message input box |
-| `Alt+S` | Open Settings | Open the settings dialog |
-| `Ctrl+B` / `⌘+B` | Toggle Sidebar | Show/hide the conversation sidebar |
-| `Tab` | Switch Tab | Switch between Chat and Favorites tabs |
-| `Shift+/` | Show Shortcuts | Display this keyboard shortcuts help panel |
-| `Enter` | Send Message | Send the current message |
-| `Shift+Enter` | New Line | Insert a new line in the message input |
-
-> 💡 **Tip**: Press `Shift+/` anytime to view the complete keyboard shortcuts panel
+1. اعمل Fork للمستودع.
+2. أنشئ فرعًا للميزة (`git checkout -b feature/AmazingFeature`).
+3. ثبّت تغييراتك (`git commit -m 'Add some AmazingFeature'`).
+4. ادفع الفرع (`git push origin feature/AmazingFeature`).
+5. افتح Pull Request.
 
 ---
 
-## ❓ FAQ
+## 📄 الرخصة
 
-### 1. How to configure API Key?
-Click the settings icon in the top right corner, enter your API Key and Base URL, then save.
-
-### 2. Does it support domestic large models?
-Yes, supports all OpenAI-compatible API interfaces, including DeepSeek, GLM, Qwen, etc.
-
-### 3. Is data secure?
-All data is stored locally in the browser (IndexedDB), and API Keys are not uploaded to the server.
-
-### 4. How to export conversation history?
-Currently supports manual copying. Batch export feature is under development.
-
-### 5. Does it support mobile devices?
-Yes, the interface is responsive and supports mobile browsers.
+هذا المشروع مرخّص بموجب رخصة MIT — راجع ملف [LICENSE](LICENSE) للتفاصيل.
 
 ---
 
-## 🤝 Contributing
+## 🙏 شكر وتقدير
 
-Contributions are welcome! Please follow these steps:
-
-1. Fork this repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📝 Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/) - React framework
-- [Vercel AI SDK](https://sdk.vercel.ai/) - AI integration toolkit
-- [Shadcn/UI](https://ui.shadcn.com/) - UI component library
-- [Dexie.js](https://dexie.org/) - IndexedDB wrapper
-
----
-
-## 🌟 Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=systemoutprintlnhelloworld/interactive-prompt-iterator&type=Date)](https://star-history.com/#systemoutprintlnhelloworld/interactive-prompt-iterator&Date)
+- [Next.js](https://nextjs.org/) — إطار React
+- [Tauri](https://tauri.app/) — إطار سطح المكتب
+- [shadcn/ui](https://ui.shadcn.com/) — مكتبة مكوّنات الواجهة
+- [Dexie.js](https://dexie.org/) — غلاف IndexedDB
 
 ---
 
 <div align="center">
-  <p>⭐ If this project helps you, please give it a star!</p>
-  <p>Made with ❤️ by the community</p>
+  <p>⭐ إذا أفادك هذا المشروع، فلا تنسَ منحه نجمة!</p>
 </div>

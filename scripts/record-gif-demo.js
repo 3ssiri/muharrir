@@ -1,61 +1,61 @@
 /**
- * Playwright GIF录制演示脚本
- * 用于在Vercel环境录制演示并生成GIF
+ * سكربت تسجيل عرض توضيحي بصيغة GIF باستخدام Playwright
+ * يُستخدم لتسجيل عرض توضيحي في بيئة Vercel وتوليد ملف GIF
  */
 
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 
-// 配置
+// الإعدادات
 const CONFIG = {
   baseUrl: 'https://interactive-prompt-iterator.vercel.app',
   outputDir: path.join(__dirname, '../docs/screenshots'),
   viewport: { width: 1280, height: 800 },
-  slowMo: 300, // 放慢操作速度
+  slowMo: 300, // إبطاء سرعة العمليات
 };
 
-// 确保输出目录存在
+// التأكد من وجود مجلد المخرجات
 if (!fs.existsSync(CONFIG.outputDir)) {
   fs.mkdirSync(CONFIG.outputDir, { recursive: true });
 }
 
 /**
- * 等待指定时间
+ * الانتظار لمدة زمنية محددة
  */
 async function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
- * 录制场景1：交互式提示词生成流程
+ * تسجيل المشهد 1: مسار توليد المطالبات التفاعلي
  */
 async function recordInteractiveFlow(page, context) {
-  console.log('📹 场景1：交互式提示词生成流程');
+  console.log('📹 المشهد 1: مسار توليد المطالبات التفاعلي');
 
-  // 访问首页
+  // الوصول إلى الصفحة الرئيسية
   await page.goto(CONFIG.baseUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await wait(2000);
 
-  // 点击快速示例
-  await page.click('text=AI 趋势分析文章');
+  // النقر على المثال السريع
+  await page.click('text=مقال تحليل اتجاهات الذكاء الاصطناعي');
   await wait(1000);
 
-  // 点击发送
+  // النقر على الإرسال
   await page.click('button[type="submit"]');
   await wait(3000);
 
-  console.log('✅ 场景1录制完成');
+  console.log('✅ اكتمل تسجيل المشهد 1');
 }
 
 /**
- * 主函数
+ * الدالة الرئيسية
  */
 async function main() {
-  console.log('🎬 开始录制GIF演示...\n');
+  console.log('🎬 بدء تسجيل العرض التوضيحي بصيغة GIF...\n');
 
   const browser = await chromium.launch({
-    headless: true, // 无头模式录制
+    headless: true, // التسجيل في وضع بدون واجهة
   });
 
   const context = await browser.newContext({
@@ -72,13 +72,13 @@ async function main() {
   try {
     await recordInteractiveFlow(page, context);
 
-    console.log('✅ 录制完成！');
-    console.log('📁 视频保存在:', CONFIG.outputDir);
-    console.log('\n💡 提示: 使用 ffmpeg 将视频转换为 GIF:');
+    console.log('✅ اكتمل التسجيل!');
+    console.log('📁 تم حفظ الفيديو في:', CONFIG.outputDir);
+    console.log('\n💡 تلميح: استخدم ffmpeg لتحويل الفيديو إلى GIF:');
     console.log('   ffmpeg -i video.webm -vf "fps=10,scale=800:-1:flags=lanczos" output.gif');
 
   } catch (error) {
-    console.error('❌ 录制出错:', error);
+    console.error('❌ خطأ أثناء التسجيل:', error);
   } finally {
     await context.close();
     await browser.close();

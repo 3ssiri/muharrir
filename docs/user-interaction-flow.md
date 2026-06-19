@@ -1,41 +1,41 @@
-# 用户交互流程图
+# مخطط تدفق تفاعل المستخدم
 
-## 完整交互流程
+## تدفق التفاعل الكامل
 
 ```mermaid
 graph TD
-    Start([用户打开应用]) --> Input[输入模糊需求]
-    Input --> Upload{需要上传文件?}
-    Upload -->|是| DragDrop[拖拽文件到页面<br/>或点击上传按钮]
-    Upload -->|否| Submit[点击发送]
+    Start([المستخدم يفتح التطبيق]) --> Input[إدخال متطلب غامض]
+    Input --> Upload{هل يلزم رفع ملف؟}
+    Upload -->|نعم| DragDrop[سحب الملف إلى الصفحة<br/>أو النقر على زر الرفع]
+    Upload -->|لا| Submit[النقر على إرسال]
     DragDrop --> Submit
 
-    Submit --> AI[AI 分析需求]
-    AI --> Questions[展示多维度选项]
+    Submit --> AI[الذكاء الاصطناعي يحلل المتطلب]
+    AI --> Questions[عرض خيارات متعددة الأبعاد]
 
-    Questions --> UserSelect[用户选择偏好]
-    UserSelect --> Generate[生成结构化提示词]
+    Questions --> UserSelect[المستخدم يختار تفضيلاته]
+    UserSelect --> Generate[توليد مطالبة منظمة]
 
-    Generate --> Preview[展示预览和结构详情]
-    Preview --> UserAction{用户操作}
+    Generate --> Preview[عرض المعاينة وتفاصيل البنية]
+    Preview --> UserAction{إجراء المستخدم}
 
-    UserAction -->|复制| Copy[复制提示词]
-    UserAction -->|收藏| Favorite[添加到收藏]
-    UserAction -->|全屏查看| Fullscreen[全屏模式]
-    UserAction -->|采纳| Accept[采纳此版本]
-    UserAction -->|修改| Feedback[输入反馈意见]
+    UserAction -->|نسخ| Copy[نسخ المطالبة]
+    UserAction -->|إضافة للمفضلة| Favorite[إضافة إلى المفضلة]
+    UserAction -->|عرض ملء الشاشة| Fullscreen[وضع ملء الشاشة]
+    UserAction -->|اعتماد| Accept[اعتماد هذه النسخة]
+    UserAction -->|تعديل| Feedback[إدخال ملاحظات التعديل]
 
     Feedback --> AI
-    Copy --> End([完成])
-    Favorite --> FavTab[切换到收藏标签页]
+    Copy --> End([انتهى])
+    Favorite --> FavTab[التبديل إلى تبويب المفضلة]
     Fullscreen --> Preview
     Accept --> End
 
-    FavTab --> ManageFav{管理收藏}
-    ManageFav -->|搜索| Search[Ctrl+K 搜索]
-    ManageFav -->|编辑| Edit[编辑收藏内容]
-    ManageFav -->|删除| Delete[删除收藏]
-    ManageFav -->|复制| CopyFav[复制收藏内容]
+    FavTab --> ManageFav{إدارة المفضلة}
+    ManageFav -->|بحث| Search[Ctrl+K للبحث]
+    ManageFav -->|تعديل| Edit[تعديل محتوى المفضلة]
+    ManageFav -->|حذف| Delete[حذف من المفضلة]
+    ManageFav -->|نسخ| CopyFav[نسخ محتوى المفضلة]
 
     Search --> FavTab
     Edit --> FavTab
@@ -43,79 +43,79 @@ graph TD
     CopyFav --> End
 ```
 
-## 核心功能流程
+## تدفق الوظائف الأساسية
 
-### 1. 提示词生成流程
+### 1. تدفق توليد المطالبة
 ```mermaid
 sequenceDiagram
-    participant U as 用户
-    participant UI as 界面
-    participant AI as AI 引擎
-    participant DB as 本地数据库
+    participant U as المستخدم
+    participant UI as الواجهة
+    participant AI as محرك الذكاء الاصطناعي
+    participant DB as قاعدة البيانات المحلية
 
-    U->>UI: 输入模糊需求
-    U->>UI: (可选)上传文件
-    U->>UI: 点击发送
-    UI->>AI: 发送需求和文件
-    AI->>UI: 返回多维度选项
-    UI->>U: 展示选项表单
-    U->>UI: 选择偏好
-    UI->>AI: 提交选择
-    AI->>UI: 生成结构化提示词
-    UI->>U: 展示预览和详情
-    U->>UI: 采纳/修改/收藏
-    UI->>DB: 保存对话历史
+    U->>UI: إدخال متطلب غامض
+    U->>UI: (اختياري) رفع ملف
+    U->>UI: النقر على إرسال
+    UI->>AI: إرسال المتطلب والملف
+    AI->>UI: إرجاع خيارات متعددة الأبعاد
+    UI->>U: عرض نموذج الخيارات
+    U->>UI: اختيار التفضيلات
+    UI->>AI: إرسال الاختيارات
+    AI->>UI: توليد مطالبة منظمة
+    UI->>U: عرض المعاينة والتفاصيل
+    U->>UI: اعتماد/تعديل/إضافة للمفضلة
+    UI->>DB: حفظ سجل المحادثة
 ```
 
-### 2. 收藏管理流程
+### 2. تدفق إدارة المفضلة
 ```mermaid
 sequenceDiagram
-    participant U as 用户
-    participant UI as 界面
+    participant U as المستخدم
+    participant UI as الواجهة
     participant DB as IndexedDB
 
-    U->>UI: 点击收藏按钮
-    UI->>DB: 检查是否已收藏
-    alt 未收藏
-        UI->>DB: 添加到收藏
-        DB->>UI: 返回收藏 ID
-        UI->>U: 显示已收藏状态
-    else 已收藏
-        UI->>DB: 删除收藏
-        DB->>UI: 确认删除
-        UI->>U: 显示未收藏状态
+    U->>UI: النقر على زر المفضلة
+    UI->>DB: التحقق إن كانت مضافة للمفضلة
+    alt غير مضافة للمفضلة
+        UI->>DB: الإضافة إلى المفضلة
+        DB->>UI: إرجاع معرّف المفضلة
+        UI->>U: عرض حالة "تمت الإضافة للمفضلة"
+    else مضافة للمفضلة
+        UI->>DB: الحذف من المفضلة
+        DB->>UI: تأكيد الحذف
+        UI->>U: عرض حالة "غير مضافة للمفضلة"
     end
 ```
 
-### 3. 文件上传流程
+### 3. تدفق رفع الملفات
 ```mermaid
 graph LR
-    A[用户拖拽文件] --> B{检测到拖拽}
-    B -->|是| C[全屏显示上传区]
-    C --> D[用户释放文件]
-    D --> E{验证文件}
-    E -->|通过| F[处理文件]
-    E -->|失败| G[显示错误提示]
-    F --> H[显示文件预览]
-    G --> I[返回初始状态]
-    H --> J[文件已上传]
+    A[المستخدم يسحب ملفاً] --> B{تم اكتشاف السحب}
+    B -->|نعم| C[عرض منطقة الرفع بملء الشاشة]
+    C --> D[المستخدم يفلت الملف]
+    D --> E{التحقق من الملف}
+    E -->|ناجح| F[معالجة الملف]
+    E -->|فاشل| G[عرض رسالة خطأ]
+    F --> H[عرض معاينة الملف]
+    G --> I[العودة إلى الحالة الأولية]
+    H --> J[تم رفع الملف]
 ```
 
-## 关键交互点
+## نقاط التفاعل الرئيسية
 
-### 快捷键
-- `Ctrl+K` / `Cmd+K`: 打开 Spotlight 搜索
-- `Tab`: 在搜索中切换对话/收藏
-- `↑↓`: 在搜索结果中导航
-- `Enter`: 选择搜索结果
+### اختصارات لوحة المفاتيح
+- `Ctrl+K` / `Cmd+K`: فتح بحث Spotlight
+- `Tab`: التبديل بين المحادثات/المفضلة في البحث
+- `↑↓`: التنقل في نتائج البحث
+- `Enter`: اختيار نتيجة البحث
 
-### 状态反馈
-- 收藏按钮: 黄色表示已收藏,灰色表示未收藏
-- 拖拽上传: 全屏动画提示上传区域
-- 标签页切换: 滑动动画效果
-- 加载状态: 脉冲动画和加载提示
+### التغذية الراجعة للحالة
+- زر المفضلة: اللون الأصفر يعني مضافة للمفضلة، والرمادي يعني غير مضافة
+- السحب للرفع: تنبيه متحرك بملء الشاشة لمنطقة الرفع
+- تبديل التبويبات: تأثير حركة انزلاقية
+- حالة التحميل: حركة نبضية وتنبيه التحميل
 
-### 数据持久化
-- 对话历史: 自动保存到 IndexedDB
-- 收藏提示词: 本地存储,支持搜索和管理
-- 用户设置: API Key、Base URL、模型选择
+### حفظ البيانات
+- سجل المحادثات: حفظ تلقائي في IndexedDB
+- المطالبات المفضلة: تخزين محلي مع دعم البحث والإدارة
+- إعدادات المستخدم: API Key وBase URL واختيار النموذج

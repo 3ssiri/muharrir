@@ -31,6 +31,7 @@ import { LanguageSwitcher } from '@/components/language-switcher'
 import { KeyboardShortcutsDialog } from '@/components/keyboard-shortcuts-dialog'
 import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
 import { useTranslations } from 'next-intl'
+import { streamChat } from '@/lib/chat-client'
 
 export default function Home() {
   const t = useTranslations();
@@ -354,19 +355,13 @@ export default function Home() {
     setMessages(prev => [...prev, aiMessage])
 
     try {
-      console.log('Starting fetch request...')
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'x-base-url': baseUrl
-        },
-        body: JSON.stringify({
-          messages: [...messages, userMessage],
-          model: model,
-          systemPrompt: systemPrompt
-        }),
+      console.log('Starting chat request...')
+      const response = await streamChat({
+        messages: [...messages, userMessage],
+        model: model,
+        systemPrompt: systemPrompt,
+        apiKey: apiKey,
+        baseUrl: baseUrl,
         signal: abortController.signal
       })
 
@@ -792,20 +787,14 @@ export default function Home() {
 
     setMessages(prev => [...prev, aiMessage])
 
-    // إرسال طلب API
+    // إرسال طلب المحادثة
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'x-base-url': baseUrl
-        },
-        body: JSON.stringify({
-          messages: [...messages, userMessage],
-          model: model,
-          systemPrompt: systemPrompt
-        })
+      const response = await streamChat({
+        messages: [...messages, userMessage],
+        model: model,
+        systemPrompt: systemPrompt,
+        apiKey: apiKey,
+        baseUrl: baseUrl
       })
 
       if (!response.ok) {

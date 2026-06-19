@@ -1,42 +1,42 @@
 const { chromium } = require('playwright');
 
 (async () => {
-  console.log('🧪 验证已修复的问题...\n');
+  console.log('🧪 التحقق من المشكلات التي تم إصلاحها...\n');
 
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
 
   try {
-    console.log('1️⃣ 访问应用 (端口 3002)...');
+    console.log('1️⃣ الوصول إلى التطبيق (المنفذ 3002)...');
     await page.goto('http://localhost:3002');
     await page.waitForTimeout(2000);
-    console.log('✅ 应用加载成功\n');
+    console.log('✅ تم تحميل التطبيق بنجاح\n');
 
-    // 测试表单宽度
-    console.log('2️⃣ 测试表单宽度是否全宽...');
-    await page.fill('textarea[placeholder*="描述"]', '帮我写一个测试计划');
+    // اختبار عرض النموذج
+    console.log('2️⃣ اختبار ما إذا كان النموذج يُعرض بالعرض الكامل...');
+    await page.fill('textarea[placeholder*="صِف"]', 'اكتب لي خطة اختبار');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(8000);
 
-    // 检查表单宽度
+    // التحقق من عرض النموذج
     const formCards = await page.locator('.border-primary\\/20').all();
     if (formCards.length > 0) {
       const box = await formCards[0].boundingBox();
-      console.log(`   表单宽度: ${box?.width}px`);
-      console.log(`   ${box && box.width > 1000 ? '✅ 全宽显示' : '❌ 仍然较窄'}\n`);
+      console.log(`   عرض النموذج: ${box?.width}px`);
+      console.log(`   ${box && box.width > 1000 ? '✅ عرض كامل' : '❌ لا يزال ضيقًا'}\n`);
     }
 
-    console.log('📝 请手动检查:');
-    console.log('   1. 表单是否占据全宽');
-    console.log('   2. 附件显示是否正常\n');
+    console.log('📝 يُرجى التحقق يدويًا:');
+    console.log('   1. هل يشغل النموذج العرض الكامل');
+    console.log('   2. هل تُعرض المرفقات بشكل طبيعي\n');
 
     await page.waitForTimeout(20000);
 
   } catch (error) {
-    console.error('❌ 测试失败:', error.message);
+    console.error('❌ فشل الاختبار:', error.message);
   } finally {
     await browser.close();
-    console.log('\n🎉 测试完成!');
+    console.log('\n🎉 اكتمل الاختبار!');
   }
 })();

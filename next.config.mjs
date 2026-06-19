@@ -5,10 +5,16 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // 优化开发模式的编译性能
+  // توليد ملفات HTML ثابتة (Static Export) ليقرأها Tauri
+  output: 'export',
+  // مطلوب مع next-intl static export
+  trailingSlash: true,
+  // Next Image لا يعمل مع static export، لذا نعطّل التحسين
+  images: { unoptimized: true },
+  // تحسين أداء الترجمة في وضع التطوير
   webpack: (config, { dev, isServer }) => {
     if (dev) {
-      // 减少不必要的重新编译
+      // تقليل عمليات إعادة الترجمة غير الضرورية
       config.watchOptions = {
         ...config.watchOptions,
         ignored: ['**/node_modules', '**/.git', '**/.next'],

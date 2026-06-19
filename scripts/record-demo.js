@@ -1,140 +1,140 @@
 /**
- * Playwright 自动录制演示脚本
- * 用于录制应用的功能演示视频
+ * سكربت تسجيل العروض التوضيحية تلقائيًا باستخدام Playwright
+ * يُستخدم لتسجيل فيديو يوضح ميزات التطبيق
  */
 
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 
-// 配置
+// الإعدادات
 const CONFIG = {
   baseUrl: 'http://localhost:3000',
   outputDir: path.join(__dirname, '../docs/screenshots'),
   viewport: { width: 1920, height: 1080 },
-  slowMo: 500, // 放慢操作速度，便于录制
+  slowMo: 500, // إبطاء سرعة العمليات لتسهيل التسجيل
 };
 
-// 确保输出目录存在
+// التأكد من وجود مجلد المخرجات
 if (!fs.existsSync(CONFIG.outputDir)) {
   fs.mkdirSync(CONFIG.outputDir, { recursive: true });
 }
 
 /**
- * 等待指定时间
+ * الانتظار لمدة زمنية محددة
  */
 async function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
- * 录制交互式提示词生成流程
+ * تسجيل مسار توليد المطالبات التفاعلي
  */
 async function recordInteractiveFlow(page) {
-  console.log('📹 开始录制：交互式提示词生成流程');
+  console.log('📹 بدء التسجيل: مسار توليد المطالبات التفاعلي');
 
-  // 等待页面加载
+  // انتظار تحميل الصفحة
   await page.waitForLoadState('domcontentloaded');
   await wait(2000);
 
-  // 截图：初始页面
+  // لقطة شاشة: الصفحة الأولية
   await page.screenshot({
     path: path.join(CONFIG.outputDir, 'demo-01-homepage.png'),
     fullPage: true
   });
 
-  console.log('✅ 已截图：初始页面');
+  console.log('✅ تم التقاط لقطة الشاشة: الصفحة الأولية');
 
-  // 点击快速示例
-  await page.click('text=AI 趋势分析文章');
+  // النقر على المثال السريع
+  await page.click('text=مقال تحليل اتجاهات الذكاء الاصطناعي');
   await wait(500);
 
-  // 截图：输入框已填充
+  // لقطة شاشة: تم ملء حقل الإدخال
   await page.screenshot({
     path: path.join(CONFIG.outputDir, 'demo-02-input-filled.png'),
     fullPage: true
   });
 
-  console.log('✅ 已截图：输入框已填充');
+  console.log('✅ تم التقاط لقطة الشاشة: تم ملء حقل الإدخال');
 
-  // 点击发送按钮
+  // النقر على زر الإرسال
   await page.click('button[type="submit"]');
   await wait(2000);
 
-  // 等待AI响应
-  await page.waitForSelector('text=正在思考', { timeout: 5000 }).catch(() => {});
+  // انتظار استجابة الذكاء الاصطناعي
+  await page.waitForSelector('text=جارٍ التفكير', { timeout: 5000 }).catch(() => {});
   await wait(3000);
 
-  // 截图：AI响应中
+  // لقطة شاشة: الذكاء الاصطناعي يستجيب
   await page.screenshot({
     path: path.join(CONFIG.outputDir, 'demo-03-ai-responding.png'),
     fullPage: true
   });
 
-  console.log('✅ 已截图：AI响应中');
+  console.log('✅ تم التقاط لقطة الشاشة: الذكاء الاصطناعي يستجيب');
 
-  // 等待交互式表单出现
-  await page.waitForSelector('text=优化方向建议', { timeout: 15000 }).catch(() => {});
+  // انتظار ظهور النموذج التفاعلي
+  await page.waitForSelector('text=اقتراحات التحسين', { timeout: 15000 }).catch(() => {});
   await wait(1000);
 
-  // 截图：交互式表单
+  // لقطة شاشة: النموذج التفاعلي
   await page.screenshot({
     path: path.join(CONFIG.outputDir, 'demo-04-interactive-form.png'),
     fullPage: true
   });
 
-  console.log('✅ 已截图：交互式表单');
+  console.log('✅ تم التقاط لقطة الشاشة: النموذج التفاعلي');
 
-  // 选择一些选项
-  const buttons = await page.$$('button:has-text("专业")');
+  // اختيار بعض الخيارات
+  const buttons = await page.$$('button:has-text("احترافي")');
   if (buttons.length > 0) {
     await buttons[0].click();
     await wait(500);
   }
 
-  // 截图：选择选项后
+  // لقطة شاشة: بعد اختيار الخيارات
   await page.screenshot({
     path: path.join(CONFIG.outputDir, 'demo-05-options-selected.png'),
     fullPage: true
   });
 
-  console.log('✅ 已截图：选择选项后');
+  console.log('✅ تم التقاط لقطة الشاشة: بعد اختيار الخيارات');
 
-  // 点击生成按钮
-  await page.click('text=生成最终 Prompt 文档');
+  // النقر على زر التوليد
+  await page.click('text=إنشاء مستند الموجّه النهائي');
   await wait(3000);
 
-  // 截图：最终结果
+  // لقطة شاشة: النتيجة النهائية
   await page.screenshot({
     path: path.join(CONFIG.outputDir, 'demo-06-final-result.png'),
     fullPage: true
   });
 
-  console.log('✅ 已截图：最终结果');
-  console.log('✅ 交互式流程录制完成\n');
+  console.log('✅ تم التقاط لقطة الشاشة: النتيجة النهائية');
+  console.log('✅ اكتمل تسجيل المسار التفاعلي\n');
 }
 
 /**
- * 录制文件上传演示
+ * تسجيل عرض توضيحي لرفع الملفات
  */
 async function recordFileUpload(page) {
-  console.log('📹 开始录制：文件上传演示');
+  console.log('📹 بدء التسجيل: عرض توضيحي لرفع الملفات');
 
-  // 点击新建对话
-  await page.click('button:has-text("清空对话")');
+  // النقر على إنشاء محادثة جديدة
+  await page.click('button:has-text("مسح المحادثة")');
   await wait(1000);
 
-  console.log('✅ 文件上传演示录制完成\n');
+  console.log('✅ اكتمل تسجيل العرض التوضيحي لرفع الملفات\n');
 }
 
 /**
- * 主函数
+ * الدالة الرئيسية
  */
 async function main() {
-  console.log('🎬 开始录制演示...\n');
+  console.log('🎬 بدء تسجيل العرض التوضيحي...\n');
 
   const browser = await chromium.launch({
-    headless: false, // 显示浏览器窗口
+    headless: false, // إظهار نافذة المتصفح
     slowMo: CONFIG.slowMo,
   });
 
@@ -148,31 +148,31 @@ async function main() {
 
   const page = await context.newPage();
 
-  // 增加默认超时时间
+  // زيادة المهلة الافتراضية
   page.setDefaultTimeout(60000);
 
   try {
-    // 访问应用
-    console.log(`🌐 访问: ${CONFIG.baseUrl}`);
+    // الوصول إلى التطبيق
+    console.log(`🌐 الوصول إلى: ${CONFIG.baseUrl}`);
     await page.goto(CONFIG.baseUrl, {
       waitUntil: 'domcontentloaded',
       timeout: 60000
     });
 
-    // 录制各个场景
+    // تسجيل المشاهد المختلفة
     await recordInteractiveFlow(page);
     await recordFileUpload(page);
 
-    console.log('✅ 所有演示录制完成！');
-    console.log(`📁 输出目录: ${CONFIG.outputDir}`);
+    console.log('✅ اكتمل تسجيل جميع العروض التوضيحية!');
+    console.log(`📁 مجلد المخرجات: ${CONFIG.outputDir}`);
 
   } catch (error) {
-    console.error('❌ 录制出错:', error);
+    console.error('❌ خطأ أثناء التسجيل:', error);
   } finally {
     await context.close();
     await browser.close();
   }
 }
 
-// 运行
+// التشغيل
 main().catch(console.error);

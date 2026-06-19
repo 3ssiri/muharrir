@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { RefreshCw, Download } from 'lucide-react'
-import { toast } from 'sonner'
+import { Download } from 'lucide-react'
 
 interface VersionInfo {
   localVersion: string
@@ -16,23 +15,29 @@ export function VersionBadge() {
   const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // جلب الإصدار مباشرةً من GitHub API (client-side) بدلاً من مسار خادم
+  // محذوف. لا تتوفّر مقارنة محلية في وضع static export/Tauri.
   const fetchVersion = async () => {
     try {
-      const response = await fetch('/api/version')
-      if (response.ok) {
-        const data = await response.json()
-        setVersionInfo(data)
-
-        if (data.hasUpdate) {
-          toast.info('تم العثور على إصدار جديد', {
-            description: `الإصدار الحالي: ${data.localVersion}, أحدث إصدار: ${data.remoteVersion}`,
-            duration: 5000,
-            action: {
-              label: 'عرض التحديث',
-              onClick: () => window.open('https://github.com/systemoutprintlnhelloworld/interactive-prompt-iterator#دليل-التحديث', '_blank')
-            }
-          })
+      let remoteVersion: string | null = null
+      try {
+        const response = await fetch(
+          'https://api.github.com/repos/systemoutprintlnhelloworld/interactive-prompt-iterator/commits?per_page=1',
+          { headers: { Accept: 'application/vnd.github.v3+json' } }
+        )
+        if (response.ok) {
+          const linkHeader = response.headers.get('Link')
+          const match = linkHeader?.match(/page=(\d+)>; rel="last"/)
+          if (match) {
+            remoteVersion = `v1.${match[1]}`
+          }
         }
+      } catch {
+        // تجاهل أخطاء الشبكة عند تعذّر الوصول إلى GitHub
+      }
+
+      if (remoteVersion) {
+        setVersionInfo({ localVersion: remoteVersion, remoteVersion, hasUpdate: false })
       }
     } catch (error) {
       console.error('Failed to fetch version:', error)
@@ -45,8 +50,12 @@ export function VersionBadge() {
     fetchVersion()
   }, [])
 
-  if (loading || !versionInfo) {
+  if (loading) {
     return <Badge variant="outline" className="text-xs font-normal">جارٍ التحميل...</Badge>
+  }
+
+  if (!versionInfo) {
+    return null
   }
 
   return (
