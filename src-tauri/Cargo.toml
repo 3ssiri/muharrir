@@ -1,0 +1,29 @@
+[package]
+name = "prompt-iterator"
+version = "0.1.0"
+description = "Prompt Iterator Desktop"
+edition = "2021"
+
+# مكتبة التطبيق (يستدعيها main.rs ونقطة دخول الجوال)
+[lib]
+name = "prompt_iterator_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# إطار Tauri v2 مع أدوات المطوّر (devtools)
+# ملاحظة: تطبيقنا يحمّل الواجهة المبنية من ../out ولا يحتاج بروتوكول الأصول
+# (protocol-asset)؛ تفعيله يتطلّب إعداد assetProtocol في tauri.conf.json ويفتح
+# صلاحية وصول إضافية للملفات بلا داعٍ، لذا أُبقي على devtools فقط.
+tauri = { version = "2", features = ["devtools"] }
+# حفظ مفاتيح API في الـ OS Keychain بأمان
+keyring = "2"
+# اختبار الاتصال بمزوّد الذكاء الاصطناعي من Rust (يتجاوز قيود CORS)
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+# (de)serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# وقت تشغيل غير متزامن
+tokio = { version = "1", features = ["full"] }

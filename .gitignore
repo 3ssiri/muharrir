@@ -1,0 +1,90 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+public/pdf.worker.min.mjs
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# AI tools and memory
+.ace-tool/
+.ai_memory/
+.cunzhi-memory/
+.serena/
+
+# Test files and screenshots
+test-*.js
+test-*.png
+debug-*.js
+debug-*.png
+check-*.js
+simple-*.js
+/screenshots/debug/
+tests/screenshots/
+# Allow demo files in docs/screenshots.
+!docs/screenshots/
+docs/screenshots/*
+!docs/screenshots/demo-*.gif
+!docs/screenshots/demo-*.webp
+*.log
+temp_frames/
+
+# Documentation (optional - remove if you want to commit these)
+ARCHITECTURE.md
+BUTTON_FIX.md
+COMPLETION_CHECKLIST.md
+FINAL_FIX_REPORT.md
+FINAL_SOLUTION.md
+FIX_SUMMARY.md
+LATEST_FIX.md
+MANUAL_TEST_GUIDE.md
+PLAN_SOLUTION_B.md
+RESEARCH_SUMMARY.md
+TECH_RESEARCH.md
+TEST_REPORT.md
+STREAM_FIX.md
+SYSTEM_PROMPT_DESIGN.md
+SYSTEM_PROMPT_ENHANCEMENT.md
+UNIVERSAL_PROMPT_OPTIMIZER_DESIGN.md
+UNIVERSAL_PROMPT_OPTIMIZER_SUMMARY.md
+USER_GUIDE.md
+WORK_SUMMARY.md
+WORKFLOW_SUMMARY.md
+*.patch
+*.txt
+nul
