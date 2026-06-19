@@ -239,6 +239,14 @@
     "newLine": "New Line",
     "hint": "Press Shift + / to open this panel anytime"
   },
+  "updater": {
+    "check": "Check for updates",
+    "desktopOnly": "Auto-update is only available in the desktop app",
+    "noUpdate": "You are on the latest version",
+    "downloading": "Update found. Downloading and installing...",
+    "installed": "Update installed. The app will restart now",
+    "failed": "Update check failed"
+  },
   "apiKeyRequired": {
     "title": "API Key Required",
     "description": "You haven't configured an API Key yet and cannot use AI features.",

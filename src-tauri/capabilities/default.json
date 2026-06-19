@@ -3,5 +3,5 @@
   "identifier": "default",
   "description": "القدرات الافتراضية للنافذة الرئيسية. أوامر التطبيق المخصّصة (save_api_key, get_api_key, delete_api_key, has_api_key, test_api_connection) مُتاحة للاستدعاء افتراضيًا في Tauri v2.",
   "windows": ["main"],
-  "permissions": ["core:default"]
+  "permissions": ["core:default", "updater:default", "process:default"]
 }
