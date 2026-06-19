@@ -27,6 +27,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useAppStore } from '@/lib/store'
+import { openExternal } from '@/lib/tauri-bridge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslations, useLocale } from 'next-intl'
@@ -154,6 +155,9 @@ Assistant response:
    - Workflow: Technical background introduction → Core concept analysis → Practical use cases → Best practice recommendations
    - Constraints: Maintain professional and rigorous tone, provide code examples, cite official documentation
    - Knowledge Boundaries: Based on React 18+ version, covering latest server-side rendering practices`
+
+// إصدار التطبيق (يطابق tauri.conf.json و package.json)
+const APP_VERSION = '0.1.0'
 
 interface SettingsDialogProps {
     open?: boolean
@@ -447,10 +451,11 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                 </DialogHeader>
 
                 <Tabs defaultValue="connection" className="flex-1 flex flex-col min-h-0 w-full">
-                    <TabsList className="mx-6 mt-2 grid w-[400px] grid-cols-3">
+                    <TabsList className="mx-6 mt-2 grid w-[520px] grid-cols-4">
                         <TabsTrigger value="connection">{t('settings.connectionConfig')}</TabsTrigger>
                         <TabsTrigger value="advanced">{t('settings.advancedSettings')}</TabsTrigger>
                         <TabsTrigger value="prompt">{t('settings.promptManagement')}</TabsTrigger>
+                        <TabsTrigger value="about">{t('settings.about')}</TabsTrigger>
                     </TabsList>
 
                     <div className="flex-1 overflow-y-auto p-6 pt-4">
@@ -674,6 +679,30 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                 }}
                                 placeholder={t('settings.promptPlaceholder')}
                             />
+                        </TabsContent>
+
+                        {/* About tab */}
+                        <TabsContent value="about" className="space-y-6 mt-0">
+                            <div className="flex flex-col items-center text-center gap-2 py-2">
+                                <h3 className="text-lg font-semibold">مُحسِّن الموجّهات — Prompt Iterator</h3>
+                                <p className="text-sm text-muted-foreground max-w-md">{t('settings.aboutTagline')}</p>
+                                <span className="text-xs text-muted-foreground">{t('settings.version')} {APP_VERSION}</span>
+                            </div>
+                            <div className="p-4 bg-muted/30 rounded-lg border space-y-3 text-sm">
+                                <div className="flex items-center justify-between gap-2">
+                                    <span className="text-muted-foreground">{t('settings.developedBy')}</span>
+                                    <span className="font-medium">علي عسيري</span>
+                                </div>
+                                <div className="flex items-center justify-between gap-2">
+                                    <span className="text-muted-foreground">{t('settings.email')}</span>
+                                    <button type="button" onClick={() => openExternal('mailto:assiri@gmail.com')} className="font-medium text-primary hover:underline">assiri@gmail.com</button>
+                                </div>
+                                <div className="flex items-center justify-between gap-2">
+                                    <span className="text-muted-foreground">{t('settings.website')}</span>
+                                    <button type="button" onClick={() => openExternal('https://x.com/3li3')} className="font-medium text-primary hover:underline">x.com/3li3</button>
+                                </div>
+                            </div>
+                            <p className="text-center text-xs text-muted-foreground">© 2026 علي عسيري</p>
                         </TabsContent>
                     </div>
                 </Tabs>
