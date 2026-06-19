@@ -128,11 +128,11 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
         {/* مربع البحث */}
         <div className="p-4 border-b">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               ref={inputRef}
               placeholder={t('spotlight.searchPlaceholder')}
-              className="pl-10 pr-4 h-12 text-base border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="ps-10 pe-4 h-12 text-base border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -179,7 +179,7 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
                 <button
                   key={item.id}
                   onClick={() => handleSelect(item)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors ${
+                  className={`w-full text-start p-3 rounded-lg transition-colors ${
                     index === selectedIndex
                       ? 'bg-primary/10 border border-primary/20'
                       : 'hover:bg-muted/50'
@@ -211,11 +211,11 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
         {/* تلميحات اختصارات لوحة المفاتيح */}
         <div className="p-3 border-t bg-muted/30 flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex gap-4">
-            <span><Badge variant="outline" className="mr-1">↑↓</Badge>{t('spotlight.navigate')}</span>
-            <span><Badge variant="outline" className="mr-1">Enter</Badge>{t('spotlight.select')}</span>
-            <span><Badge variant="outline" className="mr-1">Tab</Badge>{t('spotlight.switchTab')}</span>
+            <span><Badge variant="outline" className="me-1">↑↓</Badge>{t('spotlight.navigate')}</span>
+            <span><Badge variant="outline" className="me-1">Enter</Badge>{t('spotlight.select')}</span>
+            <span><Badge variant="outline" className="me-1">Tab</Badge>{t('spotlight.switchTab')}</span>
           </div>
-          <span><Badge variant="outline" className="mr-1">Esc</Badge>{t('spotlight.closeDialog')}</span>
+          <span><Badge variant="outline" className="me-1">Esc</Badge>{t('spotlight.closeDialog')}</span>
         </div>
       </DialogContent>
     </Dialog>

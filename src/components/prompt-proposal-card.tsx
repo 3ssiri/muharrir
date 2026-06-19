@@ -69,7 +69,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
     if (!proposal || !proposal.title) {
         return (
             <Card className="flex items-center justify-center p-6 border-dashed animate-pulse">
-                <Sparkles className="w-5 h-5 text-primary animate-spin mr-2" />
+                <Sparkles className="w-5 h-5 text-primary animate-spin me-2" />
                 <span className="text-sm text-muted-foreground">{t('common.loading')}</span>
             </Card>
         )
@@ -136,7 +136,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                 </CardContent>
                 <CardFooter className="py-2 justify-end">
                     <Button variant="ghost" size="sm" onClick={handleCopy}>
-                        {copied ? <Check className="w-4 h-4 mr-1" /> : <Copy className="w-4 h-4 mr-1" />}
+                        {copied ? <Check className="w-4 h-4 me-1" /> : <Copy className="w-4 h-4 me-1" />}
                         {t('promptProposal.copy')}
                     </Button>
                 </CardFooter>
@@ -190,7 +190,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                                     value={proposal.finalPrompt || proposal.final_prompt || ''}
                                     readOnly
                                 />
-                                <div className="absolute top-2 right-2 flex gap-2">
+                                <div className="absolute top-2 end-2 flex gap-2">
                                     <Button
                                         size="icon"
                                         variant="secondary"
@@ -236,7 +236,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
 
                         <div className="space-y-2">
                             <Label className="text-xs font-semibold uppercase text-muted-foreground">Constraints (القيود)</Label>
-                            <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap border-l-2 border-destructive pl-3">{proposal.constraints}</div>
+                            <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap border-s-2 border-destructive ps-3">{proposal.constraints}</div>
                         </div>
                     </TabsContent>
                 </CardContent>
@@ -281,7 +281,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                             {t('common.close')}
                         </Button>
                         <Button onClick={handleCopy}>
-                            {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                            {copied ? <Check className="w-4 h-4 me-2" /> : <Copy className="w-4 h-4 me-2" />}
                             {t('promptProposal.copy')}
                         </Button>
                     </div>

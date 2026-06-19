@@ -27,7 +27,7 @@ export default function Error({
                     {error.message || "حدث خطأ غير معروف منع عرض الصفحة."}
                 </p>
                 {process.env.NODE_ENV === 'development' && (
-                    <div className="mt-4 p-4 bg-muted rounded-lg text-left w-full max-w-[600px] overflow-auto max-h-[200px] text-xs font-mono">
+                    <div className="mt-4 p-4 bg-muted rounded-lg text-start w-full max-w-[600px] overflow-auto max-h-[200px] text-xs font-mono">
                         {error.stack}
                     </div>
                 )}

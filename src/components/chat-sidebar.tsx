@@ -223,11 +223,11 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
             {!isCollapsed && (
                 <div className="px-4 mb-3">
                     <div className="relative group">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                        <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
                         <Input
                             ref={searchInputRef}
                             placeholder={t('sidebar.searchPlaceholder')}
-                            className="pl-9 pr-9 h-10 text-sm rounded-lg border-muted-foreground/20 bg-muted/30 hover:bg-muted/50 focus-visible:bg-background focus-visible:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/20 transition-all duration-200"
+                            className="ps-9 pe-9 h-10 text-sm rounded-lg border-muted-foreground/20 bg-muted/30 hover:bg-muted/50 focus-visible:bg-background focus-visible:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/20 transition-all duration-200"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -235,14 +235,14 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="absolute right-0.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-md hover:bg-muted transition-all duration-200 animate-in fade-in zoom-in"
+                                className="absolute end-0.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-md hover:bg-muted transition-all duration-200 animate-in fade-in zoom-in"
                                 onClick={() => setSearchQuery('')}
                             >
                                 <X className="h-3.5 w-3.5" />
                             </Button>
                         )}
                         {!searchQuery && (
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <div className="absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none">
                                 <kbd className="px-2 py-0.5 text-xs font-medium text-muted-foreground bg-muted border border-muted-foreground/20 rounded">
                                     {t('sidebar.searchShortcut')}
                                 </kbd>
@@ -289,7 +289,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full opacity-0 group-hover:opacity-100 h-7 w-7 bg-destructive/90 hover:bg-destructive text-destructive-foreground transition-all shrink-0 rounded-full z-50 ml-1"
+                                        className="absolute end-0 top-1/2 -translate-y-1/2 ltr:translate-x-full rtl:-translate-x-full opacity-0 group-hover:opacity-100 h-7 w-7 bg-destructive/90 hover:bg-destructive text-destructive-foreground transition-all shrink-0 rounded-full z-50 ms-1"
                                         onClick={(e) => handleDelete(e, session.id!)}
                                     >
                                         <Trash2 className="w-3.5 h-3.5" />
@@ -297,7 +297,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                                 </>
                             ) : (
                                 <>
-                                    <div className="flex flex-col gap-1 flex-1 min-w-0 pr-2">
+                                    <div className="flex flex-col gap-1 flex-1 min-w-0 pe-2">
                                         <span className="font-medium text-sm break-words line-clamp-2">
                                             {session.title || t('sidebar.untitled')}
                                         </span>
@@ -340,7 +340,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         <>
             {/* Desktop Sidebar */}
             <div
-                className="hidden md:flex border-r flex-col bg-card/30 shrink-0 relative h-screen overflow-hidden"
+                className="hidden md:flex border-e flex-col bg-card/30 shrink-0 relative h-screen overflow-hidden"
                 style={{
                     width: isCollapsed ? '64px' : `${sidebarWidth}px`,
                     transition: isCollapsed ? 'width 0.3s' : 'none'
@@ -351,7 +351,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                 {/* الشريط الفاصل القابل للسحب */}
                 {!isCollapsed && (
                     <div
-                        className={`absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-primary/50 transition-colors ${
+                        className={`absolute end-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-primary/50 transition-colors ${
                             isResizing ? 'bg-primary' : ''
                         }`}
                         onMouseDown={handleMouseDown}
@@ -362,7 +362,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
             {/* Mobile Sidebar */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className="md:hidden absolute left-4 top-4 z-20">
+                    <Button variant="ghost" size="icon" className="md:hidden absolute start-4 top-4 z-20">
                         <Menu className="w-5 h-5" />
                     </Button>
                 </SheetTrigger>

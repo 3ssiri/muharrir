@@ -493,7 +493,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                         </span>
                                     </div>
                                     <Button size="sm" variant="outline" onClick={checkConnection} disabled={isChecking}>
-                                        <RefreshCw className={`w-3.5 h-3.5 mr-2 ${isChecking ? 'animate-spin' : ''}`} /> {t('settings.testConnection')}
+                                        <RefreshCw className={`w-3.5 h-3.5 me-2 ${isChecking ? 'animate-spin' : ''}`} /> {t('settings.testConnection')}
                                     </Button>
                                 </div>
 
@@ -679,12 +679,12 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                 </Tabs>
 
                 <DialogFooter className="p-6 pt-2 border-t mt-auto bg-muted/10">
-                    <div className="flex items-center gap-2 mr-auto">
+                    <div className="flex items-center gap-2 me-auto">
                         <Button variant="outline" size="sm" onClick={handleImportSettings}>
-                            <Upload className="w-4 h-4 mr-2" /> {t('settings.importSettings')}
+                            <Upload className="w-4 h-4 me-2" /> {t('settings.importSettings')}
                         </Button>
                         <Button variant="outline" size="sm" onClick={handleExportSettings}>
-                            <Download className="w-4 h-4 mr-2" /> {t('settings.exportSettings')}
+                            <Download className="w-4 h-4 me-2" /> {t('settings.exportSettings')}
                         </Button>
                     </div>
                     <Button variant="outline" onClick={() => setOpen(false)}>{t('settings.cancel')}</Button>

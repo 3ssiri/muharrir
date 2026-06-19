@@ -87,7 +87,7 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
     if (!formConfig || !formConfig.dimensions || formConfig.dimensions.length === 0) {
         return (
             <Card className="flex items-center justify-center p-6 border-dashed animate-pulse">
-                <Sparkles className="w-5 h-5 text-primary animate-spin mr-2" />
+                <Sparkles className="w-5 h-5 text-primary animate-spin me-2" />
                 <span className="text-sm text-muted-foreground">{t('enhancementForm.analyzing')}</span>
             </Card>
         )

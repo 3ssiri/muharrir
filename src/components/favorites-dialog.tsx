@@ -101,10 +101,10 @@ export function FavoritesDialog({ open, onOpenChange }: FavoritesDialogProps) {
 
         {/* مربع البحث */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={t('favoritesDialog.searchPlaceholder')}
-            className="pl-9"
+            className="ps-9"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

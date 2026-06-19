@@ -132,7 +132,7 @@ export function AutoResizeTextarea({
           size="icon"
           variant="ghost"
           onClick={() => setIsExpanded(true)}
-          className="absolute right-2 top-2 h-8 w-8 rounded-md bg-background/80 backdrop-blur-sm hover:bg-muted shadow-sm transition-all z-10"
+          className="absolute end-2 top-2 h-8 w-8 rounded-md bg-background/80 backdrop-blur-sm hover:bg-muted shadow-sm transition-all z-10"
           title="توسيع حقل الإدخال (عرض المحتوى الكامل)"
           style={{
             visibility: isMounted && showExpandButton ? 'visible' : 'hidden',

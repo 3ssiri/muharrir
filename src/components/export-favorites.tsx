@@ -65,7 +65,7 @@ export function ExportFavorites() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" disabled={isExporting}>
-          <Download className="w-4 h-4 mr-2" />
+          <Download className="w-4 h-4 me-2" />
           {t('favoritesDialog.export')}
         </Button>
       </DropdownMenuTrigger>

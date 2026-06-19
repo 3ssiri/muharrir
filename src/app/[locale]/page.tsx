@@ -996,7 +996,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <Button
                       variant="outline"
-                      className="h-auto py-4 px-5 text-left justify-start hover:border-primary/50 hover:bg-primary/5"
+                      className="h-auto py-4 px-5 text-start justify-start hover:border-primary/50 hover:bg-primary/5"
                       onClick={() => setLocalInput(t('welcome.example1Prompt'))}
                     >
                       <div className="flex flex-col gap-1">
@@ -1007,7 +1007,7 @@ export default function Home() {
 
                     <Button
                       variant="outline"
-                      className="h-auto py-4 px-5 text-left justify-start hover:border-primary/50 hover:bg-primary/5"
+                      className="h-auto py-4 px-5 text-start justify-start hover:border-primary/50 hover:bg-primary/5"
                       onClick={() => setLocalInput(t('welcome.example2Prompt'))}
                     >
                       <div className="flex flex-col gap-1">
@@ -1018,7 +1018,7 @@ export default function Home() {
 
                     <Button
                       variant="outline"
-                      className="h-auto py-4 px-5 text-left justify-start hover:border-primary/50 hover:bg-primary/5"
+                      className="h-auto py-4 px-5 text-start justify-start hover:border-primary/50 hover:bg-primary/5"
                       onClick={() => setLocalInput(t('welcome.example3Prompt'))}
                     >
                       <div className="flex flex-col gap-1">
@@ -1029,7 +1029,7 @@ export default function Home() {
 
                     <Button
                       variant="outline"
-                      className="h-auto py-4 px-5 text-left justify-start hover:border-primary/50 hover:bg-primary/5"
+                      className="h-auto py-4 px-5 text-start justify-start hover:border-primary/50 hover:bg-primary/5"
                       onClick={() => setLocalInput(t('welcome.example4Prompt'))}
                     >
                       <div className="flex flex-col gap-1">
@@ -1267,7 +1267,7 @@ export default function Home() {
                     )}
 
                     {/* Message Actions */}
-                    <div className={`absolute -bottom-6 ${m.role === 'user' ? 'right-12' : 'left-12'} opacity-0 group-hover:opacity-100 transition-opacity flex gap-1`}>
+                    <div className={`absolute -bottom-6 ${m.role === 'user' ? 'end-12' : 'start-12'} opacity-0 group-hover:opacity-100 transition-opacity flex gap-1`}>
                       <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleCopy(m.content)}>
                         <Copy className="w-3 h-3" />
                       </Button>
@@ -1345,7 +1345,7 @@ export default function Home() {
               className="relative flex items-end gap-2 p-2 rounded-xl border bg-muted/40 hover:border-primary/50 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all"
             >
               {/* زر الرفع - على اليسار */}
-              <div className="mb-1 ml-1">
+              <div className="mb-1 ms-1">
                 <Button
                   type="button"
                   variant="ghost"
@@ -1389,7 +1389,7 @@ export default function Home() {
                 type="submit"
                 size="icon"
                 disabled={isLoading || (!localInput?.trim())}
-                className={`h-10 w-10 mb-1 mr-1 shrink-0 rounded-lg ${isLoading ? 'hidden' : 'flex'}`}
+                className={`h-10 w-10 mb-1 me-1 shrink-0 rounded-lg ${isLoading ? 'hidden' : 'flex'}`}
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -1399,7 +1399,7 @@ export default function Home() {
                   size="icon"
                   variant="destructive"
                   onClick={() => stop()}
-                  className="h-10 w-10 mb-1 mr-1 shrink-0 rounded-lg animate-in fade-in zoom-in"
+                  className="h-10 w-10 mb-1 me-1 shrink-0 rounded-lg animate-in fade-in zoom-in"
                 >
                   <StopCircle className="w-4 h-4" />
                 </Button>

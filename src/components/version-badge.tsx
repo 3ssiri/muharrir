@@ -57,7 +57,7 @@ export function VersionBadge() {
       >
         {versionInfo.localVersion}
         {versionInfo.hasUpdate && (
-          <Download className="w-3 h-3 ml-1 inline" />
+          <Download className="w-3 h-3 ms-1 inline" />
         )}
       </Badge>
     </div>
