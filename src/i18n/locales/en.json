@@ -167,7 +167,15 @@
     "version": "Version",
     "developedBy": "Developed by",
     "email": "Email",
-    "website": "Website"
+    "website": "Website",
+    "provider": "Provider",
+    "providerHint": "Pick a provider to auto-fill settings, or add one manually",
+    "addProviderManually": "➕ Add provider manually",
+    "providerName": "Provider name",
+    "providerModels": "Models (optional, comma-separated)",
+    "saveProvider": "Save provider",
+    "deleteProvider": "Delete provider",
+    "customProvider": "Custom"
   },
   "errors": {
     "authFailed": "Authentication Failed",

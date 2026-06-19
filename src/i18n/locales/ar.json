@@ -167,7 +167,15 @@
     "version": "الإصدار",
     "developedBy": "تطوير",
     "email": "البريد الإلكتروني",
-    "website": "الموقع"
+    "website": "الموقع",
+    "provider": "المزوّد",
+    "providerHint": "اختر مزوّدًا لتعبئة الإعدادات تلقائيًّا، أو أضِف واحدًا يدويًّا",
+    "addProviderManually": "➕ إضافة مزوّد يدويًّا",
+    "providerName": "اسم المزوّد",
+    "providerModels": "النماذج (اختياري، مفصولة بفواصل)",
+    "saveProvider": "حفظ المزوّد",
+    "deleteProvider": "حذف المزوّد",
+    "customProvider": "مخصّص"
   },
   "errors": {
     "authFailed": "فشلت المصادقة",
