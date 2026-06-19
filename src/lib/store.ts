@@ -1,5 +1,9 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { isTauriApp, saveApiKey as keychainSave, getApiKey as keychainGet } from './tauri-bridge'
+
+// اسم المزوّد الافتراضي المستخدَم كمفتاح في الـ OS Keychain
+const KEYCHAIN_PROVIDER = 'default'
 
 interface AppSettings {
   apiKey: string
@@ -14,6 +18,7 @@ interface AppSettings {
 
 interface AppState extends AppSettings {
   setApiKey: (key: string) => void
+  hydrateApiKey: () => Promise<void> // تحميل المفتاح من الـ Keychain عند بدء التطبيق (Tauri فقط)
   setBaseUrl: (url: string) => void
   setModel: (model: string) => void
   setSystemPrompt: (prompt: string) => void
@@ -25,7 +30,7 @@ interface AppState extends AppSettings {
 }
 
 const defaultSettings: AppSettings = {
-  apiKey: 'sk-Mdj54E4QkE5dQi6jV4TUli6kEN4fsPQKuIjchrBl6hIjvws1',
+  apiKey: '',
   baseUrl: 'https://api.deepseek.com',
   model: 'deepseek-v3.2-exp',
   correctionModel: 'grok-beta-fast',
@@ -61,7 +66,25 @@ export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       ...defaultSettings,
-      setApiKey: (apiKey) => set({ apiKey }),
+      setApiKey: (apiKey) => {
+        set({ apiKey })
+        // داخل Tauri: نخزّن المفتاح بأمان في الـ OS Keychain (لا نتركه في localStorage)
+        if (isTauriApp()) {
+          keychainSave(KEYCHAIN_PROVIDER, apiKey).catch((e) =>
+            console.error('فشل حفظ المفتاح في الـ Keychain:', e)
+          )
+        }
+      },
+      // تحميل المفتاح المحفوظ من الـ Keychain (يُستدعى مرّة عند بدء التطبيق)
+      hydrateApiKey: async () => {
+        if (!isTauriApp()) return
+        try {
+          const key = await keychainGet(KEYCHAIN_PROVIDER)
+          if (key) set({ apiKey: key })
+        } catch (e) {
+          console.error('فشل تحميل المفتاح من الـ Keychain:', e)
+        }
+      },
       setBaseUrl: (baseUrl) => set({ baseUrl }),
       setModel: (model) => set({ model }),
       setSystemPrompt: (systemPrompt) => set({ systemPrompt }),
@@ -74,6 +97,15 @@ export const useAppStore = create<AppState>()(
     {
       name: 'prompt-iterator-storage',
       storage: createJSONStorage(() => localStorage),
+      // داخل Tauri: نستثني apiKey من التخزين بنصّ صريح في localStorage
+      // (يُحفظ في الـ OS Keychain بدلاً من ذلك). في المتصفح يبقى السلوك كما هو.
+      partialize: (state) => {
+        if (isTauriApp()) {
+          const { apiKey, ...rest } = state
+          return rest as AppState
+        }
+        return state
+      },
     }
   )
 )

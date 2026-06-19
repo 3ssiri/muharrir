@@ -35,8 +35,13 @@ import { streamChat } from '@/lib/chat-client'
 
 export default function Home() {
   const t = useTranslations();
-  const { apiKey, baseUrl, model, systemPrompt, availableModels, setModel } = useAppStore()
+  const { apiKey, baseUrl, model, systemPrompt, availableModels, setModel, hydrateApiKey } = useAppStore()
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // عند بدء التطبيق على سطح المكتب: حمّل مفتاح API من الـ OS Keychain
+  useEffect(() => {
+    hydrateApiKey()
+  }, [hydrateApiKey])
 
   const [sessionId, setSessionId] = useState<number | null>(null)
   const sessionIdRef = useRef(sessionId)
@@ -258,8 +263,7 @@ export default function Home() {
     if (!localInput.trim()) return
 
     // Check whether the API key is configured (KISS principle - keep it simple!)
-    const defaultApiKey = 'sk-Mdj54E4QkE5dQi6jV4TUli6kEN4fsPQKuIjchrBl6hIjvws1'
-    if (!apiKey || apiKey === defaultApiKey) {
+    if (!apiKey) {
       setApiKeyDialogOpen(true)
       return
     }

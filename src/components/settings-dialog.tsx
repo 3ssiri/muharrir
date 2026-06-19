@@ -32,7 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslations, useLocale } from 'next-intl'
 
 const TEST_CONFIG = {
-    apiKey: 'sk-xMUZVRACBogvAsbFxm2buTDoixjx7APxES7cBh5TELHABCe0',
+    apiKey: '',
     baseUrl: 'https://ai.huan666.de/v1',
     model: 'deepseek-v3.2-exp',
     systemPrompt: 'أنت مساعد تفاعلي لتحسين الموجّهات. هدفك هو إرشاد المستخدم عبر محادثة متعدّدة الجولات لتوضيح متطلباته، ثم إنشاء موجّه منظّم وعالي الجودة في النهاية. ينبغي أن تبادر بتقديم اقتراحات وأن تستخدم أشكالاً مثل مربعات الاختيار (Checkbox) ليختار المستخدم منها.',
