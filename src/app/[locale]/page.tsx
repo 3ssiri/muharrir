@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Send, Trash2, StopCircle, User, Bot, Copy, Pencil, Code2, Sparkles, Star, FileText, MessageSquare, Upload, X, RotateCcw, AlertCircle } from 'lucide-react'
+import { Send, Trash2, StopCircle, User, Bot, Copy, Pencil, Code2, Sparkles, Star, FileText, MessageSquare, Upload, X, RotateCcw, AlertCircle, RefreshCw } from 'lucide-react'
 import { useAppStore } from '@/lib/store'
 import { ChatSidebar } from '@/components/chat-sidebar'
 import { db } from '@/lib/db'
@@ -32,6 +32,7 @@ import { KeyboardShortcutsDialog } from '@/components/keyboard-shortcuts-dialog'
 import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
 import { useTranslations } from 'next-intl'
 import { streamChat } from '@/lib/chat-client'
+import { isTauriApp } from '@/lib/tauri-bridge'
 
 export default function Home() {
   const t = useTranslations();
@@ -60,6 +61,8 @@ export default function Home() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false) // shortcuts dialog state
   const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false) // API key alert dialog state
   const [settingsOpen, setSettingsOpen] = useState(false) // settings dialog state
+  const [isDesktopApp, setIsDesktopApp] = useState(false)
+  const [isCheckingForUpdate, setIsCheckingForUpdate] = useState(false)
 
   // File upload state - supports multiple files
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ file: File; preview?: string; text?: string }>>([])
@@ -75,6 +78,10 @@ export default function Home() {
   useEffect(() => {
     sessionIdRef.current = sessionId
   }, [sessionId])
+
+  useEffect(() => {
+    setIsDesktopApp(isTauriApp())
+  }, [])
 
   // Abort the in-flight request when the component unmounts
   useEffect(() => {
@@ -584,6 +591,37 @@ export default function Home() {
     }
   }
 
+  const handleCheckForUpdate = async () => {
+    if (!isTauriApp()) {
+      toast.info(t('updater.desktopOnly'))
+      return
+    }
+
+    setIsCheckingForUpdate(true)
+    try {
+      const [{ check }, { relaunch }] = await Promise.all([
+        import('@tauri-apps/plugin-updater'),
+        import('@tauri-apps/plugin-process'),
+      ])
+      const update = await check()
+
+      if (!update) {
+        toast.success(t('updater.noUpdate'))
+        return
+      }
+
+      toast.info(t('updater.downloading'), { duration: 3000 })
+      await update.downloadAndInstall()
+      toast.success(t('updater.installed'), { duration: 3000 })
+      await relaunch()
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      toast.error(`${t('updater.failed')}: ${message}`)
+    } finally {
+      setIsCheckingForUpdate(false)
+    }
+  }
+
   const handlePaste = async (e: React.ClipboardEvent) => {
     const items = e.clipboardData?.items
     if (!items) return
@@ -920,6 +958,26 @@ export default function Home() {
               </SelectContent>
             </Select>
             <LanguageSwitcher />
+            {isDesktopApp && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleCheckForUpdate}
+                      disabled={isCheckingForUpdate}
+                      className="text-muted-foreground hover:text-primary"
+                    >
+                      <RefreshCw className={`w-5 h-5 ${isCheckingForUpdate ? 'animate-spin' : ''}`} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t('updater.check')}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
             <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
             <ThemeToggle />
             <div className="h-6 w-px bg-border mx-2" />

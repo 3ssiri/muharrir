@@ -162,7 +162,12 @@ pub fn run() {
         .setup(|app| {
             setup_tray(app)?;
             #[cfg(desktop)]
-            setup_global_shortcut(app)?;
+            {
+                setup_global_shortcut(app)?;
+                app.handle()
+                    .plugin(tauri_plugin_updater::Builder::new().build())?;
+                app.handle().plugin(tauri_plugin_process::init())?;
+            }
             Ok(())
         })
         // إغلاق النافذة (X) يُخفيها إلى شريط النظام بدل إنهاء التطبيق
