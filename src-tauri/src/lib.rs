@@ -81,6 +81,17 @@ fn show_main_window(app: &tauri::AppHandle) {
     }
 }
 
+/// تبديل ظهور النافذة الرئيسية: إخفاؤها إن كانت ظاهرة، وإلا إظهارها وتركيزها
+fn toggle_main_window(app: &tauri::AppHandle) {
+    if let Some(window) = app.get_webview_window("main") {
+        if window.is_visible().unwrap_or(false) {
+            let _ = window.hide();
+        } else {
+            show_main_window(app);
+        }
+    }
+}
+
 /// بناء أيقونة شريط النظام (System Tray) مع قائمة: إظهار / إخفاء / خروج
 fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     let show = MenuItem::with_id(app, "show", "إظهار", true, None::<&str>)?;
@@ -111,17 +122,29 @@ fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
                 ..
             } = event
             {
-                let app = tray.app_handle();
-                if let Some(window) = app.get_webview_window("main") {
-                    if window.is_visible().unwrap_or(false) {
-                        let _ = window.hide();
-                    } else {
-                        show_main_window(app);
-                    }
-                }
+                toggle_main_window(tray.app_handle());
             }
         })
         .build(app)?;
+    Ok(())
+}
+
+/// تسجيل اختصار عام على مستوى النظام (Ctrl+Shift+K) لتبديل ظهور النافذة
+#[cfg(desktop)]
+fn setup_global_shortcut(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
+    use tauri_plugin_global_shortcut::{Code, Modifiers, Shortcut, ShortcutState};
+
+    let toggle = Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyK);
+    app.handle().plugin(
+        tauri_plugin_global_shortcut::Builder::new()
+            .with_shortcut(toggle)?
+            .with_handler(move |app, shortcut, event| {
+                if shortcut == &toggle && event.state() == ShortcutState::Pressed {
+                    toggle_main_window(app);
+                }
+            })
+            .build(),
+    )?;
     Ok(())
 }
 
@@ -138,6 +161,8 @@ pub fn run() {
         ])
         .setup(|app| {
             setup_tray(app)?;
+            #[cfg(desktop)]
+            setup_global_shortcut(app)?;
             Ok(())
         })
         // إغلاق النافذة (X) يُخفيها إلى شريط النظام بدل إنهاء التطبيق
