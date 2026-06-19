@@ -58,7 +58,8 @@ export async function correctFormat(
   toolName: string,
   invalidArgs: any,
   apiKey: string,
-  baseUrl: string
+  baseUrl: string,
+  correctionModel: string = 'grok-beta-fast'
 ): Promise<{ success: boolean; correctedArgs?: any; error?: string }> {
   try {
     const correctionPrompt = `أنت خبير في تصحيح الصيغ. مهمتك هي إصلاح أخطاء صيغة JSON دون تعديل أو حذف أو إضافة أي معلومة دلالية.
@@ -82,7 +83,7 @@ JSON المصحّح:`;
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'grok-beta-fast',
+        model: correctionModel || 'grok-beta-fast',
         messages: [
           { role: 'user', content: correctionPrompt }
         ],

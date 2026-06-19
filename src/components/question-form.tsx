@@ -25,6 +25,9 @@ interface QuestionFormProps {
 export function QuestionForm({ toolInvocation, addToolResult }: QuestionFormProps) {
     const t = useTranslations();
     const { toolCallId, args } = toolInvocation
+    // Hooks must run unconditionally (before any early return) — Rules of Hooks
+    const [answers, setAnswers] = useState<Record<string, any>>({})
+    const [submitted, setSubmitted] = useState(false)
 
     // Safely parse args to prevent crashes during streaming (partial JSON)
     let questions: Question[] = []
@@ -48,9 +51,6 @@ export function QuestionForm({ toolInvocation, addToolResult }: QuestionFormProp
             </Card>
         )
     }
-
-    const [answers, setAnswers] = useState<Record<string, any>>({})
-    const [submitted, setSubmitted] = useState(false)
 
     const handleSubmit = () => {
         setSubmitted(true)

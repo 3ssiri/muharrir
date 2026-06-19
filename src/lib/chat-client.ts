@@ -21,6 +21,8 @@ export interface StreamChatParams {
   systemPrompt?: string;
   apiKey: string;
   baseUrl: string;
+  // Model used by the format-correction loop (configurable in Settings)
+  correctionModel?: string;
   signal?: AbortSignal;
 }
 
@@ -203,7 +205,7 @@ function buildDemoResponse(): Response {
  * in the UI.
  */
 export async function streamChat(params: StreamChatParams): Promise<Response> {
-  const { messages, model, systemPrompt, apiKey, baseUrl, signal } = params;
+  const { messages, model, systemPrompt, apiKey, baseUrl, correctionModel, signal } = params;
 
   // Demo mode
   if (apiKey === 'demo') {
@@ -277,7 +279,7 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
             controller.enqueue(encoder.encode(`e:{"type":"correction","status":"correcting"}\n`));
             let corrected = false;
             for (let i = 0; i < 3; i++) {
-              const correction = await correctFormat(tc.name, parsed, apiKey, normalizeBaseUrl(baseUrl));
+              const correction = await correctFormat(tc.name, parsed, apiKey, normalizeBaseUrl(baseUrl), correctionModel);
               if (correction.success) {
                 const revalidation = validateToolCall(tc.name, correction.correctedArgs);
                 if (revalidation.valid) {
