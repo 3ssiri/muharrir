@@ -1,14 +1,14 @@
 const https = require('https');
 
 const VERCEL_URL = 'https://interactive-prompt-iterator-9ecljhh99.vercel.app/';
-const CHECK_INTERVAL = 10000; // 10秒检查一次
-const MAX_ATTEMPTS = 30; // 最多检查30次（5分钟）
+const CHECK_INTERVAL = 10000; // Check every 10 seconds.
+const MAX_ATTEMPTS = 30; // Check up to 30 times (5 minutes).
 
 let attempts = 0;
 
 function checkDeployment() {
   attempts++;
-  console.log(`\n[${new Date().toLocaleTimeString()}] 检查部署状态 (${attempts}/${MAX_ATTEMPTS})...`);
+  console.log(`\n[${new Date().toLocaleTimeString()}] Checking deployment status (${attempts}/${MAX_ATTEMPTS})...`);
 
   https.get(VERCEL_URL, (res) => {
     const { statusCode } = res;
@@ -20,33 +20,33 @@ function checkDeployment() {
 
     res.on('end', () => {
       if (statusCode === 200) {
-        // 检查是否是认证页面
+        // Check whether this is an authentication page.
         if (data.includes('Authentication Required') || data.includes('Vercel Authentication')) {
-          console.log('⚠️  部署成功，但需要身份验证（Deployment Protection 已启用）');
-          console.log('✅ 代码已成功部署到 Vercel');
-          console.log('🔒 需要关闭 Deployment Protection 才能公开访问');
+          console.log('⚠️  Deployment succeeded, but authentication is required (Deployment Protection is enabled)');
+          console.log('✅ Code was deployed to Vercel successfully');
+          console.log('🔒 Disable Deployment Protection to make it publicly accessible');
           process.exit(0);
         } else if (data.includes('<!DOCTYPE html>') || data.includes('<html')) {
-          console.log('✅ 部署成功！网站可以正常访问');
-          console.log(`🌐 访问地址: ${VERCEL_URL}`);
+          console.log('✅ Deployment succeeded. The site is accessible');
+          console.log(`🌐 URL: ${VERCEL_URL}`);
           process.exit(0);
         }
       } else if (statusCode === 404) {
-        console.log('⚠️  收到 404 响应，可能正在部署中...');
+        console.log('⚠️  Received 404 response; deployment may still be in progress...');
       } else {
-        console.log(`⚠️  收到 ${statusCode} 响应`);
+        console.log(`⚠️  Received ${statusCode} response`);
       }
 
       if (attempts >= MAX_ATTEMPTS) {
-        console.log('\n❌ 超时：已检查 5 分钟，部署可能失败');
-        console.log('请手动检查 Vercel 部署日志');
+        console.log('\n❌ Timed out after 5 minutes; deployment may have failed');
+        console.log('Check the Vercel deployment logs manually');
         process.exit(1);
       }
 
       setTimeout(checkDeployment, CHECK_INTERVAL);
     });
   }).on('error', (err) => {
-    console.error('❌ 请求失败:', err.message);
+    console.error('❌ Request failed:', err.message);
 
     if (attempts >= MAX_ATTEMPTS) {
       process.exit(1);
@@ -56,9 +56,9 @@ function checkDeployment() {
   });
 }
 
-console.log('🚀 开始监控 Vercel 部署状态...');
+console.log('🚀 Monitoring Vercel deployment status...');
 console.log(`📍 URL: ${VERCEL_URL}`);
-console.log(`⏱️  检查间隔: ${CHECK_INTERVAL / 1000} 秒`);
-console.log(`🔄 最大尝试次数: ${MAX_ATTEMPTS}`);
+console.log(`⏱️  Check interval: ${CHECK_INTERVAL / 1000} seconds`);
+console.log(`🔄 Max attempts: ${MAX_ATTEMPTS}`);
 
 checkDeployment();

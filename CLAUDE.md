@@ -21,7 +21,7 @@
 | shadcn/ui (Radix) | متعددة | مكونات UI |
 | Zustand | ^5.0.10 | إدارة الحالة |
 | Dexie | ^4.2.1 | قاعدة بيانات IndexedDB محلية |
-| next-intl | ^3.26.5 | i18n (عربي/إنجليزي/صيني) |
+| next-intl | ^3.26.5 | i18n (عربي/إنجليزي) |
 | next-themes | ^0.4.6 | الوضع الليلي/النهاري |
 | framer-motion | ^12.26.2 | الحركة والانتقالات |
 | Vercel AI SDK | ^6.0.33 | streaming للردود |

@@ -16,6 +16,7 @@
 # next.js
 /.next/
 /out/
+public/pdf.worker.min.mjs
 
 # production
 /build
@@ -55,7 +56,7 @@ check-*.js
 simple-*.js
 /screenshots/debug/
 tests/screenshots/
-# 允许docs/screenshots中的演示文件
+# Allow demo files in docs/screenshots.
 !docs/screenshots/
 docs/screenshots/*
 !docs/screenshots/demo-*.gif
