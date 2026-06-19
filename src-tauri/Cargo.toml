@@ -17,7 +17,7 @@ tauri-build = { version = "2", features = [] }
 # ملاحظة: تطبيقنا يحمّل الواجهة المبنية من ../out ولا يحتاج بروتوكول الأصول
 # (protocol-asset)؛ تفعيله يتطلّب إعداد assetProtocol في tauri.conf.json ويفتح
 # صلاحية وصول إضافية للملفات بلا داعٍ، لذا أُبقي على devtools فقط.
-tauri = { version = "2", features = ["devtools"] }
+tauri = { version = "2", features = ["devtools", "tray-icon"] }
 # حفظ مفاتيح API في الـ OS Keychain بأمان
 keyring = "2"
 # اختبار الاتصال بمزوّد الذكاء الاصطناعي من Rust (يتجاوز قيود CORS)
