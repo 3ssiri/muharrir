@@ -4,92 +4,85 @@
 
 @layer base {
   :root {
-    /* ===== Light theme — "Violet Atelier" ===== */
-    --background: 250 50% 99%;
-    --foreground: 250 25% 12%;
+    /* ===== Light theme — "Coral Sunset" ===== */
+    --background: 22 60% 98%;
+    --foreground: 345 34% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 250 25% 12%;
+    --card-foreground: 345 34% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 250 25% 12%;
+    --popover-foreground: 345 34% 12%;
 
-    /* Brand primary — vivid violet */
-    --primary: 258 80% 58%;
+    /* Brand primary — warm coral */
+    --primary: 6 92% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 250 35% 95%;
-    --secondary-foreground: 258 45% 30%;
+    --secondary: 18 55% 95%;
+    --secondary-foreground: 345 30% 22%;
 
-    --muted: 250 30% 96%;
-    --muted-foreground: 250 10% 45%;
+    --muted: 20 38% 95%;
+    --muted-foreground: 345 8% 42%;
 
-    --accent: 256 75% 95%;
-    --accent-foreground: 258 60% 38%;
+    --accent: 12 88% 95%;
+    --accent-foreground: 6 78% 44%;
 
-    --destructive: 0 80% 60%;
+    --destructive: 0 80% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 152 60% 42%;
-    --warning: 38 92% 50%;
+    --success: 152 58% 40%;
+    --warning: 40 88% 52%;
+    --gold: 40 90% 55%;
 
-    --border: 250 30% 91%;
-    --input: 250 30% 90%;
-    --ring: 258 80% 58%;
+    --border: 20 32% 89%;
+    --input: 20 32% 87%;
+    --ring: 6 92% 60%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Brand gradient stops (used across the app) */
-    --brand-from: 258 80% 60%;
-    --brand-via: 276 75% 62%;
-    --brand-to: 300 70% 62%;
-
-    /* Decorative aurora blobs */
-    --aurora-1: 258 90% 70%;
-    --aurora-2: 300 85% 72%;
-    --aurora-3: 200 90% 70%;
+    /* Brand gradient stops — used sparingly (wordmark) */
+    --brand-from: 6 100% 66%;
+    --brand-via: 350 100% 65%;
+    --brand-to: 339 100% 62%;
   }
 
   .dark {
-    /* ===== Dark theme — deep violet-ink ===== */
-    --background: 255 32% 7%;
-    --foreground: 250 25% 95%;
+    /* ===== Dark theme — deep plum ===== */
+    --background: 340 30% 8%;
+    --foreground: 14 62% 94%;
 
-    --card: 255 28% 10%;
-    --card-foreground: 250 25% 95%;
+    --card: 342 26% 11%;
+    --card-foreground: 14 62% 94%;
 
-    --popover: 255 30% 9%;
-    --popover-foreground: 250 25% 95%;
+    --popover: 342 28% 10%;
+    --popover-foreground: 14 62% 94%;
 
-    --primary: 262 88% 70%;
-    --primary-foreground: 255 40% 8%;
+    --primary: 6 100% 66%;
+    --primary-foreground: 345 45% 9%;
 
-    --secondary: 255 22% 17%;
-    --secondary-foreground: 250 25% 92%;
+    --secondary: 340 20% 18%;
+    --secondary-foreground: 14 50% 92%;
 
-    --muted: 255 20% 15%;
-    --muted-foreground: 250 14% 64%;
+    --muted: 340 18% 15%;
+    --muted-foreground: 18 20% 66%;
 
-    --accent: 258 35% 22%;
-    --accent-foreground: 256 80% 88%;
+    --accent: 350 36% 20%;
+    --accent-foreground: 8 92% 80%;
 
-    --destructive: 0 70% 58%;
+    --destructive: 0 68% 55%;
     --destructive-foreground: 0 0% 100%;
 
     --success: 152 55% 50%;
-    --warning: 38 92% 58%;
+    --warning: 40 90% 58%;
+    --gold: 40 92% 60%;
 
-    --border: 255 20% 20%;
-    --input: 255 20% 22%;
-    --ring: 262 88% 70%;
+    --border: 340 16% 20%;
+    --input: 340 16% 22%;
+    --ring: 6 100% 66%;
 
-    --brand-from: 258 85% 66%;
-    --brand-via: 276 80% 68%;
-    --brand-to: 300 75% 68%;
-
-    --aurora-1: 258 80% 45%;
-    --aurora-2: 300 70% 42%;
-    --aurora-3: 210 80% 45%;
+    --brand-from: 6 100% 68%;
+    --brand-via: 350 100% 68%;
+    --brand-to: 339 100% 64%;
   }
 }
 
@@ -104,12 +97,6 @@
 
   body {
     @apply bg-background text-foreground;
-    /* subtle film-grain texture for depth */
-    background-image: radial-gradient(
-      hsl(var(--foreground) / 0.015) 1px,
-      transparent 1px
-    );
-    background-size: 4px 4px;
   }
 
   /* Selection */
@@ -118,166 +105,44 @@
     color: hsl(var(--foreground));
   }
 
-  /* Custom scrollbars */
+  /* Thin, minimal scrollbars */
   * {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--primary) / 0.35) transparent;
+    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
   }
   *::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
   }
   *::-webkit-scrollbar-track {
     background: transparent;
   }
   *::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary) / 0.28);
+    background-color: hsl(var(--primary) / 0.25);
     border-radius: 9999px;
     border: 2px solid transparent;
     background-clip: content-box;
   }
   *::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--primary) / 0.5);
-  }
-}
-
-@layer components {
-  /* Brand gradient text */
-  .text-gradient {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(
-      120deg,
-      hsl(var(--brand-from)),
-      hsl(var(--brand-via)),
-      hsl(var(--brand-to))
-    );
-  }
-
-  /* Brand gradient background */
-  .bg-brand {
-    background-image: linear-gradient(
-      120deg,
-      hsl(var(--brand-from)),
-      hsl(var(--brand-via)),
-      hsl(var(--brand-to))
-    );
-  }
-
-  /* Glass surfaces */
-  .glass {
-    background-color: hsl(var(--card) / 0.6);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid hsl(var(--border) / 0.6);
-  }
-  .glass-strong {
-    background-color: hsl(var(--card) / 0.82);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border: 1px solid hsl(var(--border) / 0.7);
-  }
-
-  /* Soft brand glow */
-  .glow-primary {
-    box-shadow: 0 8px 30px -8px hsl(var(--primary) / 0.45);
-  }
-
-  /* Animated gradient ring (for hero / cards) */
-  .ring-brand {
-    position: relative;
-  }
-  .ring-brand::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(
-      130deg,
-      hsl(var(--brand-from) / 0.7),
-      hsl(var(--brand-to) / 0.5),
-      transparent 60%
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-}
-
-@layer utilities {
-  /* Aurora mesh background layer */
-  .aurora-bg {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .aurora-bg::before,
-  .aurora-bg::after {
-    content: "";
-    position: absolute;
-    width: 60vmax;
-    height: 60vmax;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.5;
-    will-change: transform;
-  }
-  .aurora-bg::before {
-    top: -20vmax;
-    inset-inline-start: -15vmax;
-    background: radial-gradient(circle, hsl(var(--aurora-1) / 0.55), transparent 70%);
-    animation: aurora-float-1 22s ease-in-out infinite alternate;
-  }
-  .aurora-bg::after {
-    bottom: -25vmax;
-    inset-inline-end: -15vmax;
-    background: radial-gradient(circle, hsl(var(--aurora-2) / 0.5), transparent 70%);
-    animation: aurora-float-2 26s ease-in-out infinite alternate;
-  }
-
-  .animate-shimmer {
-    background-size: 200% 100%;
-    animation: shimmer 2.2s linear infinite;
+    background-color: hsl(var(--primary) / 0.45);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .aurora-bg::before,
-    .aurora-bg::after,
-    .animate-shimmer {
-      animation: none !important;
-    }
     html {
       scroll-behavior: auto;
     }
   }
 }
 
-@keyframes aurora-float-1 {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  100% {
-    transform: translate3d(8vmax, 6vmax, 0) scale(1.15);
-  }
-}
-
-@keyframes aurora-float-2 {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1.1);
-  }
-  100% {
-    transform: translate3d(-7vmax, -5vmax, 0) scale(1);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
+@layer components {
+  /* Coral gradient text — reserved for the brand wordmark only */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      100deg,
+      hsl(var(--brand-from)),
+      hsl(var(--brand-via)),
+      hsl(var(--brand-to))
+    );
   }
 }

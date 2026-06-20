@@ -48,6 +48,10 @@ const config = {
                     DEFAULT: "hsl(var(--warning))",
                     foreground: "hsl(0 0% 100%)",
                 },
+                gold: {
+                    DEFAULT: "hsl(var(--gold))",
+                    foreground: "hsl(345 40% 12%)",
+                },
                 muted: {
                     DEFAULT: "hsl(var(--muted))",
                     foreground: "hsl(var(--muted-foreground))",
@@ -77,16 +81,8 @@ const config = {
                 sm: "calc(var(--radius) - 4px)",
             },
             boxShadow: {
-                soft: "0 2px 12px -4px hsl(var(--foreground) / 0.08), 0 4px 24px -8px hsl(var(--foreground) / 0.06)",
-                elevated: "0 8px 30px -12px hsl(var(--foreground) / 0.18)",
-                glow: "0 8px 30px -8px hsl(var(--primary) / 0.45)",
-                "glow-lg": "0 12px 50px -10px hsl(var(--primary) / 0.55)",
-            },
-            backgroundImage: {
-                "brand-gradient":
-                    "linear-gradient(120deg, hsl(var(--brand-from)), hsl(var(--brand-via)), hsl(var(--brand-to)))",
-                "brand-radial":
-                    "radial-gradient(circle at 30% 20%, hsl(var(--brand-from) / 0.18), transparent 60%)",
+                soft: "0 1px 2px hsl(var(--foreground) / 0.04), 0 2px 8px -2px hsl(var(--foreground) / 0.06)",
+                elevated: "0 4px 16px -6px hsl(var(--foreground) / 0.12)",
             },
             keyframes: {
                 "accordion-down": {
@@ -97,25 +93,10 @@ const config = {
                     from: { height: "var(--radix-accordion-content-height)" },
                     to: { height: "0" },
                 },
-                "gradient-x": {
-                    "0%, 100%": { backgroundPosition: "0% 50%" },
-                    "50%": { backgroundPosition: "100% 50%" },
-                },
-                float: {
-                    "0%, 100%": { transform: "translateY(0)" },
-                    "50%": { transform: "translateY(-6px)" },
-                },
-                "pulse-glow": {
-                    "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.35)" },
-                    "50%": { boxShadow: "0 0 0 8px hsl(var(--primary) / 0)" },
-                },
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
-                "gradient-x": "gradient-x 6s ease infinite",
-                float: "float 5s ease-in-out infinite",
-                "pulse-glow": "pulse-glow 2.2s ease-in-out infinite",
             },
         },
     },
