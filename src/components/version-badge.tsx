@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Download } from 'lucide-react'
+import { Download } from '@/components/icons'
 
 interface VersionInfo {
   localVersion: string

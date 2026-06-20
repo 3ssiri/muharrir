@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useTranslations } from 'next-intl'
-import { Command, Search, Plus, MessageSquare, Keyboard } from 'lucide-react'
+import { Command, Search, Plus, MessageSquare, Keyboard } from '@/components/icons'
 
 interface KeyboardShortcutsDialogProps {
   open: boolean

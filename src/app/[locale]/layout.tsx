@@ -3,6 +3,7 @@ import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { Rubik } from "next/font/google";
 import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/components/theme-provider';
+import { IconProvider } from '@/components/icon-provider';
 import { getLocaleDir } from '@/i18n/config';
 import { routing } from '@/i18n/routing';
 import "../globals.css";
@@ -47,8 +48,10 @@ export default async function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-            {children}
-            <Toaster richColors closeButton position="top-center" />
+            <IconProvider>
+              {children}
+              <Toaster richColors closeButton position="top-center" />
+            </IconProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
