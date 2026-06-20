@@ -83,6 +83,103 @@
     "requestCancelled": "Request cancelled",
     "requestError": "Request error"
   },
+  "presets": {
+    "creative": {
+      "name": "Creative Writing",
+      "description": "Content and stories with flair",
+      "starter": "Role: [a creative writer]\nType: [story / article / script / poem]\nTopic or idea: [...]\nStyle and tone: [e.g. gripping, emotional]\nApproximate length: [...]"
+    },
+    "summarize": {
+      "name": "Summarize",
+      "description": "Condense long text accurately",
+      "starter": "Role: [a professional summarizer]\nText to summarize: [paste it here]\nDeliverable: [e.g. a 5-point summary + the key idea]\nAudience: [...]\nLength: [...]"
+    },
+    "translate": {
+      "name": "Translate",
+      "description": "Accurate translation between languages",
+      "starter": "Role: [a professional translator]\nFrom language: [...] To language: [...]\nText: [paste it here]\nRequirements: [preserve meaning and tone; clarify tricky terms]"
+    },
+    "proofreading": {
+      "name": "Proofread & Edit",
+      "description": "Fix grammar and improve clarity",
+      "starter": "Role: [a copy editor]\nText: [paste it here]\nTask: [fix spelling and grammar, improve clarity, keep the meaning]\nOutput format: [corrected text + list of key changes]"
+    },
+    "marketing": {
+      "name": "Marketing",
+      "description": "Persuasive marketing & ad copy",
+      "starter": "Role: [a marketing expert]\nProduct or service: [...]\nTarget audience: [...]\nTask: [e.g. ad copy / catchy headline / campaign idea]\nTone and output format: [...]"
+    },
+    "email": {
+      "name": "Professional Email",
+      "description": "Draft formal emails",
+      "starter": "Role: [a professional writing assistant]\nRecipient and occasion: [...]\nPurpose: [e.g. request a meeting / follow-up / apology]\nTone: [formal / friendly]\nOutput format: [subject line + email body]"
+    },
+    "social_media": {
+      "name": "Social Media",
+      "description": "Posts for social platforms",
+      "starter": "Role: [a content creator]\nPlatform: [X / Instagram / LinkedIn]\nTopic: [...]\nGoal: [engagement / followers / sales]\nDeliverable: [ready-to-post copy + relevant hashtags]"
+    },
+    "product": {
+      "name": "Product Copy",
+      "description": "Sales-driven product descriptions",
+      "starter": "Role: [a product copywriter]\nProduct and specs: [...]\nAudience: [...]\nTask: [a sales description that highlights benefits, not just features]\nOutput format: [headline + paragraph + bullet highlights]"
+    },
+    "customer_support": {
+      "name": "Customer Support",
+      "description": "Empathetic support replies",
+      "starter": "Role: [a courteous support agent]\nCustomer message: [paste it here]\nSituation: [complaint / question / refund request]\nTask: [an empathetic reply with a clear solution and steps]\nTone: [friendly and professional]"
+    },
+    "business_plan": {
+      "name": "Business Plan",
+      "description": "Plans and feasibility studies",
+      "starter": "Role: [a business consultant]\nVenture: [the idea and target market]\nTask: [e.g. business model / feasibility study / SWOT analysis]\nOutput format: [structured sections with headings and rough numbers]"
+    },
+    "presentation": {
+      "name": "Presentation",
+      "description": "Structured slide outlines",
+      "starter": "Role: [a presentation designer]\nTopic: [...]\nAudience and duration: [...]\nTask: [a slide outline with a title and bullets per slide]\nNumber of slides: [...]"
+    },
+    "resume": {
+      "name": "Resume / CV",
+      "description": "Resume and cover letter",
+      "starter": "Role: [a recruiting expert]\nTarget role: [...]\nMy experience and skills: [...]\nTask: [e.g. resume / cover letter]\nOutput format: [structured sections with measurable action verbs]"
+    },
+    "coding": {
+      "name": "Code Development",
+      "description": "Write and review code",
+      "starter": "Role: [an expert software engineer in the target language]\nTask: [describe the feature or function]\nContext: [framework/stack and constraints]\nOutput format: [commented code + a brief step-by-step explanation]"
+    },
+    "debugging": {
+      "name": "Debugging",
+      "description": "Diagnose and fix code errors",
+      "starter": "Role: [a debugging engineer]\nCode and error message: [paste them here]\nExpected behavior: [...]\nTask: [find the root cause and propose a fix]\nOutput format: [step-by-step diagnosis + the corrected code]"
+    },
+    "sql": {
+      "name": "SQL Queries",
+      "description": "Write and optimize database queries",
+      "starter": "Role: [a database expert]\nTables and columns: [describe the schema]\nTask: [describe the query you need in words]\nDatabase type: [PostgreSQL / MySQL ...]\nOutput format: [the SQL query + a brief explanation]"
+    },
+    "data_analysis": {
+      "name": "Data Analysis",
+      "description": "Interpret data and spot trends",
+      "starter": "Role: [a data analyst]\nData: [describe or paste it here]\nTask: [e.g. find trends / compare / actionable insights]\nOutput format: [a table + a key-points summary]"
+    },
+    "academic": {
+      "name": "Academic Research",
+      "description": "Literature review and methodology",
+      "starter": "Role: [an academic researcher in the target field]\nTopic or research question: [...]\nTask: [e.g. literature review / design a methodology / form hypotheses]\nRequirements: [cite sources, formal tone]\nOutput format: [structured sections with headings]"
+    },
+    "teaching": {
+      "name": "Teach & Explain",
+      "description": "Simple explanations and lesson plans",
+      "starter": "Role: [an expert teacher]\nTopic: [...]\nLearner level: [beginner / intermediate / advanced]\nTask: [e.g. simple explanation / lesson plan / examples and exercises]\nOutput format: [progressive steps with examples]"
+    },
+    "brainstorm": {
+      "name": "Brainstorm",
+      "description": "Generate diverse ideas and solutions",
+      "starter": "Role: [a brainstorming partner]\nChallenge or goal: [...]\nConstraints: [...]\nTask: [e.g. 10 diverse ideas, each with pros and cons]\nOutput format: [a numbered list]"
+    }
+  },
   "welcome": {
     "title": "Build Perfect Prompts",
     "subtitle": "Transform vague ideas into precise, structured AI instructions through multi-turn interactive guidance.",
