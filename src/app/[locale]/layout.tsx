@@ -1,15 +1,20 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
-import { Inter, Cairo } from "next/font/google";
+import { Rubik } from "next/font/google";
 import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/components/theme-provider';
+import { IconProvider } from '@/components/icon-provider';
 import { getLocaleDir } from '@/i18n/config';
 import { routing } from '@/i18n/routing';
 import "../globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
-// Arabic font for rendering a high-quality RTL interface
-const cairo = Cairo({ subsets: ["arabic"] });
+// Rubik covers both Arabic and Latin, giving a single cohesive, modern typeface
+// across the whole bilingual UI. Used for body text and (heavier) headings alike.
+const rubik = Rubik({
+  subsets: ["arabic", "latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-sans",
+});
 
 // Generate static pages for each language (required with output: 'export')
 export function generateStaticParams() {
@@ -30,13 +35,12 @@ export default async function LocaleLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
 
-  // Determine the page direction and the appropriate font based on the language (RTL for Arabic)
+  // Determine the page direction based on the language (RTL for Arabic)
   const dir = getLocaleDir(locale);
-  const fontClass = locale === 'ar' ? cairo.className : inter.className;
 
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
-      <body className={`${fontClass} antialiased`}>
+      <body className={`${rubik.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -44,8 +48,10 @@ export default async function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-            {children}
-            <Toaster />
+            <IconProvider>
+              {children}
+              <Toaster richColors closeButton position="top-center" />
+            </IconProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

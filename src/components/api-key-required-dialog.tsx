@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertCircle, Settings } from 'lucide-react'
+import { AlertCircle, Settings } from '@/components/icons'
 import {
   Dialog,
   DialogContent,

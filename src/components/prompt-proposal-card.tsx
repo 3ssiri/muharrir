@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Copy, Check, RefreshCw, Sparkles, Send, Maximize2, X, Star } from 'lucide-react'
+import { Copy, Check, RefreshCw, Sparkles, Send, Maximize2, X, Star } from '@/components/icons'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -146,24 +146,24 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
 
     return (
         <>
-        <Card className="w-full max-w-5xl border-primary/50 shadow-md overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <CardHeader className="bg-muted/30 pb-3">
+        <Card className="w-full max-w-5xl border-border shadow-elevated overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-500 py-0 gap-0">
+            <CardHeader className="bg-primary text-primary-foreground pb-4 pt-5">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-primary" />
-                        <CardTitle className="text-lg">{proposal.title}</CardTitle>
+                        <Sparkles className="w-5 h-5" />
+                        <CardTitle className="text-lg text-primary-foreground">{proposal.title}</CardTitle>
                     </div>
                     <div className="flex items-center gap-2">
                         <Button
                             size="icon"
-                            variant={favorited ? "default" : "secondary"}
-                            className={`h-8 w-8 transition-all ${favorited ? 'bg-yellow-500 hover:bg-yellow-600' : 'opacity-80 hover:opacity-100'}`}
+                            variant="secondary"
+                            className={`h-8 w-8 transition-colors border-0 ${favorited ? 'bg-gold hover:bg-gold/90 text-gold-foreground' : 'bg-white/20 hover:bg-white/30 text-primary-foreground'}`}
                             onClick={handleFavorite}
                             title={favorited ? t('promptProposal.unfavorite') : t('promptProposal.favorite')}
                         >
-                            <Star className={`w-4 h-4 transition-all duration-300 ${favorited ? 'fill-white text-white' : ''}`} />
+                            <Star className={`w-4 h-4 transition-all duration-300 ${favorited ? 'fill-current' : ''}`} />
                         </Button>
-                        <Badge variant="outline" className="bg-background">اقتراح منظّم</Badge>
+                        <Badge variant="outline" className="bg-white/15 text-primary-foreground border-white/30">اقتراح منظّم</Badge>
                     </div>
                 </div>
             </CardHeader>

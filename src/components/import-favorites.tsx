@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Upload } from 'lucide-react'
+import { Upload } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { db } from '@/lib/db'
 import { importFromJSON, importFromMarkdown } from '@/lib/import-utils'

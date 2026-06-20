@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Send, Sparkles, Check, Pencil } from 'lucide-react'
+import { Send, Sparkles, Check, Pencil } from '@/components/icons'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -219,14 +219,16 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
     }
 
     return (
-        <Card className="w-full max-w-5xl mx-auto border-primary/20 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <CardHeader className="bg-primary/5 pb-3">
+        <Card className="w-full max-w-5xl mx-auto border-border shadow-elevated animate-in fade-in slide-in-from-bottom-2 duration-500 py-0 gap-0 overflow-hidden">
+            <CardHeader className="bg-primary text-primary-foreground pb-4 pt-5">
                 <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-primary" />
-                    <CardTitle className="text-base">{t('enhancementForm.title')}</CardTitle>
+                    <Sparkles className="w-5 h-5" />
+                    <CardTitle className="text-base text-primary-foreground">{t('enhancementForm.title')}</CardTitle>
                 </div>
-                <p className="text-xs text-muted-foreground">{t('enhancementForm.subtitle')}</p>
+                <p className="text-xs text-primary-foreground/80">{t('enhancementForm.subtitle')}</p>
             </CardHeader>
+
+            <div className="pt-2" />
 
             <CardContent className="p-0">
                 <div className="flex flex-col">
