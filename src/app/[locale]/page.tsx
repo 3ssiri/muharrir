@@ -27,7 +27,7 @@ import { KeyboardShortcutsDialog } from '@/components/keyboard-shortcuts-dialog'
 import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
 import { useTranslations } from 'next-intl'
 import { streamChat } from '@/lib/chat-client'
-import { consumeChatStream, classifyChatError } from '@/lib/chat-stream'
+import { consumeChatStream, classifyChatError, type UiMessage, type ToolInvocation } from '@/lib/chat-stream'
 import { estimateTokens } from '@/lib/token-estimate'
 import { log } from '@/lib/logger'
 import { isTauriApp } from '@/lib/tauri-bridge'
@@ -48,9 +48,9 @@ export default function Home() {
   // Core fix: use local state and ref
   const [localInput, setLocalInput] = useState('')
   const aiContentRef = useRef('')
-  const aiToolInvocationsRef = useRef<any[]>([])
+  const aiToolInvocationsRef = useRef<ToolInvocation[]>([])
 
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<UiMessage[]>([])
   // Always-current snapshot of messages, so memoized callbacks passed to
   // MessageItem can stay referentially stable (don't close over `messages`).
   const messagesRef = useRef(messages)
@@ -253,11 +253,11 @@ export default function Home() {
 
     const loadHistory = async () => {
       const history = await db.messages.where('sessionId').equals(sessionId).sortBy('createdAt')
-      const uiMessages = history.map(m => ({
+      const uiMessages: UiMessage[] = history.map(m => ({
         id: m.id?.toString() || Math.random().toString(),
-        role: m.role as any,
+        role: (m.role === 'data' ? 'assistant' : m.role) as UiMessage['role'],
         content: m.content,
-        toolInvocations: m.toolInvocations,
+        toolInvocations: m.toolInvocations as ToolInvocation[] | undefined,
         files: m.files
       }))
       setMessages(uiMessages)
@@ -313,7 +313,7 @@ export default function Home() {
       userContent = `${localInput}\n\n${fileContents}`
     }
 
-    const userMessage = {
+    const userMessage: UiMessage = {
       id: Math.random().toString(),
       role: 'user',
       content: userContent,
@@ -358,7 +358,7 @@ export default function Home() {
     })
 
     const aiMessageId = aiDbId.toString()
-    const aiMessage = {
+    const aiMessage: UiMessage = {
       id: aiMessageId,
       role: 'assistant',
       content: ''
@@ -672,7 +672,7 @@ export default function Home() {
   }, [])
 
   const handleDeleteMessage = useCallback(async (id: string, _sessionId: number | null) => {
-    setMessages(prev => prev.filter((m: any) => m.id !== id))
+    setMessages(prev => prev.filter((m) => m.id !== id))
 
     if (id) {
       const dbId = parseInt(id)
@@ -683,9 +683,9 @@ export default function Home() {
     }
   }, [])
 
-  const append = useCallback(async (message: any) => {
+  const append = useCallback(async (message: { content: string; role?: string }) => {
     // Add the user message
-    const userMessage = {
+    const userMessage: UiMessage = {
       id: Math.random().toString(),
       role: 'user',
       content: message.content
@@ -719,7 +719,7 @@ export default function Home() {
     })
 
     const aiMessageId = aiDbId.toString()
-    const aiMessage = {
+    const aiMessage: UiMessage = {
       id: aiMessageId,
       role: 'assistant',
       content: ''
@@ -774,7 +774,7 @@ export default function Home() {
   const handleRetry = useCallback(async (messageIndex: number) => {
     // Find the last user message before the current assistant message
     const current = messagesRef.current
-    const userMessages = current.slice(0, messageIndex).filter((m: any) => m.role === 'user')
+    const userMessages = current.slice(0, messageIndex).filter((m) => m.role === 'user')
     if (userMessages.length === 0) return
 
     const lastUserMessage = userMessages[userMessages.length - 1]
@@ -968,7 +968,7 @@ export default function Home() {
               </div>
             ) : (
               <div className="flex flex-col gap-3">
-                {messages.map((m: any, index) => (
+                {messages.map((m, index) => (
                   <MessageItem
                     key={m.id}
                     m={m}
