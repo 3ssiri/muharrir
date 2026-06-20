@@ -3223,7 +3223,7 @@ dependencies = [
 
 [[package]]
 name = "prompt-iterator"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "keyring",
  "reqwest 0.12.28",
