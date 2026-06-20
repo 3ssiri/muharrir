@@ -9,41 +9,70 @@ import { invoke } from '@tauri-apps/api/core';
 
 const LS_PREFIX = 'api-key:';
 
+/** Where an API key ended up being stored. */
+export type KeyStorage = 'keychain' | 'localStorage' | 'localStorage-fallback';
+
 /** Is the app running inside Tauri? */
 export function isTauriApp(): boolean {
   return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
 }
 
-/** Save an API key (Keychain inside Tauri, or localStorage in the browser) */
-export async function saveApiKey(provider: string, apiKey: string): Promise<void> {
+/**
+ * Save an API key.
+ * - Browser: localStorage.
+ * - Tauri: the OS Keychain. If the keychain is unavailable (e.g. no Secret
+ *   Service / gnome-keyring on Linux — a common cause of "saving the key
+ *   failed"), fall back to localStorage so the app stays usable, and report
+ *   it via the returned status so the caller can warn the user.
+ */
+export async function saveApiKey(provider: string, apiKey: string): Promise<KeyStorage> {
   if (isTauriApp()) {
-    await invoke('save_api_key', { provider, apiKey });
-    return;
+    try {
+      await invoke('save_api_key', { provider, apiKey });
+      // A previous insecure fallback (if any) is now redundant.
+      try { localStorage.removeItem(LS_PREFIX + provider); } catch { /* ignore */ }
+      return 'keychain';
+    } catch (e) {
+      // Keychain failed — persist locally so the key survives restarts.
+      localStorage.setItem(LS_PREFIX + provider, apiKey);
+      return 'localStorage-fallback';
+    }
   }
   localStorage.setItem(LS_PREFIX + provider, apiKey);
+  return 'localStorage';
 }
 
-/** Get the saved API key (empty string if not found in browser mode) */
+/** Get the saved API key (empty string if none found). */
 export async function getApiKey(provider: string): Promise<string> {
   if (isTauriApp()) {
-    return await invoke<string>('get_api_key', { provider });
+    try {
+      const key = await invoke<string>('get_api_key', { provider });
+      if (key) return key;
+    } catch {
+      // NoEntry or keychain unavailable — fall through to the local fallback.
+    }
+    return localStorage.getItem(LS_PREFIX + provider) ?? '';
   }
   return localStorage.getItem(LS_PREFIX + provider) ?? '';
 }
 
-/** Delete the saved API key */
+/** Delete the saved API key (clears both the keychain and any local fallback). */
 export async function deleteApiKey(provider: string): Promise<void> {
   if (isTauriApp()) {
-    await invoke('delete_api_key', { provider });
+    try { await invoke('delete_api_key', { provider }); } catch { /* ignore */ }
+    try { localStorage.removeItem(LS_PREFIX + provider); } catch { /* ignore */ }
     return;
   }
   localStorage.removeItem(LS_PREFIX + provider);
 }
 
-/** Check whether a saved API key exists */
+/** Check whether a saved API key exists (keychain or local fallback). */
 export async function hasApiKey(provider: string): Promise<boolean> {
   if (isTauriApp()) {
-    return await invoke<boolean>('has_api_key', { provider });
+    try {
+      if (await invoke<boolean>('has_api_key', { provider })) return true;
+    } catch { /* ignore */ }
+    return localStorage.getItem(LS_PREFIX + provider) !== null;
   }
   return localStorage.getItem(LS_PREFIX + provider) !== null;
 }

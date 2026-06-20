@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { toast } from 'sonner'
 import { isTauriApp, saveApiKey as keychainSave, getApiKey as keychainGet } from './tauri-bridge'
+import { log } from './logger'
 import type { Provider } from './providers'
 
 // اسم المزوّد الافتراضي المستخدَم كمفتاح في الـ OS Keychain
@@ -37,7 +39,7 @@ const defaultSettings: AppSettings = {
   apiKey: '',
   baseUrl: 'https://api.deepseek.com',
   model: 'deepseek-chat',
-  correctionModel: 'grok-beta-fast',
+  correctionModel: '', // فارغ = استخدم نموذج المحادثة نفسه للتصحيح (الأكثر أمانًا عبر المزوّدين)
   autoRetry: true, // Enable automatic retry by default
   maxRetries: 3, // The default maximum number of attempts is 3
   customProviders: [],
@@ -51,11 +53,24 @@ export const useAppStore = create<AppState>()(
       ...defaultSettings,
       setApiKey: (apiKey) => {
         set({ apiKey })
-        // داخل Tauri: نخزّن المفتاح بأمان في الـ OS Keychain (لا نتركه في localStorage)
-        if (isTauriApp()) {
-          keychainSave(KEYCHAIN_PROVIDER, apiKey).catch((e) =>
-            console.error('فشل حفظ المفتاح في الـ Keychain:', e)
-          )
+        // داخل Tauri: نخزّن المفتاح بأمان في الـ OS Keychain (لا نتركه في localStorage).
+        // إن تعذّر الوصول إلى الـ Keychain (مثلاً لا توجد خدمة أسرار على Linux)
+        // فإن tauri-bridge يحفظه محليًّا كحلٍّ بديل ونُعلِم المستخدم بذلك.
+        if (isTauriApp() && apiKey) {
+          keychainSave(KEYCHAIN_PROVIDER, apiKey)
+            .then((storage) => {
+              if (storage === 'localStorage-fallback') {
+                toast.warning(
+                  'تعذّر الوصول إلى مخزن مفاتيح النظام؛ حُفظ المفتاح محليًّا بدلاً من ذلك. ' +
+                  'قد يتطلّب نظامك خدمة أسرار (مثل gnome-keyring) لتخزينٍ أكثر أمانًا.',
+                  { duration: 7000 }
+                )
+              }
+            })
+            .catch((e) => {
+              log.error('فشل حفظ المفتاح:', e)
+              toast.error('فشل حفظ مفتاح API. يرجى المحاولة مجددًا.')
+            })
         }
       },
       // تحميل المفتاح المحفوظ من الـ Keychain (يُستدعى مرّة عند بدء التطبيق)
@@ -65,7 +80,7 @@ export const useAppStore = create<AppState>()(
           const key = await keychainGet(KEYCHAIN_PROVIDER)
           if (key) set({ apiKey: key })
         } catch (e) {
-          console.error('فشل تحميل المفتاح من الـ Keychain:', e)
+          log.error('فشل تحميل المفتاح من الـ Keychain:', e)
         }
       },
       setBaseUrl: (baseUrl) => set({ baseUrl }),

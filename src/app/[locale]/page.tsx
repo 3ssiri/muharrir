@@ -32,6 +32,9 @@ import { KeyboardShortcutsDialog } from '@/components/keyboard-shortcuts-dialog'
 import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
 import { useTranslations } from 'next-intl'
 import { streamChat } from '@/lib/chat-client'
+import { consumeChatStream, classifyChatError } from '@/lib/chat-stream'
+import { estimateTokens } from '@/lib/token-estimate'
+import { log } from '@/lib/logger'
 import { isTauriApp } from '@/lib/tauri-bridge'
 
 export default function Home() {
@@ -87,7 +90,7 @@ export default function Home() {
   useEffect(() => {
     return () => {
       if (abortControllerRef.current) {
-        console.log('Component unmounting, aborting request')
+        log.debug('Component unmounting, aborting request')
         abortControllerRef.current.abort()
       }
     }
@@ -366,7 +369,7 @@ export default function Home() {
     setMessages(prev => [...prev, aiMessage])
 
     try {
-      console.log('Starting chat request...')
+      log.debug('Starting chat request...')
       const response = await streamChat({
         messages: [...messages, userMessage],
         model: model,
@@ -382,115 +385,34 @@ export default function Home() {
         throw new Error(errorText || `HTTP error! status: ${response.status}`)
       }
 
-      const reader = response.body?.getReader()
-      if (!reader) {
-        throw new Error('No reader available')
-      }
-
-      const decoder = new TextDecoder()
-      console.log('Starting to read stream...')
-      let chunkCount = 0
-      let lastChunkTime = Date.now()
-      const TIMEOUT_MS = 30000 // 30 second timeout
-      let buffer = ''
-
-      while (true) {
-        // Add timeout detection
-        if (Date.now() - lastChunkTime > TIMEOUT_MS) {
-          console.warn('Stream timeout - no data received for 30s')
-          break
-        }
-
-        try {
-          const { done, value } = await reader.read()
-
-          if (done) {
-            console.log('Stream complete normally')
-            break
-          }
-
-          lastChunkTime = Date.now()
-          chunkCount++
-          const chunk = decoder.decode(value, { stream: true })
-          console.log(`Chunk ${chunkCount} raw:`, chunk.substring(0, 100))
-          buffer += chunk
-
-          // Parse the Vercel AI SDK data stream protocol
-          const lines = buffer.split('\n')
-          buffer = lines.pop() || '' // Keep the last incomplete line
-
-          for (const line of lines) {
-            if (!line.trim()) continue
-
-            console.log('Processing line:', line.substring(0, 100))
-
-            try {
-              // The Vercel AI SDK uses the format: "0:text" or "9:{json}" or "e:{error}"
-              if (line.startsWith('0:')) {
-                // Text content
-                const text = JSON.parse(line.slice(2))
-                aiContentRef.current += text
-                console.log('Text added, total length:', aiContentRef.current.length)
-              } else if (line.startsWith('9:')) {
-                // Tool call
-                const toolData = JSON.parse(line.slice(2))
-                console.log('Tool call detected:', toolData)
-                aiToolInvocationsRef.current.push(toolData)
-                setIsToolRendering(true) // Signal that the tool is being rendered
-              } else if (line.startsWith('e:')) {
-                // Error info
-                const errorData = JSON.parse(line.slice(2))
-                console.error('Stream error detected:', errorData)
-
-                // Stop processing the stream immediately and display the error
-                throw new Error(errorData.message || 'Stream error')
-              } else {
-                // Might be another format, accumulate it directly as text
-                console.log('Unknown format, treating as text')
-                aiContentRef.current += line
-              }
-            } catch (parseError) {
-              console.warn('Failed to parse line:', line.substring(0, 50), parseError)
-              // If it is an error object, re-throw it
-              if (parseError instanceof Error && parseError.message.includes('Stream error')) {
-                throw parseError
-              }
-              // When parsing fails, treat it as plain text
-              aiContentRef.current += line
-            }
-          }
-
-          // Update the message display
-          setMessages(prev => {
-            const updated = prev.map(m =>
-              m.id === aiMessageId ? {
-                ...m,
-                content: aiContentRef.current,
-                toolInvocations: aiToolInvocationsRef.current.length > 0 ? aiToolInvocationsRef.current : undefined
-              } : m
-            )
-            return updated
-          })
-
-          // Update the database in real time (once every 10 chunks)
-          if (chunkCount % 10 === 0) {
+      // Stream the response through the shared consumer (single source of truth).
+      let streamChunkCount = 0
+      const { content: finalContent, toolInvocations: finalTools } = await consumeChatStream(
+        response,
+        (content, tools) => {
+          aiContentRef.current = content
+          aiToolInvocationsRef.current = tools
+          if (tools.length > 0) setIsToolRendering(true)
+          setMessages(prev => prev.map(m =>
+            m.id === aiMessageId
+              ? { ...m, content, toolInvocations: tools.length > 0 ? tools : undefined }
+              : m
+          ))
+          streamChunkCount++
+          if (streamChunkCount % 10 === 0) {
             db.messages.update(parseInt(aiMessageId), {
-              content: aiContentRef.current,
-              toolInvocations: aiToolInvocationsRef.current.length > 0 ? aiToolInvocationsRef.current : undefined
-            }).catch(err => console.error('Failed to update message:', err))
+              content,
+              toolInvocations: tools.length > 0 ? tools : undefined,
+            }).catch(err => log.error('Failed to update message:', err))
           }
-        } catch (readError: any) {
-          console.error('Stream read error:', readError)
-          break
         }
-      }
-
-      console.log('Final AI content length:', aiContentRef.current.length)
-      console.log('Tool invocations count:', aiToolInvocationsRef.current.length)
+      )
+      aiContentRef.current = finalContent
+      aiToolInvocationsRef.current = finalTools
 
       // Detect an empty response
       if (aiContentRef.current.length === 0 && aiToolInvocationsRef.current.length === 0) {
-        console.warn('Empty response detected - treating as authentication error')
+        log.warn('Empty response detected - treating as authentication error')
 
         // An empty response usually means an error in the API key configuration or a permissions issue
         const errorType = 'auth'
@@ -527,27 +449,16 @@ export default function Home() {
       }
 
     } catch (error: any) {
-      console.error('Chat error:', error)
-
-      // Determine the error type
-      let errorType: 'network' | 'auth' | 'quota' | 'server' | 'unknown' = 'unknown'
-      const errorMessage = error.message || 'خطأ غير معروف'
-
-      if (error.name === 'AbortError') {
-        console.log('Request was aborted')
+      // Aborts are user-initiated, not failures.
+      if (error?.name === 'AbortError') {
         toast.info('تم إلغاء الطلب', { duration: 2000 })
         return
       }
 
-      if (errorMessage.includes('Authentication Failed') || errorMessage.includes('401')) {
-        errorType = 'auth'
-      } else if (errorMessage.includes('Connection Failed') || errorMessage.includes('fetch failed')) {
-        errorType = 'network'
-      } else if (errorMessage.includes('429') || errorMessage.includes('quota')) {
-        errorType = 'quota'
-      } else if (errorMessage.includes('500') || errorMessage.includes('502') || errorMessage.includes('503')) {
-        errorType = 'server'
-      }
+      log.error('Chat error:', error)
+
+      // Classify the error into a typed, user-facing category.
+      const { type: errorType, message: errorMessage } = classifyChatError(error)
 
       // Update the AI message and add the error info
       await db.messages.update(parseInt(aiMessageId), {
@@ -568,9 +479,7 @@ export default function Home() {
 
       toast.error(`حدث خطأ في الطلب: ${errorMessage}`, { duration: 4000 })
     } finally {
-      console.log('Setting isLoading to false')
       setIsLoading(false)
-      console.log('isLoading set to false')
 
       // Clean up the AbortController reference
       if (abortControllerRef.current === abortController) {
@@ -686,7 +595,7 @@ export default function Home() {
         fileText = fullText
         toast.success(`تم تحليل PDF (${pdf.numPages} صفحة)`)
       } catch (error: any) {
-        console.error('خطأ في تحليل PDF:', error)
+        log.error('خطأ في تحليل PDF:', error)
         toast.error(`فشل تحليل PDF: ${error.message || 'خطأ غير معروف'}`)
       }
     }
@@ -703,7 +612,7 @@ export default function Home() {
         fileText = result.value
         toast.success('تم تحليل DOCX')
       } catch (error: any) {
-        console.error('خطأ في تحليل DOCX:', error)
+        log.error('خطأ في تحليل DOCX:', error)
         toast.error(`فشل تحليل DOCX: ${error.message || 'خطأ غير معروف'}`)
       }
     }
@@ -714,7 +623,7 @@ export default function Home() {
         fileText = text
         toast.success('تم قراءة الملف النصي')
       } catch (error: any) {
-        console.error('خطأ في قراءة الملف النصي:', error)
+        log.error('خطأ في قراءة الملف النصي:', error)
         toast.error(`فشل قراءة الملف: ${error.message || 'خطأ غير معروف'}`)
       }
     }
@@ -845,55 +754,29 @@ export default function Home() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
-      const reader = response.body?.getReader()
-      if (!reader) throw new Error('No reader available')
-
-      const decoder = new TextDecoder()
-      let buffer = ''
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        const chunk = decoder.decode(value, { stream: true })
-        buffer += chunk
-
-        const lines = buffer.split('\n')
-        buffer = lines.pop() || ''
-
-        for (const line of lines) {
-          if (!line.trim()) continue
-
-          try {
-            if (line.startsWith('0:')) {
-              const text = JSON.parse(line.slice(2))
-              aiContentRef.current += text
-            } else if (line.startsWith('9:')) {
-              const toolData = JSON.parse(line.slice(2))
-              aiToolInvocationsRef.current.push(toolData)
-            }
-          } catch (e) {
-            aiContentRef.current += line
-          }
+      // Reuse the shared stream consumer (same path as onFormSubmit).
+      const { content: finalContent, toolInvocations: finalTools } = await consumeChatStream(
+        response,
+        (content, tools) => {
+          aiContentRef.current = content
+          aiToolInvocationsRef.current = tools
+          setMessages(prev => prev.map(m =>
+            m.id === aiMessageId
+              ? { ...m, content, toolInvocations: tools.length > 0 ? tools : undefined }
+              : m
+          ))
         }
-
-        setMessages(prev => prev.map(m =>
-          m.id === aiMessageId ? {
-            ...m,
-            content: aiContentRef.current,
-            toolInvocations: aiToolInvocationsRef.current.length > 0 ? aiToolInvocationsRef.current : undefined
-          } : m
-        ))
-      }
+      )
 
       // Save to the database
       await db.messages.update(parseInt(aiMessageId), {
-        content: aiContentRef.current,
-        toolInvocations: aiToolInvocationsRef.current.length > 0 ? aiToolInvocationsRef.current : undefined
+        content: finalContent,
+        toolInvocations: finalTools.length > 0 ? finalTools : undefined
       })
 
     } catch (error: any) {
-      console.error('Chat error:', error)
+      if (error?.name === 'AbortError') return
+      log.error('Chat error:', error)
       toast.error(`حدث خطأ في الطلب: ${error.message}`)
     } finally {
       setIsLoading(false)
@@ -901,7 +784,6 @@ export default function Home() {
   }
 
   const stop = () => {
-    console.log('Stop button clicked')
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
@@ -1443,8 +1325,13 @@ export default function Home() {
                 </Button>
               )}
             </form>
-            <div className="text-center text-xs text-muted-foreground mt-2">
-              {t('chat.disclaimer')}
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <span className="text-xs text-muted-foreground">{t('chat.disclaimer')}</span>
+              {localInput.trim() && (
+                <span className="text-[11px] text-muted-foreground/80 tabular-nums shrink-0">
+                  · ≈ {estimateTokens(localInput)} tok
+                </span>
+              )}
             </div>
           </div>
         </div>

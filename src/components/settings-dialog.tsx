@@ -220,7 +220,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                 }
             }
         }
-    }, [open, apiKey, baseUrl, model, systemPrompt, DEFAULT_SYSTEM_PROMPT])
+    }, [open, apiKey, baseUrl, model, systemPrompt, correctionModel, autoRetry, maxRetries, DEFAULT_SYSTEM_PROMPT])
 
     const normalizeUrl = (url: string) => {
         let cleanUrl = url.trim()
