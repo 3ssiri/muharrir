@@ -24,6 +24,7 @@ import { FileUpload } from '@/components/file-upload'
 import { AutoResizeTextarea } from '@/components/auto-resize-textarea'
 import { FileAttachmentIcon } from '@/components/file-attachment-icon'
 import { FavoritesPage } from '@/components/favorites-page'
+import { PresetGallery } from '@/components/preset-gallery'
 import { SpotlightSearch } from '@/components/spotlight-search'
 import { ImagePreview } from '@/components/image-preview'
 import { VersionBadge } from '@/components/version-badge'
@@ -959,6 +960,8 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
+
+                <PresetGallery onSelect={setLocalInput} />
               </div>
             ) : (
               <div className="flex flex-col gap-3">
@@ -1188,20 +1191,20 @@ export default function Home() {
 
                     {/* Message Actions */}
                     <div className={`absolute -bottom-6 ${m.role === 'user' ? 'end-12' : 'start-12'} opacity-0 group-hover:opacity-100 transition-opacity flex gap-1`}>
-                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleCopy(m.content)}>
+                      <Button aria-label={t('a11y.copy')} variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleCopy(m.content)}>
                         <Copy className="w-3 h-3" />
                       </Button>
                       {m.role === 'user' && (
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleEdit(m.content)}>
+                        <Button aria-label={t('a11y.edit')} variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleEdit(m.content)}>
                           <Pencil className="w-3 h-3" />
                         </Button>
                       )}
                       {m.role === 'assistant' && (
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleRetry(index)}>
+                        <Button aria-label={t('a11y.retry')} variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleRetry(index)}>
                           <RotateCcw className="w-3 h-3" />
                         </Button>
                       )}
-                      <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive/50 hover:text-destructive" onClick={() => handleDeleteMessage(m.id, sessionId)}>
+                      <Button aria-label={t('a11y.delete')} variant="ghost" size="icon" className="h-6 w-6 text-destructive/50 hover:text-destructive" onClick={() => handleDeleteMessage(m.id, sessionId)}>
                         <Trash2 className="w-3 h-3" />
                       </Button>
                     </div>
@@ -1272,7 +1275,8 @@ export default function Home() {
                   size="icon"
                   className="h-10 w-10 shrink-0"
                   onClick={() => document.getElementById('file-input')?.click()}
-                  title="رفع ملف"
+                  title={t('a11y.upload')}
+                  aria-label={t('a11y.upload')}
                 >
                   <Upload className="w-4 h-4" />
                 </Button>
@@ -1308,6 +1312,7 @@ export default function Home() {
               <Button
                 type="submit"
                 size="icon"
+                aria-label={t('a11y.send')}
                 disabled={isLoading || (!localInput?.trim())}
                 className={`h-10 w-10 mb-1 me-1 shrink-0 rounded-lg ${isLoading ? 'hidden' : 'flex'}`}
               >
@@ -1318,6 +1323,7 @@ export default function Home() {
                   type="button"
                   size="icon"
                   variant="destructive"
+                  aria-label={t('a11y.stop')}
                   onClick={() => stop()}
                   className="h-10 w-10 mb-1 me-1 shrink-0 rounded-lg animate-in fade-in zoom-in"
                 >
