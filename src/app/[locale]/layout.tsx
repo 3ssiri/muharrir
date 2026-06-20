@@ -16,6 +16,20 @@ const rubik = Rubik({
   variable: "--font-sans",
 });
 
+// PWA: make the app installable (manifest + theme color).
+export const metadata = {
+  manifest: '/manifest.webmanifest',
+  applicationName: 'Prompt Iterator',
+  appleWebApp: { capable: true, title: 'Muharrir', statusBarStyle: 'default' as const },
+};
+
+export const viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f5efdd' },
+    { media: '(prefers-color-scheme: dark)', color: '#2b2420' },
+  ],
+};
+
 // Generate static pages for each language (required with output: 'export')
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
