@@ -1,15 +1,17 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
-import { Inter, Cairo } from "next/font/google";
+import { Inter, Cairo, Sora } from "next/font/google";
 import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/components/theme-provider';
 import { getLocaleDir } from '@/i18n/config';
 import { routing } from '@/i18n/routing';
 import "../globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 // Arabic font for rendering a high-quality RTL interface
-const cairo = Cairo({ subsets: ["arabic"] });
+const cairo = Cairo({ subsets: ["arabic"], variable: "--font-sans" });
+// Expressive display font for the brand wordmark and headings
+const sora = Sora({ subsets: ["latin"], variable: "--font-display", weight: ["500", "600", "700", "800"] });
 
 // Generate static pages for each language (required with output: 'export')
 export function generateStaticParams() {
@@ -32,20 +34,22 @@ export default async function LocaleLayout({
 
   // Determine the page direction and the appropriate font based on the language (RTL for Arabic)
   const dir = getLocaleDir(locale);
-  const fontClass = locale === 'ar' ? cairo.className : inter.className;
+  const bodyFont = locale === 'ar' ? cairo.variable : inter.variable;
 
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
-      <body className={`${fontClass} antialiased`}>
+      <body className={`${bodyFont} ${sora.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          {/* Decorative aurora mesh that sits behind the entire app */}
+          <div className="aurora-bg" aria-hidden="true" />
           <NextIntlClientProvider messages={messages}>
             {children}
-            <Toaster />
+            <Toaster richColors closeButton position="top-center" />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
