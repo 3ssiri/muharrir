@@ -138,7 +138,21 @@
     "unfavorite": "Remove from Favorites",
     "favoriteAdded": "Added to favorites",
     "favoriteRemoved": "Removed from favorites",
-    "favoriteFailed": "Operation failed"
+    "favoriteFailed": "Operation failed",
+    "structuredBadge": "Structured proposal",
+    "accepted": "Prompt proposal accepted: {title}",
+    "tabPreview": "Preview",
+    "tabStructure": "Structure",
+    "finalPrompt": "Final Prompt",
+    "role": "Role",
+    "objective": "Objective",
+    "context": "Context",
+    "workflow": "Workflow",
+    "noWorkflow": "No specific steps",
+    "constraints": "Constraints",
+    "modificationsHint": "For modifications, please provide feedback in the chat",
+    "accept": "Accept",
+    "previewHeading": "Prompt Preview"
   },
   "favorites": {
     "title": "My Favorites",
