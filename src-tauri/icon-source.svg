@@ -1,0 +1,32 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFB45E"/>
+      <stop offset="0.5" stop-color="#FB7B41"/>
+      <stop offset="1" stop-color="#EE4F2C"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="20" stdDeviation="30" flood-color="#6e2410" flood-opacity="0.30"/>
+    </filter>
+  </defs>
+
+  <!-- warm squircle tile -->
+  <rect x="64" y="64" width="896" height="896" rx="236" fill="url(#bg)"/>
+  <rect x="64" y="64" width="896" height="896" rx="236" fill="url(#sheen)"/>
+
+  <!-- prompt / chat bubble -->
+  <g filter="url(#soft)">
+    <rect x="212" y="300" width="600" height="312" rx="92" fill="#FFFFFF"/>
+    <path d="M356 590 L342 716 L470 600 Z" fill="#FFFFFF"/>
+  </g>
+
+  <!-- central sparkle (optimization / AI) -->
+  <path d="M512 336 c20 80 40 100 120 120 c-80 20 -100 40 -120 120 c-20 -80 -40 -100 -120 -120 c80 -20 100 -40 120 -120 Z" fill="url(#bg)"/>
+
+  <!-- small accent sparkle -->
+  <path d="M792 206 c7 29 16 38 45 45 c-29 7 -38 16 -45 45 c-7 -29 -16 -38 -45 -45 c29 -7 38 -16 45 -45 Z" fill="#FFFFFF" opacity="0.85"/>
+</svg>
