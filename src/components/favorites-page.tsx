@@ -14,6 +14,7 @@ import { ar, enUS } from 'date-fns/locale'
 import { useTranslations, useLocale } from 'next-intl'
 import { ExportFavorites } from '@/components/export-favorites'
 import { ImportFavorites } from '@/components/import-favorites'
+import { CompareDialog } from '@/components/compare-dialog'
 
 export function FavoritesPage() {
   const t = useTranslations();
@@ -95,6 +96,14 @@ export function FavoritesPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+        {favorites.length >= 2 && (
+          <CompareDialog
+            favorites={favorites}
+            trigger={
+              <Button variant="outline" className="shrink-0">{t('compare.button')}</Button>
+            }
+          />
+        )}
         <ImportFavorites onImportSuccess={loadFavorites} />
         <ExportFavorites />
       </div>

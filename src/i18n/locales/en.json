@@ -1,4 +1,21 @@
 {
+  "a11y": {
+    "copy": "Copy message",
+    "edit": "Edit message",
+    "retry": "Retry",
+    "delete": "Delete message",
+    "upload": "Upload file",
+    "send": "Send",
+    "stop": "Stop generating"
+  },
+  "compare": {
+    "button": "Compare",
+    "title": "Compare prompts",
+    "first": "First version",
+    "second": "Second version",
+    "needTwo": "You need at least two saved prompts to compare.",
+    "identical": "The two versions are identical."
+  },
   "common": {
     "appName": "Prompt Iterator",
     "tagline": "Transform vague ideas into structured, high-quality AI prompts",
@@ -53,6 +70,8 @@
     "title": "Build Perfect Prompts",
     "subtitle": "Transform vague ideas into precise, structured AI instructions through multi-turn interactive guidance.",
     "quickStart": "Quick Start",
+    "modes": "Or start from a ready-made mode",
+    "modeStarter": "I want to craft a professional prompt for «{mode}». Help me step by step.",
     "example1Title": "AI Trend Analysis Article",
     "example1Desc": "Generate professional technical analysis articles",
     "example1Prompt": "Help me write an in-depth analysis article about AI development trends",
