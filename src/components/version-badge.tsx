@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Download } from '@/components/icons'
@@ -12,6 +13,7 @@ interface VersionInfo {
 }
 
 export function VersionBadge() {
+  const t = useTranslations()
   const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -51,7 +53,7 @@ export function VersionBadge() {
   }, [])
 
   if (loading) {
-    return <Badge variant="outline" className="text-xs font-normal">جارٍ التحميل...</Badge>
+    return <Badge variant="outline" className="text-xs font-normal">{t('common.loading')}</Badge>
   }
 
   if (!versionInfo) {
