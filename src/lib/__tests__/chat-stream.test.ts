@@ -13,6 +13,10 @@ describe('classifyChatError', () => {
   it('classifies quota errors', () => {
     expect(classifyChatError(new Error('429 rate limit')).type).toBe('quota')
   })
+  it('classifies insufficient-credits (402) as quota', () => {
+    expect(classifyChatError(new Error('Insufficient Balance: no credits left')).type).toBe('quota')
+    expect(classifyChatError(new Error('402 requires more credits')).type).toBe('quota')
+  })
   it('classifies server errors', () => {
     expect(classifyChatError(new Error('500 server error')).type).toBe('server')
   })

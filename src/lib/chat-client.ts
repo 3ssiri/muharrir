@@ -164,10 +164,44 @@ function toProviderMessages(messages: any[]): Array<{ role: string; content: str
     }));
 }
 
+// Cap on how much of a raw provider error we surface to the UI. Some providers
+// (e.g. OpenRouter) return very long JSON bodies that previously leaked verbatim
+// into the chat as a giant error message.
+const MAX_ERROR_LEN = 300;
+
+/**
+ * Pull a human-readable message out of a provider error body. Provider errors
+ * are usually `{"error":{"message":"..."}}`; fall back to the raw text when the
+ * body is not JSON.
+ */
+export function extractProviderMessage(raw: string): string {
+  if (!raw) return '';
+  try {
+    const parsed = JSON.parse(raw);
+    const msg = parsed?.error?.message ?? parsed?.error ?? parsed?.message;
+    if (typeof msg === 'string' && msg.trim()) return msg.trim();
+  } catch {
+    // Not JSON — fall through and return the raw text.
+  }
+  return raw;
+}
+
+/** Trim stray whitespace/newlines a pasted key often carries. */
+export function normalizeApiKey(key: string): string {
+  return (key ?? '').trim();
+}
+
+function truncate(text: string, max = MAX_ERROR_LEN): string {
+  return text.length > max ? text.slice(0, max) + '…' : text;
+}
+
 // Map a status code / error message to a clear message (same handling logic as before)
-function mapError(status: number, raw: string, modelId?: string): string {
-  if (status === 401 || /unauthorized|invalid api key/i.test(raw)) {
+export function mapError(status: number, raw: string, modelId?: string): string {
+  if (status === 401 || /unauthorized|invalid api key|authentication fail/i.test(raw)) {
     return 'Authentication Failed: Invalid API Key. Please check your API Key in Settings.';
+  }
+  if (status === 402 || /insufficient (balance|credits|quota|funds)|requires more credits|more credits/i.test(raw)) {
+    return 'Insufficient Balance: Your provider account has no remaining credits or quota. Please top up your account.';
   }
   if (status === 404 || /not found|model_not_found/i.test(raw)) {
     return `Model Not Found: The model '${modelId}' does not exist on this provider. Please select a valid model.`;
@@ -181,7 +215,8 @@ function mapError(status: number, raw: string, modelId?: string): string {
   if (status >= 500) {
     return 'Server Error: The API provider is experiencing issues. Please try again later.';
   }
-  return raw || `AI Error: request failed with status ${status}`;
+  // Unmapped status: surface the provider's own message, parsed and length-capped.
+  return truncate(extractProviderMessage(raw)) || `AI Error: request failed with status ${status}`;
 }
 
 // Demo mode stream
@@ -205,7 +240,10 @@ function buildDemoResponse(): Response {
  * in the UI.
  */
 export async function streamChat(params: StreamChatParams): Promise<Response> {
-  const { messages, model, systemPrompt, apiKey, baseUrl, correctionModel, signal } = params;
+  const { messages, model, systemPrompt, baseUrl, correctionModel, signal } = params;
+  // Normalize the key up front: stray whitespace/newlines from a pasted key are
+  // a common cause of mysterious 401s. An all-whitespace key becomes '' below.
+  const apiKey = normalizeApiKey(params.apiKey);
 
   // Demo mode
   if (apiKey === 'demo') {
