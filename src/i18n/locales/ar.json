@@ -16,6 +16,22 @@
     "needTwo": "تحتاج إلى موجّهين محفوظين على الأقل للمقارنة.",
     "identical": "النسختان متطابقتان."
   },
+  "toasts": {
+    "requestCancelled": "تم إلغاء الطلب",
+    "requestError": "حدث خطأ في الطلب: {message}",
+    "unknownError": "خطأ غير معروف",
+    "imagePasted": "تم لصق الصورة",
+    "imagePastedDesc": "ملاحظة: تأكد من أن نموذجك يدعم التعرف على الصور (مثل GPT-4o و Claude 3.5 وغيرها)",
+    "parsingPdf": "جارٍ تحليل PDF...",
+    "pdfParsed": "تم تحليل PDF ({count} صفحة)",
+    "pdfFailed": "فشل تحليل PDF: {message}",
+    "parsingDocx": "جارٍ تحليل DOCX...",
+    "docxParsed": "تم تحليل DOCX",
+    "docxFailed": "فشل تحليل DOCX: {message}",
+    "textRead": "تم قراءة الملف النصي",
+    "textFailed": "فشل قراءة الملف: {message}",
+    "messageDeleted": "تم حذف الرسالة"
+  },
   "common": {
     "appName": "مُحسِّن الموجّهات",
     "tagline": "حوِّل الأفكار الغامضة إلى موجّهات ذكاء اصطناعي منظّمة وعالية الجودة",

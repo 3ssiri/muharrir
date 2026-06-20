@@ -432,7 +432,7 @@ export default function Home() {
             : m
         ))
 
-        toast.error(`حدث خطأ في الطلب: ${errorMessage}`, { duration: 4000 })
+        toast.error(t('toasts.requestError', { message: errorMessage }), { duration: 4000 })
       } else {
         // Final update of the AI message in the database
         await db.messages.update(parseInt(aiMessageId), {
@@ -450,7 +450,7 @@ export default function Home() {
     } catch (error: any) {
       // Aborts are user-initiated, not failures.
       if (error?.name === 'AbortError') {
-        toast.info('تم إلغاء الطلب', { duration: 2000 })
+        toast.info(t('toasts.requestCancelled'), { duration: 2000 })
         return
       }
 
@@ -476,7 +476,7 @@ export default function Home() {
           : m
       ))
 
-      toast.error(`حدث خطأ في الطلب: ${errorMessage}`, { duration: 4000 })
+      toast.error(t('toasts.requestError', { message: errorMessage }), { duration: 4000 })
     } finally {
       setIsLoading(false)
 
@@ -549,8 +549,8 @@ export default function Home() {
         const reader = new FileReader()
         reader.onload = (event) => {
           handleFileSelect(file, event.target?.result as string)
-          toast.success('تم لصق الصورة', {
-            description: 'ملاحظة: تأكد من أن نموذجك يدعم التعرف على الصور (مثل GPT-4o و Claude 3.5 وغيرها)',
+          toast.success(t('toasts.imagePasted'), {
+            description: t('toasts.imagePastedDesc'),
             duration: 4000
           })
         }
@@ -566,7 +566,7 @@ export default function Home() {
     // If it is a PDF file, use client-side parsing
     if (file.type === 'application/pdf') {
       try {
-        toast.info('جارٍ تحليل PDF...', { duration: 3000 })
+        toast.info(t('toasts.parsingPdf'), { duration: 3000 })
         const arrayBuffer = await file.arrayBuffer()
 
         // Import pdfjs-dist dynamically
@@ -592,16 +592,16 @@ export default function Home() {
         }
 
         fileText = fullText
-        toast.success(`تم تحليل PDF (${pdf.numPages} صفحة)`)
+        toast.success(t('toasts.pdfParsed', { count: pdf.numPages }))
       } catch (error: any) {
         log.error('خطأ في تحليل PDF:', error)
-        toast.error(`فشل تحليل PDF: ${error.message || 'خطأ غير معروف'}`)
+        toast.error(t('toasts.pdfFailed', { message: error.message || t('toasts.unknownError') }))
       }
     }
     // Parse a DOCX file
     else if (file.type.includes('wordprocessing') || file.name.endsWith('.docx')) {
       try {
-        toast.info('جارٍ تحليل DOCX...')
+        toast.info(t('toasts.parsingDocx'))
         const arrayBuffer = await file.arrayBuffer()
 
         // Import mammoth dynamically
@@ -609,10 +609,10 @@ export default function Home() {
 
         const result = await mammoth.extractRawText({ arrayBuffer })
         fileText = result.value
-        toast.success('تم تحليل DOCX')
+        toast.success(t('toasts.docxParsed'))
       } catch (error: any) {
         log.error('خطأ في تحليل DOCX:', error)
-        toast.error(`فشل تحليل DOCX: ${error.message || 'خطأ غير معروف'}`)
+        toast.error(t('toasts.docxFailed', { message: error.message || t('toasts.unknownError') }))
       }
     }
     // Parse the text file
@@ -620,10 +620,10 @@ export default function Home() {
       try {
         const text = await file.text()
         fileText = text
-        toast.success('تم قراءة الملف النصي')
+        toast.success(t('toasts.textRead'))
       } catch (error: any) {
         log.error('خطأ في قراءة الملف النصي:', error)
-        toast.error(`فشل قراءة الملف: ${error.message || 'خطأ غير معروف'}`)
+        toast.error(t('toasts.textFailed', { message: error.message || t('toasts.unknownError') }))
       }
     }
 
@@ -678,7 +678,7 @@ export default function Home() {
       const dbId = parseInt(id)
       if (!isNaN(dbId)) {
         await db.messages.delete(dbId)
-        toast.success("تم حذف الرسالة")
+        toast.success(t('toasts.messageDeleted'))
       }
     }
   }, [])
@@ -765,7 +765,7 @@ export default function Home() {
     } catch (error: any) {
       if (error?.name === 'AbortError') return
       log.error('Chat error:', error)
-      toast.error(`حدث خطأ في الطلب: ${error.message}`)
+      toast.error(t('toasts.requestError', { message: error.message }))
     } finally {
       setIsLoading(false)
     }
