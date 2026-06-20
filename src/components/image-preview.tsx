@@ -15,6 +15,10 @@ export function ImagePreview({ src, alt, className = '' }: ImagePreviewProps) {
 
   return (
     <>
+      {/* Sources are arbitrary-size data: URLs and remote previews, so the
+          plain <img> is intentional here (next/image adds little for a static
+          export with images.unoptimized and complicates data URLs). */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
         alt={alt}

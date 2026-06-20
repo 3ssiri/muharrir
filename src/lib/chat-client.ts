@@ -279,7 +279,11 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
             controller.enqueue(encoder.encode(`e:{"type":"correction","status":"correcting"}\n`));
             let corrected = false;
             for (let i = 0; i < 3; i++) {
-              const correction = await correctFormat(tc.name, parsed, apiKey, normalizeBaseUrl(baseUrl), correctionModel);
+              // Fall back to the main chat model when no dedicated correction
+              // model is configured — a hard-coded model like 'grok-beta-fast'
+              // does not exist on most providers and would make correction
+              // always fail.
+              const correction = await correctFormat(tc.name, parsed, apiKey, normalizeBaseUrl(baseUrl), correctionModel || modelId);
               if (correction.success) {
                 const revalidation = validateToolCall(tc.name, correction.correctedArgs);
                 if (revalidation.valid) {
