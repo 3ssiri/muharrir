@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef, useLayoutEffect } from 'react'
-import { Plus, MessageSquare, Trash2, Menu, ChevronLeft, ChevronRight, Search, X } from 'lucide-react'
+import { Plus, MessageSquare, Trash2, Menu, ChevronLeft, ChevronRight, Search, X } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'

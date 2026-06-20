@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Copy, Check, RefreshCw, Sparkles, Send, Maximize2, X, Star } from 'lucide-react'
+import { Copy, Check, RefreshCw, Sparkles, Send, Maximize2, X, Star } from '@/components/icons'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
