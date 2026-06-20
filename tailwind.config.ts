@@ -81,8 +81,16 @@ const config = {
                 sm: "calc(var(--radius) - 4px)",
             },
             boxShadow: {
-                soft: "0 1px 2px hsl(var(--foreground) / 0.04), 0 2px 8px -2px hsl(var(--foreground) / 0.06)",
-                elevated: "0 4px 16px -6px hsl(var(--foreground) / 0.12)",
+                "2xs": "var(--shadow-2xs)",
+                xs: "var(--shadow-xs)",
+                sm: "var(--shadow-sm)",
+                DEFAULT: "var(--shadow)",
+                md: "var(--shadow-md)",
+                lg: "var(--shadow-lg)",
+                xl: "var(--shadow-xl)",
+                "2xl": "var(--shadow-2xl)",
+                soft: "var(--shadow-sm)",
+                elevated: "var(--shadow-lg)",
             },
             keyframes: {
                 "accordion-down": {
