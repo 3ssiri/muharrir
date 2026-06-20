@@ -33,6 +33,7 @@ import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
 import { useTranslations } from 'next-intl'
 import { streamChat } from '@/lib/chat-client'
 import { consumeChatStream, classifyChatError } from '@/lib/chat-stream'
+import { estimateTokens } from '@/lib/token-estimate'
 import { log } from '@/lib/logger'
 import { isTauriApp } from '@/lib/tauri-bridge'
 
@@ -1324,8 +1325,13 @@ export default function Home() {
                 </Button>
               )}
             </form>
-            <div className="text-center text-xs text-muted-foreground mt-2">
-              {t('chat.disclaimer')}
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <span className="text-xs text-muted-foreground">{t('chat.disclaimer')}</span>
+              {localInput.trim() && (
+                <span className="text-[11px] text-muted-foreground/80 tabular-nums shrink-0">
+                  · ≈ {estimateTokens(localInput)} tok
+                </span>
+              )}
             </div>
           </div>
         </div>
