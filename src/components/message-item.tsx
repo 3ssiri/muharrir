@@ -2,6 +2,7 @@
 
 import { memo } from 'react'
 import { useTranslations } from 'next-intl'
+import type { UiMessage, ToolInvocation } from '@/lib/chat-stream'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Bot, User, Copy, Pencil, RotateCcw, Trash2, AlertCircle, Sparkles } from '@/components/icons'
@@ -12,7 +13,7 @@ import { EnhancementForm } from '@/components/enhancement-form'
 import { PromptProposalCard } from '@/components/prompt-proposal-card'
 
 interface MessageItemProps {
-  m: any
+  m: UiMessage
   index: number
   /** Is this the last message AND a response is still streaming? */
   isActive: boolean
@@ -21,7 +22,7 @@ interface MessageItemProps {
   onEdit: (content: string) => void
   onRetry: (index: number) => void
   onDelete: (id: string, sessionId: number | null) => void
-  onAppend: (message: any) => void
+  onAppend: (message: { content: string; role?: string }) => void
   onToolRendered: () => void
 }
 
@@ -142,7 +143,7 @@ function MessageItemComponent({
         {/* Preview of multiple files */}
         {m.files && m.files.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {m.files.map((file: any, fileIndex: number) => (
+            {m.files.map((file, fileIndex) => (
               <div key={fileIndex}>
                 {file.preview && file.type.startsWith('image/') ? (
                   <ImagePreview
@@ -181,7 +182,7 @@ function MessageItemComponent({
         )}
 
         {/* Generative UI for Tool Invocations */}
-        {m.toolInvocations?.map((toolInvocation: any) => {
+        {m.toolInvocations?.map((toolInvocation: ToolInvocation) => {
           const toolCallId = toolInvocation.toolCallId;
 
           if (toolInvocation.toolName === 'ask_questions') {
