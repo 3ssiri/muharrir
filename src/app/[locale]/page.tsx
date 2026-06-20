@@ -917,7 +917,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen bg-transparent text-foreground overflow-hidden">
+    <div className="flex h-screen bg-background text-foreground overflow-hidden">
       {/* Sidebar */}
       <ChatSidebar
         currentSessionId={sessionId}
@@ -927,16 +927,16 @@ export default function Home() {
 
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3.5 border-b border-border/60 glass-strong shrink-0 z-10">
+        <header className="flex items-center justify-between px-6 py-3.5 border-b border-border bg-card shrink-0 z-10">
           <div className="flex items-center gap-2 md:hidden">
             <div className="w-8" />
           </div>
 
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-brand-gradient flex items-center justify-center shadow-glow ring-1 ring-white/20">
-              <Code2 className="w-5 h-5 text-white drop-shadow-sm" />
+            <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+              <Code2 className="w-5 h-5 text-primary-foreground" />
             </div>
-            <h1 className="text-xl font-extrabold tracking-tight font-display text-gradient">Prompt Iterator</h1>
+            <h1 className="text-xl font-bold tracking-tight font-display text-gradient">Prompt Iterator</h1>
             <VersionBadge />
           </div>
           <div className="flex items-center gap-2">
@@ -998,31 +998,35 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Tab switcher — segmented pill control */}
-        <div className="shrink-0 flex justify-center py-3 bg-background/40">
-          <div className="inline-flex items-center gap-1 p-1 rounded-full glass shadow-soft">
-            <button
-              onClick={() => setActiveTab('chat')}
-              className={`relative py-2 px-5 rounded-full text-sm transition-all flex items-center gap-2 ${
-                activeTab === 'chat'
-                  ? 'bg-brand-gradient text-white font-semibold shadow-glow'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <MessageSquare className="w-4 h-4" />
-              {t('tabs.chat')}
-            </button>
-            <button
-              onClick={() => setActiveTab('favorites')}
-              className={`relative py-2 px-5 rounded-full text-sm transition-all flex items-center gap-2 ${
-                activeTab === 'favorites'
-                  ? 'bg-brand-gradient text-white font-semibold shadow-glow'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Star className={`w-4 h-4 ${activeTab === 'favorites' ? 'fill-white' : ''}`} />
-              {t('tabs.favorites')}
-            </button>
+        {/* Tab switcher — minimal underline */}
+        <div className="border-b border-border bg-card shrink-0">
+          <div className="max-w-3xl mx-auto px-4 sm:px-8">
+            <div className="flex gap-8 justify-center">
+              <button
+                onClick={() => setActiveTab('chat')}
+                className={`relative py-3 px-1 text-sm transition-colors flex items-center gap-2 ${
+                  activeTab === 'chat'
+                    ? 'text-primary font-semibold'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <MessageSquare className="w-4 h-4" />
+                {t('tabs.chat')}
+                {activeTab === 'chat' && <span className="absolute inset-x-0 -bottom-px h-0.5 bg-primary rounded-full" />}
+              </button>
+              <button
+                onClick={() => setActiveTab('favorites')}
+                className={`relative py-3 px-1 text-sm transition-colors flex items-center gap-2 ${
+                  activeTab === 'favorites'
+                    ? 'text-primary font-semibold'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Star className={`w-4 h-4 ${activeTab === 'favorites' ? 'fill-gold text-gold' : ''}`} />
+                {t('tabs.favorites')}
+                {activeTab === 'favorites' && <span className="absolute inset-x-0 -bottom-px h-0.5 bg-primary rounded-full" />}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1033,11 +1037,11 @@ export default function Home() {
               {messages.length === 0 ? (
               <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 mt-10">
                 <div className="text-center space-y-5">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-medium text-primary shadow-soft animate-float">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-accent text-xs font-medium text-accent-foreground">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>{t('welcome.subtitle')}</span>
+                    <span>{t('welcome.quickStart')}</span>
                   </div>
-                  <h2 className="text-4xl font-extrabold tracking-tight lg:text-6xl font-display text-gradient pb-2 leading-[1.1]">
+                  <h2 className="text-4xl font-extrabold tracking-tight lg:text-6xl font-display text-foreground pb-1 leading-[1.1]">
                     {t('welcome.title')}
                   </h2>
                   <p className="text-lg text-muted-foreground max-w-[600px] mx-auto">
@@ -1058,11 +1062,10 @@ export default function Home() {
                       <button
                         key={i}
                         onClick={() => setLocalInput(ex.prompt)}
-                        className="group relative text-start rounded-2xl glass p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated hover:border-primary/40 overflow-hidden"
+                        className="group text-start rounded-lg border border-border bg-card p-4 transition-colors duration-200 hover:border-primary hover:bg-accent/40"
                       >
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-brand-radial pointer-events-none" />
-                        <div className="relative flex items-start gap-3">
-                          <span className="shrink-0 w-10 h-10 rounded-xl bg-accent flex items-center justify-center text-lg shadow-sm group-hover:scale-110 transition-transform">
+                        <div className="flex items-start gap-3">
+                          <span className="shrink-0 w-10 h-10 rounded-md bg-accent flex items-center justify-center text-lg">
                             {ex.emoji}
                           </span>
                           <div className="flex flex-col gap-1 min-w-0">
@@ -1083,19 +1086,19 @@ export default function Home() {
                     className={`group flex gap-4 relative mb-4 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     {m.role !== 'user' && (
-                      <Avatar className="w-8 h-8 mt-1 shrink-0 bg-brand-gradient shadow-glow ring-1 ring-white/20">
-                        <AvatarFallback className="bg-transparent"><Bot className="w-5 h-5 text-white" /></AvatarFallback>
+                      <Avatar className="w-8 h-8 mt-1 shrink-0 bg-primary">
+                        <AvatarFallback className="bg-transparent"><Bot className="w-5 h-5 text-primary-foreground" /></AvatarFallback>
                         <AvatarImage src="/ai-avatar.png" className="opacity-0" />
                       </Avatar>
                     )}
 
                     <div
-                      className={`rounded-2xl px-5 py-3 ${
+                      className={`rounded-xl px-5 py-3 ${
                         m.error
                           ? 'bg-destructive/10 text-destructive border-2 border-destructive rounded-tl-sm max-w-[90%]'
                           : m.role === 'user'
-                            ? 'bg-brand-gradient text-white shadow-glow rounded-tr-sm max-w-[85%]'
-                            : 'glass text-card-foreground shadow-soft rounded-tl-sm max-w-[90%]'
+                            ? 'bg-primary text-primary-foreground rounded-tr-sm max-w-[85%]'
+                            : 'bg-card text-card-foreground border border-border rounded-tl-sm max-w-[90%]'
                         }`}
                     >
                       {/* Display the error info */}
@@ -1295,7 +1298,7 @@ export default function Home() {
                     </div>
 
                     {m.role === 'user' && (
-                      <Avatar className="w-8 h-8 mt-1 border border-border/60 shrink-0 bg-accent">
+                      <Avatar className="w-8 h-8 mt-1 border border-border shrink-0 bg-accent">
                         <AvatarFallback className="bg-transparent"><User className="w-5 h-5 text-primary" /></AvatarFallback>
                         <AvatarImage src="/user-avatar.png" className="opacity-0" />
                       </Avatar>
@@ -1336,7 +1339,7 @@ export default function Home() {
 
         {/* Floating Input Area - shown only on the chat tab */}
         {activeTab === 'chat' && (
-        <div className="p-4 bg-gradient-to-t from-background via-background/80 to-transparent border-t border-border/50 shrink-0">
+        <div className="p-4 bg-card border-t border-border shrink-0">
           <div className="max-w-3xl mx-auto">
             {/* Files list - displayed independently at the top */}
             {uploadedFiles.length > 0 && (
@@ -1377,7 +1380,7 @@ export default function Home() {
             {/* Input area: upload button + input field + send button */}
             <form
               onSubmit={onFormSubmit}
-              className="relative flex items-end gap-2 p-2 rounded-2xl glass shadow-soft hover:border-primary/40 focus-within:border-primary/50 focus-within:shadow-glow focus-within:ring-2 focus-within:ring-primary/15 transition-all duration-300"
+              className="relative flex items-end gap-2 p-2 rounded-lg border border-input bg-background hover:border-primary/50 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-colors"
             >
               {/* Upload button - on the left */}
               <div className="mb-1 ms-1">

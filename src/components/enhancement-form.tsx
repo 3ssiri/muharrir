@@ -219,13 +219,13 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
     }
 
     return (
-        <Card className="w-full max-w-5xl mx-auto border-primary/20 shadow-elevated animate-in fade-in slide-in-from-bottom-2 duration-500 py-0 gap-0 overflow-hidden">
-            <CardHeader className="bg-brand-gradient text-white pb-4 pt-5">
+        <Card className="w-full max-w-5xl mx-auto border-border shadow-elevated animate-in fade-in slide-in-from-bottom-2 duration-500 py-0 gap-0 overflow-hidden">
+            <CardHeader className="bg-primary text-primary-foreground pb-4 pt-5">
                 <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-white drop-shadow" />
-                    <CardTitle className="text-base text-white">{t('enhancementForm.title')}</CardTitle>
+                    <Sparkles className="w-5 h-5" />
+                    <CardTitle className="text-base text-primary-foreground">{t('enhancementForm.title')}</CardTitle>
                 </div>
-                <p className="text-xs text-white/80">{t('enhancementForm.subtitle')}</p>
+                <p className="text-xs text-primary-foreground/80">{t('enhancementForm.subtitle')}</p>
             </CardHeader>
 
             <div className="pt-2" />
