@@ -6,7 +6,8 @@
     "delete": "حذف الرسالة",
     "upload": "رفع ملف",
     "send": "إرسال",
-    "stop": "إيقاف التوليد"
+    "stop": "إيقاف التوليد",
+    "expandInput": "توسيع حقل الإدخال (عرض المحتوى الكامل)"
   },
   "compare": {
     "button": "مقارنة",
@@ -204,6 +205,7 @@
     "maxRetries": "أقصى عدد للمحاولات",
     "maxRetriesHint": "المُوصى به: 1-5 مرات",
     "theme": "السمة",
+    "themeDescription": "اختر مظهر السمة الذي تفضّله",
     "themeLight": "فاتحة",
     "themeDark": "داكنة",
     "themeSystem": "النظام",
