@@ -8,6 +8,14 @@
     "send": "Send",
     "stop": "Stop generating"
   },
+  "compare": {
+    "button": "Compare",
+    "title": "Compare prompts",
+    "first": "First version",
+    "second": "Second version",
+    "needTwo": "You need at least two saved prompts to compare.",
+    "identical": "The two versions are identical."
+  },
   "common": {
     "appName": "Prompt Iterator",
     "tagline": "Transform vague ideas into structured, high-quality AI prompts",
