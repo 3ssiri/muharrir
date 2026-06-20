@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Maximize2 } from '@/components/icons'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -32,6 +33,7 @@ export function AutoResizeTextarea({
   autoFocus,
   className = '',
 }: AutoResizeTextareaProps) {
+  const t = useTranslations()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isExpanded, setIsExpanded] = useState(false)
   const [showExpandButton, setShowExpandButton] = useState(false)
@@ -133,7 +135,8 @@ export function AutoResizeTextarea({
           variant="ghost"
           onClick={() => setIsExpanded(true)}
           className="absolute end-2 top-2 h-8 w-8 rounded-md bg-background/80 backdrop-blur-sm hover:bg-muted shadow-sm transition-all z-10"
-          title="توسيع حقل الإدخال (عرض المحتوى الكامل)"
+          title={t('a11y.expandInput')}
+          aria-label={t('a11y.expandInput')}
           style={{
             visibility: isMounted && showExpandButton ? 'visible' : 'hidden',
             opacity: isMounted && showExpandButton ? 1 : 0,
