@@ -195,7 +195,6 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                 {!isCollapsed && (
                     <Button
                         className="flex-1 justify-start gap-2"
-                        variant="outline"
                         onClick={() => {
                             onNewChat()
                             setIsOpen(false)
@@ -267,9 +266,9 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                     {filteredSessions.map((session) => (
                         <div
                             key={session.id}
-                            className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-3 rounded-lg cursor-pointer transition-all border ${currentSessionId === session.id
-                                ? 'bg-secondary border-primary/20'
-                                : 'hover:bg-muted/50 border-transparent'
+                            className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-3 rounded-xl cursor-pointer transition-all duration-200 border ${currentSessionId === session.id
+                                ? 'bg-accent border-primary/30 shadow-soft'
+                                : 'hover:bg-muted/60 border-transparent hover:border-border/60'
                                 } ${isCollapsed ? 'overflow-visible' : ''}`}
                             onClick={() => {
                                 // Save the scroll position before clicking
@@ -340,7 +339,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         <>
             {/* Desktop Sidebar */}
             <div
-                className="hidden md:flex border-e flex-col bg-card/30 shrink-0 relative h-screen overflow-hidden"
+                className="hidden md:flex border-e border-border/60 flex-col glass shrink-0 relative h-screen overflow-hidden"
                 style={{
                     width: isCollapsed ? '64px' : `${sidebarWidth}px`,
                     transition: isCollapsed ? 'width 0.3s' : 'none'
