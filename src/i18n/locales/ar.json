@@ -138,7 +138,21 @@
     "unfavorite": "إزالة من المفضّلة",
     "favoriteAdded": "تمت الإضافة إلى المفضّلة",
     "favoriteRemoved": "تمت الإزالة من المفضّلة",
-    "favoriteFailed": "فشلت العملية"
+    "favoriteFailed": "فشلت العملية",
+    "structuredBadge": "اقتراح منظّم",
+    "accepted": "تم اعتماد مقترح الموجّه: {title}",
+    "tabPreview": "معاينة",
+    "tabStructure": "البنية",
+    "finalPrompt": "الموجّه النهائي",
+    "role": "الدور",
+    "objective": "الهدف",
+    "context": "السياق",
+    "workflow": "سير العمل",
+    "noWorkflow": "لا توجد خطوات محددة",
+    "constraints": "القيود",
+    "modificationsHint": "للتعديلات، يرجى تقديم ملاحظاتك في المحادثة",
+    "accept": "اعتماد",
+    "previewHeading": "معاينة الموجّه"
   },
   "favorites": {
     "title": "مفضّلتي",
