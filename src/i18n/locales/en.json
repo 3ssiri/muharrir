@@ -16,6 +16,22 @@
     "needTwo": "You need at least two saved prompts to compare.",
     "identical": "The two versions are identical."
   },
+  "toasts": {
+    "requestCancelled": "Request cancelled",
+    "requestError": "Request error: {message}",
+    "unknownError": "Unknown error",
+    "imagePasted": "Image pasted",
+    "imagePastedDesc": "Note: make sure your model supports image recognition (e.g. GPT-4o, Claude 3.5, etc.)",
+    "parsingPdf": "Parsing PDF…",
+    "pdfParsed": "PDF parsed ({count} pages)",
+    "pdfFailed": "PDF parsing failed: {message}",
+    "parsingDocx": "Parsing DOCX…",
+    "docxParsed": "DOCX parsed",
+    "docxFailed": "DOCX parsing failed: {message}",
+    "textRead": "Text file read",
+    "textFailed": "File read failed: {message}",
+    "messageDeleted": "Message deleted"
+  },
   "common": {
     "appName": "Prompt Iterator",
     "tagline": "Transform vague ideas into structured, high-quality AI prompts",
