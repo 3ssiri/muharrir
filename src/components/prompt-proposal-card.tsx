@@ -38,6 +38,8 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
     const [isFullscreen, setIsFullscreen] = useState(false)
     const [favorited, setFavorited] = useState(false)
     const [favoriteId, setFavoriteId] = useState<number | null>(null)
+    // User edits to the final prompt (null = untouched, follows the model output)
+    const [edited, setEdited] = useState<string | null>(null)
 
     // Parse args safely
     let proposal: PromptProposal | null = null
@@ -46,6 +48,10 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
     } catch (e) {
         // Partial JSON during streaming
     }
+
+    // The prompt currently shown: the user's edit if any, else the model output
+    const finalPromptValue = proposal?.finalPrompt || proposal?.final_prompt || ''
+    const promptText = edited ?? finalPromptValue
 
     // Check whether it has been added to favorites
     useEffect(() => {
@@ -76,8 +82,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
     }
 
     const handleCopy = () => {
-        const finalPrompt = proposal?.finalPrompt || proposal?.final_prompt || ''
-        navigator.clipboard.writeText(finalPrompt)
+        navigator.clipboard.writeText(promptText)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }
@@ -97,7 +102,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
     }
 
     const handleFavorite = async () => {
-        const finalPrompt = proposal?.finalPrompt || proposal?.final_prompt || ''
+        const finalPrompt = promptText
         const title = proposal?.title || t('promptProposal.title')
 
         if (favorited && favoriteId) {
@@ -131,7 +136,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                 </CardHeader>
                 <CardContent className="py-2">
                     <div className="text-sm text-muted-foreground line-clamp-2">
-                        {proposal.finalPrompt || proposal.final_prompt}
+                        {promptText}
                     </div>
                 </CardContent>
                 <CardFooter className="py-2 justify-end">
@@ -187,8 +192,9 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                             <div className="relative">
                                 <Textarea
                                     className="min-h-[200px] font-mono text-sm leading-relaxed bg-muted/20 resize-none focus-visible:ring-1"
-                                    value={proposal.finalPrompt || proposal.final_prompt || ''}
-                                    readOnly
+                                    value={promptText}
+                                    onChange={(e) => setEdited(e.target.value)}
+                                    spellCheck={false}
                                 />
                                 <div className="absolute top-2 end-2 flex gap-2">
                                     <Button
@@ -272,8 +278,9 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                     <div className="flex-1 overflow-auto p-6">
                         <Textarea
                             className="w-full h-full font-mono text-sm leading-relaxed bg-muted/20 resize-none focus-visible:ring-1"
-                            value={proposal.finalPrompt || proposal.final_prompt || ''}
-                            readOnly
+                            value={promptText}
+                            onChange={(e) => setEdited(e.target.value)}
+                            spellCheck={false}
                         />
                     </div>
                     <div className="p-4 border-t flex justify-end gap-2">
