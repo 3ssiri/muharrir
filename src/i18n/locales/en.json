@@ -6,7 +6,8 @@
     "delete": "Delete message",
     "upload": "Upload file",
     "send": "Send",
-    "stop": "Stop generating"
+    "stop": "Stop generating",
+    "expandInput": "Expand input field (show full content)"
   },
   "compare": {
     "button": "Compare",
@@ -204,6 +205,7 @@
     "maxRetries": "Max Retries",
     "maxRetriesHint": "Recommended: 1-5 times",
     "theme": "Theme",
+    "themeDescription": "Choose your preferred theme appearance",
     "themeLight": "Light",
     "themeDark": "Dark",
     "themeSystem": "System",

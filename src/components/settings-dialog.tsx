@@ -627,7 +627,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                 <div className="p-4 bg-muted/30 rounded-lg border space-y-3">
                                     <div className="space-y-1">
                                         <Label className="text-sm font-semibold">{t('settings.theme')}</Label>
-                                        <p className="text-xs text-muted-foreground">اختر مظهر السمة الذي تفضّله</p>
+                                        <p className="text-xs text-muted-foreground">{t('settings.themeDescription')}</p>
                                     </div>
                                     <Select value={theme} onValueChange={setTheme}>
                                         <SelectTrigger className="w-full">
