@@ -118,7 +118,7 @@ export function classifyChatError(error: unknown): MessageError {
     type = 'auth'
   } else if (/Connection Failed|fetch failed|Failed to fetch|network|\b504\b/i.test(message)) {
     type = 'network'
-  } else if (/\b429\b|quota|rate limit/i.test(message)) {
+  } else if (/\b429\b|\b402\b|quota|rate limit|insufficient (balance|credits|quota|funds)|more credits/i.test(message)) {
     type = 'quota'
   } else if (/\b5\d\d\b|server error|service unavailable/i.test(message)) {
     type = 'server'
