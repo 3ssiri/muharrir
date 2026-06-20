@@ -9,16 +9,21 @@ interface PresetGalleryProps {
 }
 
 /**
- * Browsable gallery of starter "modes" (previously the unused PRESET_MODES
- * config). Picking one seeds the input with a mode-appropriate starter so the
+ * Browsable gallery of starter "modes". Picking one seeds the input with a rich,
+ * mode-specific starter (role + context + task + output format) so the
  * conversation kicks off in the right direction.
+ *
+ * Names, descriptions and starters are localized — see the `presets` namespace
+ * in the locale files, keyed by each mode's `id`.
  */
 export function PresetGallery({ onSelect }: PresetGalleryProps) {
   const t = useTranslations()
   const modes = Object.values(PRESET_MODES)
+  // Dynamic message keys (presets.<id>.*); the locale files define every id.
+  const tp = (id: string, field: string) => t(`presets.${id}.${field}` as never)
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <h3 className="text-sm font-semibold text-muted-foreground mb-4 text-center">
         {t('welcome.modes')}
       </h3>
@@ -27,16 +32,16 @@ export function PresetGallery({ onSelect }: PresetGalleryProps) {
           <button
             key={mode.id}
             type="button"
-            aria-label={mode.name}
-            onClick={() => onSelect(t('welcome.modeStarter', { mode: mode.name }))}
+            aria-label={tp(mode.id, 'name')}
+            onClick={() => onSelect(tp(mode.id, 'starter'))}
             className="group flex flex-col items-center gap-2 rounded-lg border border-border bg-card p-4 text-center transition-colors hover:border-primary hover:bg-accent/40"
           >
             <span className="text-2xl" aria-hidden="true">{mode.icon}</span>
             <span className="text-xs font-semibold group-hover:text-primary transition-colors">
-              {mode.name}
+              {tp(mode.id, 'name')}
             </span>
             <span className="text-[11px] text-muted-foreground leading-snug line-clamp-2">
-              {mode.description}
+              {tp(mode.id, 'description')}
             </span>
           </button>
         ))}
