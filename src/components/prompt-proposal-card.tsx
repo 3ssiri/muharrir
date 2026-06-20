@@ -131,7 +131,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                 <CardHeader className="py-4">
                     <div className="flex items-center gap-2">
                         <Check className="w-5 h-5 text-primary" />
-                        <CardTitle className="text-base">تم اعتماد مقترح الموجّه: {proposal.title}</CardTitle>
+                        <CardTitle className="text-base">{t('promptProposal.accepted', { title: proposal.title })}</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="py-2">
@@ -168,7 +168,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                         >
                             <Star className={`w-4 h-4 transition-all duration-300 ${favorited ? 'fill-current' : ''}`} />
                         </Button>
-                        <Badge variant="outline" className="bg-white/15 text-primary-foreground border-white/30">اقتراح منظّم</Badge>
+                        <Badge variant="outline" className="bg-white/15 text-primary-foreground border-white/30">{t('promptProposal.structuredBadge')}</Badge>
                     </div>
                 </div>
             </CardHeader>
@@ -177,10 +177,10 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                 <div className="px-6 border-b bg-muted/10">
                     <TabsList className="h-10 bg-transparent p-0">
                         <TabsTrigger value="preview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">
-                            Preview
+                            {t('promptProposal.tabPreview')}
                         </TabsTrigger>
                         <TabsTrigger value="structure" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">
-                            Structure
+                            {t('promptProposal.tabStructure')}
                         </TabsTrigger>
                     </TabsList>
                 </div>
@@ -188,7 +188,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                 <CardContent className="p-0">
                     <TabsContent value="preview" className="m-0">
                         <div className="p-6 bg-card">
-                            <Label className="mb-2 block text-muted-foreground">Final Prompt</Label>
+                            <Label className="mb-2 block text-muted-foreground">{t('promptProposal.finalPrompt')}</Label>
                             <div className="relative">
                                 <Textarea
                                     className="min-h-[200px] font-mono text-sm leading-relaxed bg-muted/20 resize-none focus-visible:ring-1"
@@ -221,27 +221,27 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                     <TabsContent value="structure" className="m-0 p-6 space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label className="text-xs font-semibold uppercase text-muted-foreground">Role (الدور)</Label>
+                                <Label className="text-xs font-semibold uppercase text-muted-foreground">{t('promptProposal.role')}</Label>
                                 <div className="p-3 bg-muted/30 rounded-md text-sm">{proposal.role}</div>
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-xs font-semibold uppercase text-muted-foreground">Objective (الهدف)</Label>
+                                <Label className="text-xs font-semibold uppercase text-muted-foreground">{t('promptProposal.objective')}</Label>
                                 <div className="p-3 bg-muted/30 rounded-md text-sm">{proposal.objective}</div>
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Context (السياق)</Label>
+                            <Label className="text-xs font-semibold uppercase text-muted-foreground">{t('promptProposal.context')}</Label>
                             <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap">{proposal.context}</div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Workflow (سير العمل)</Label>
-                            <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap">{proposal.workflow || 'لا توجد خطوات محددة'}</div>
+                            <Label className="text-xs font-semibold uppercase text-muted-foreground">{t('promptProposal.workflow')}</Label>
+                            <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap">{proposal.workflow || t('promptProposal.noWorkflow')}</div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-xs font-semibold uppercase text-muted-foreground">Constraints (القيود)</Label>
+                            <Label className="text-xs font-semibold uppercase text-muted-foreground">{t('promptProposal.constraints')}</Label>
                             <div className="p-3 bg-muted/30 rounded-md text-sm whitespace-pre-wrap border-s-2 border-destructive ps-3">{proposal.constraints}</div>
                         </div>
                     </TabsContent>
@@ -250,12 +250,12 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
 
             <CardFooter className="bg-muted/30 p-4 flex justify-between gap-4">
                 <div className="text-xs text-muted-foreground flex items-center gap-1">
-                    For modifications, please provide feedback in the chat
+                    {t('promptProposal.modificationsHint')}
                 </div>
                 <div className="flex gap-2">
                     <Button variant="default" onClick={handleAccept} className="gap-2">
                         <Check className="w-4 h-4" />
-                        Accept
+                        {t('promptProposal.accept')}
                     </Button>
                 </div>
             </CardFooter>
@@ -266,7 +266,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
             <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-2">
                 <div className="w-full max-w-[95vw] h-[95vh] flex flex-col bg-card border rounded-lg shadow-2xl">
                     <div className="flex items-center justify-between p-4 border-b">
-                        <h3 className="text-lg font-semibold">Prompt Preview</h3>
+                        <h3 className="text-lg font-semibold">{t('promptProposal.previewHeading')}</h3>
                         <Button
                             size="icon"
                             variant="ghost"
