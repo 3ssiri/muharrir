@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Settings, Check, AlertCircle, RefreshCw, Loader2, Save, Upload, Download } from 'lucide-react'
+import { Settings, Check, AlertCircle, RefreshCw, Loader2, Save, Upload, Download } from '@/components/icons'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef, useLayoutEffect } from 'react'
-import { Plus, MessageSquare, Trash2, Menu, ChevronLeft, ChevronRight, Search, X } from 'lucide-react'
+import { Plus, MessageSquare, Trash2, Menu, ChevronLeft, ChevronRight, Search, X } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
@@ -195,7 +195,6 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                 {!isCollapsed && (
                     <Button
                         className="flex-1 justify-start gap-2"
-                        variant="outline"
                         onClick={() => {
                             onNewChat()
                             setIsOpen(false)
@@ -267,9 +266,9 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                     {filteredSessions.map((session) => (
                         <div
                             key={session.id}
-                            className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-3 rounded-lg cursor-pointer transition-all border ${currentSessionId === session.id
-                                ? 'bg-secondary border-primary/20'
-                                : 'hover:bg-muted/50 border-transparent'
+                            className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-3 rounded-lg cursor-pointer transition-colors duration-150 border ${currentSessionId === session.id
+                                ? 'bg-accent border-primary/40'
+                                : 'hover:bg-muted border-transparent'
                                 } ${isCollapsed ? 'overflow-visible' : ''}`}
                             onClick={() => {
                                 // Save the scroll position before clicking
@@ -340,7 +339,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         <>
             {/* Desktop Sidebar */}
             <div
-                className="hidden md:flex border-e flex-col bg-card/30 shrink-0 relative h-screen overflow-hidden"
+                className="hidden md:flex border-e border-border flex-col bg-card shrink-0 relative h-screen overflow-hidden"
                 style={{
                     width: isCollapsed ? '64px' : `${sidebarWidth}px`,
                     transition: isCollapsed ? 'width 0.3s' : 'none'

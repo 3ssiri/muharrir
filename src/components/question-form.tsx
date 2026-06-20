@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, Send } from 'lucide-react'
+import { Check, Send } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'

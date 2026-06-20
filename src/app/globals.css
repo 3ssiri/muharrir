@@ -4,65 +4,96 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* ===== tweakcn theme — warm neo-brutalist (light) ===== */
+    /* Values stored as bare HSL triplets so Tailwind's `/opacity` modifiers work. */
+    --background: 51.4286 46.6667% 94.1176%;
+    --foreground: 22.7586 22.1374% 25.6863%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 51.4286 46.6667% 94.1176%;
+    --card-foreground: 22.7586 22.1374% 25.6863%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 22.7586 22.1374% 25.6863%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 353.7662 30.9237% 51.1765%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 20.4545 26.8293% 67.8431%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 15.3488 49.4253% 82.9412%;
+    --muted-foreground: 20.3571 23.3333% 47.0588%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 15.3488 49.4253% 82.9412%;
+    --accent-foreground: 22.7586 22.1374% 25.6863%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 34.2857 12.7273% 10.7843%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Semantic extras (not in the source theme) — harmonised warm tones */
+    --success: 145 45% 40%;
+    --warning: 36 80% 50%;
+    --gold: 36 62% 50%;
 
-    --radius: 0.5rem;
+    --border: 20.3571 23.3333% 47.0588%;
+    --input: 20.3571 23.3333% 47.0588%;
+    --ring: 353.7662 30.9237% 51.1765%;
+
+    --radius: 0px;
+
+    /* Brand wordmark gradient (warm) */
+    --brand-from: 353.7662 30.9237% 51.1765%;
+    --brand-via: 7.3469 21.9731% 56.2745%;
+    --brand-to: 23.0769 37.5723% 66.0784%;
+
+    /* Hard offset shadows (neo-brutalist) — verbatim from the source theme */
+    --shadow-2xs: 2px 2px 0px 2px hsl(22.7586 22.1374% 25.6863% / 0.50);
+    --shadow-xs: 2px 2px 0px 2px hsl(22.7586 22.1374% 25.6863% / 0.50);
+    --shadow-sm: 2px 2px 0px 2px hsl(22.7586 22.1374% 25.6863% / 1.00), 2px 1px 2px 1px hsl(22.7586 22.1374% 25.6863% / 1.00);
+    --shadow: 2px 2px 0px 2px hsl(22.7586 22.1374% 25.6863% / 1.00), 2px 1px 2px 1px hsl(22.7586 22.1374% 25.6863% / 1.00);
+    --shadow-md: 2px 2px 0px 2px hsl(22.7586 22.1374% 25.6863% / 1.00), 2px 2px 4px 1px hsl(22.7586 22.1374% 25.6863% / 1.00);
+    --shadow-lg: 2px 2px 0px 2px hsl(22.7586 22.1374% 25.6863% / 1.00), 2px 4px 6px 1px hsl(22.7586 22.1374% 25.6863% / 1.00);
+    --shadow-xl: 2px 2px 0px 2px hsl(22.7586 22.1374% 25.6863% / 1.00), 2px 8px 10px 1px hsl(22.7586 22.1374% 25.6863% / 1.00);
+    --shadow-2xl: 2px 2px 0px 2px hsl(22.7586 22.1374% 25.6863% / 2.50);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* ===== tweakcn theme — warm neo-brutalist (dark) ===== */
+    --background: 18.0000 13.1579% 14.9020%;
+    --foreground: 51.4286 46.6667% 94.1176%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 21.4286 13.2075% 20.7843%;
+    --card-foreground: 51.4286 46.6667% 94.1176%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 21.4286 13.2075% 20.7843%;
+    --popover-foreground: 51.4286 46.6667% 94.1176%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 23.0769 37.5723% 66.0784%;
+    --primary-foreground: 18.0000 13.1579% 14.9020%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 20.3571 23.3333% 47.0588%;
+    --secondary-foreground: 51.4286 46.6667% 94.1176%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 22.7586 22.1374% 25.6863%;
+    --muted-foreground: 21.4286 26.5823% 69.0196%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 20.4545 26.8293% 67.8431%;
+    --accent-foreground: 18.0000 13.1579% 14.9020%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 68.6747% 67.4510%;
+    --destructive-foreground: 18.0000 13.1579% 14.9020%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --success: 145 45% 52%;
+    --warning: 36 85% 58%;
+    --gold: 36 64% 60%;
+
+    --border: 22.7586 22.1374% 25.6863%;
+    --input: 22.7586 22.1374% 25.6863%;
+    --ring: 23.0769 37.5723% 66.0784%;
+
+    --brand-from: 23.0769 37.5723% 66.0784%;
+    --brand-via: 20.4545 26.8293% 67.8431%;
+    --brand-to: 21.4286 26.5823% 69.0196%;
   }
 }
 
@@ -70,7 +101,59 @@
   * {
     @apply border-border;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: hsl(var(--primary) / 0.22);
+    color: hsl(var(--foreground));
+  }
+
+  /* Thin scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.4) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary) / 0.35);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--primary) / 0.55);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  /* Warm gradient text — reserved for the brand wordmark only */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      100deg,
+      hsl(var(--brand-from)),
+      hsl(var(--brand-via)),
+      hsl(var(--brand-to))
+    );
   }
 }

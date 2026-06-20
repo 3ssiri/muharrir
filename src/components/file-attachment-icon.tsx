@@ -1,6 +1,6 @@
 'use client'
 
-import { FileText, File } from 'lucide-react'
+import { FileText, File } from '@/components/icons'
 import {
   Tooltip,
   TooltipContent,

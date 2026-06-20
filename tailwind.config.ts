@@ -18,6 +18,10 @@ const config = {
             },
         },
         extend: {
+            fontFamily: {
+                sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+                display: ["var(--font-display)", "var(--font-sans)", "sans-serif"],
+            },
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
@@ -36,6 +40,18 @@ const config = {
                     DEFAULT: "hsl(var(--destructive))",
                     foreground: "hsl(var(--destructive-foreground))",
                 },
+                success: {
+                    DEFAULT: "hsl(var(--success))",
+                    foreground: "hsl(0 0% 100%)",
+                },
+                warning: {
+                    DEFAULT: "hsl(var(--warning))",
+                    foreground: "hsl(0 0% 100%)",
+                },
+                gold: {
+                    DEFAULT: "hsl(var(--gold))",
+                    foreground: "hsl(345 40% 12%)",
+                },
                 muted: {
                     DEFAULT: "hsl(var(--muted))",
                     foreground: "hsl(var(--muted-foreground))",
@@ -52,11 +68,29 @@ const config = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
+                brand: {
+                    from: "hsl(var(--brand-from))",
+                    via: "hsl(var(--brand-via))",
+                    to: "hsl(var(--brand-to))",
+                },
             },
             borderRadius: {
+                xl: "calc(var(--radius) + 4px)",
                 lg: "var(--radius)",
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)",
+            },
+            boxShadow: {
+                "2xs": "var(--shadow-2xs)",
+                xs: "var(--shadow-xs)",
+                sm: "var(--shadow-sm)",
+                DEFAULT: "var(--shadow)",
+                md: "var(--shadow-md)",
+                lg: "var(--shadow-lg)",
+                xl: "var(--shadow-xl)",
+                "2xl": "var(--shadow-2xl)",
+                soft: "var(--shadow-sm)",
+                elevated: "var(--shadow-lg)",
             },
             keyframes: {
                 "accordion-down": {
