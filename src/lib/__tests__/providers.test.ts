@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { BUILTIN_PROVIDERS, findProviderByBaseUrl, isLocalProviderBaseUrl, normalizeBaseUrl } from '@/lib/providers'
+import {
+  BUILTIN_PROVIDERS,
+  findProviderByBaseUrl,
+  isLocalProviderBaseUrl,
+  normalizeBaseUrl,
+  selectPreferredLocalChatModel,
+} from '@/lib/providers'
 
 describe('providers', () => {
   it('normalizes whitespace and trailing slashes from base URLs', () => {
@@ -40,5 +46,22 @@ describe('providers', () => {
     expect(isLocalProviderBaseUrl('http://localhost:11434/v1')).toBe(true)
     expect(isLocalProviderBaseUrl('http://127.0.0.1:1234/v1/')).toBe(true)
     expect(isLocalProviderBaseUrl('https://api.deepseek.com')).toBe(false)
+  })
+
+  it('prefers chat-capable local models over embedding or OCR models', () => {
+    expect(
+      selectPreferredLocalChatModel([
+        'bge-m3:latest',
+        'glm-ocr:latest',
+        'nomic-embed-text:latest',
+        'qwen2.5:7b',
+        'qwen2.5vl:7b',
+      ])
+    ).toBe('qwen2.5:7b')
+  })
+
+  it('falls back to a non-empty local model when no known chat model exists', () => {
+    expect(selectPreferredLocalChatModel(['bge-m3:latest'])).toBe('bge-m3:latest')
+    expect(selectPreferredLocalChatModel([])).toBe('')
   })
 })

@@ -42,6 +42,10 @@ test.describe('اختبار تحسين واجهة المستخدم', () => {
     await expect(page.locator('text=Prompt Iterator')).toBeVisible();
     await expect(page.getByText('لست بحاجة إلى مفتاح API للتجربة الأولى')).toBeVisible();
     await expect(page.getByRole('button', { name: 'جرّب بدون مفتاح' })).toBeVisible();
+    const ollamaButton = page.getByRole('button', { name: 'استخدم Ollama المحلي' });
+    if (await ollamaButton.isVisible().catch(() => false)) {
+      await expect(page.getByText(/تم العثور على Ollama محليًا/)).toBeVisible();
+    }
 
     // التحقق من أزرار الأمثلة السريعة
     await expect(page.locator('text=مقال تحليل اتجاهات الذكاء الاصطناعي')).toBeVisible();

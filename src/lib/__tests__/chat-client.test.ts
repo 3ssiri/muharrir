@@ -111,4 +111,33 @@ describe('streamChat local providers', () => {
       })
     )
   })
+
+  it('adds a local-model note when no tool call is streamed', async () => {
+    const chunk = {
+      choices: [
+        {
+          delta: {
+            content: 'هذا رد نصي عادي.',
+          },
+        },
+      ],
+    }
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(new Response(`data: ${JSON.stringify(chunk)}\n\ndata: [DONE]\n\n`))
+    )
+
+    const response = await streamChat({
+      messages: [{ role: 'user', content: 'حوّل فكرة تطبيق ملاحظات إلى موجه منظم' }],
+      apiKey: '',
+      baseUrl: 'http://localhost:11434/v1',
+      model: 'qwen2.5:7b',
+    })
+
+    const result = await consumeChatStream(response, () => {})
+
+    expect(result.content).toContain('هذا رد نصي عادي.')
+    expect(result.content).toContain('النموذج المحلي رد كنص عادي')
+    expect(result.content).toContain('The local model replied with plain text')
+  })
 })

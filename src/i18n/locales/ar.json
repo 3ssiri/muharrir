@@ -188,6 +188,11 @@
     "demoPrompt": "لست بحاجة إلى مفتاح API للتجربة الأولى. فعّل الوضع التجريبي، اختر مثالًا أو اكتب مهمتك، ثم اضغط إرسال.",
     "demoCta": "جرّب بدون مفتاح",
     "realProviderCta": "إعداد مزوّد حقيقي",
+    "useOllama": "استخدم Ollama المحلي",
+    "checkingOllama": "جارٍ البحث عن Ollama المحلي...",
+    "ollamaDetected": "تم العثور على Ollama محليًا مع {count} نموذجًا.",
+    "ollamaNotDetected": "إذا كان Ollama يعمل عندك، افتح الإعدادات واختر Ollama يدويًا.",
+    "ollamaActivated": "تم ضبط Ollama المحلي باستخدام النموذج {model}",
     "modes": "أو ابدأ من نمط جاهز",
     "modeStarter": "أريد تطوير موجّه احترافي في مجال «{mode}». ساعدني خطوة بخطوة.",
     "example1Title": "مقال تحليل اتجاهات الذكاء الاصطناعي",
@@ -206,6 +211,12 @@
   "tabs": {
     "chat": "المحادثة",
     "favorites": "المفضّلة"
+  },
+  "providerStatus": {
+    "demo": "Demo",
+    "local": "Ollama محلي",
+    "configured": "مزوّد مهيأ",
+    "missing": "لا يوجد مزوّد"
   },
   "fileUpload": {
     "upload": "رفع ملف",
