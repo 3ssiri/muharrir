@@ -1,0 +1,36 @@
+- name: good first issue
+  color: "7057ff"
+  description: Small, well-scoped task suitable for a new contributor.
+
+- name: help wanted
+  color: "008672"
+  description: Contribution is welcome and the expected direction is documented.
+
+- name: documentation
+  color: "0075ca"
+  description: README, docs, guides, examples, or release notes.
+
+- name: i18n
+  color: "d93f0b"
+  description: Arabic/English localization, RTL, or translated examples.
+
+- name: privacy
+  color: "5319e7"
+  description: Local-first behavior, API key storage, data flow, or provider boundaries.
+
+- name: testing
+  color: "c2e0c6"
+  description: Unit, Playwright, CI, fixtures, or verification coverage.
+
+- name: desktop
+  color: "fbca04"
+  description: Tauri desktop, packaging, updater, system tray, or OS integration.
+
+- name: provider
+  color: "1d76db"
+  description: OpenAI-compatible provider presets, model lists, CORS, or local models.
+
+- name: accessibility
+  color: "bfdadc"
+  description: Keyboard, screen reader, contrast, focus, or reduced-motion work.
+

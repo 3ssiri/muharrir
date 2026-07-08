@@ -1,0 +1,32 @@
+name: Documentation
+description: Report missing, confusing, or outdated documentation.
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: textarea
+    id: location
+    attributes:
+      label: Documentation location
+      description: Link or name the file/section.
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What should change?
+      description: Explain what is missing, confusing, or outdated.
+    validations:
+      required: true
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Audience
+      options:
+        - New users
+        - Contributors
+        - Maintainers
+        - Security/privacy reviewers
+        - Grant/application reviewers
+        - Other
+    validations:
+      required: true

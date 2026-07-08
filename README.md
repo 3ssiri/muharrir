@@ -1,279 +1,169 @@
 <div align="center">
-  <img src="icon.png" alt="شعار Prompt Iterator" style="max-width: 100%;" />
+  <img src="icon.png" alt="Muharrir logo" width="160" />
 
-  # 🚀 مُحسِّن الموجّهات التفاعلي
+  # Muharrir
 
-  ### Interactive Prompt Iterator
+  **Local-first Arabic/English prompt engineering workspace**
 
-  <p align="center">
-    <strong>حوِّل الأفكار الغامضة إلى موجّهات ذكاء اصطناعي منظّمة وعالية الجودة عبر حوار تفاعلي متعدّد الجولات</strong>
-  </p>
+  Turn vague ideas, documents, and requirements into structured, reusable AI prompts through guided multi-step refinement.
 
-  <p align="center">
-    <a href="https://nextjs.org/">
-      <img src="https://img.shields.io/badge/Next.js-14.2-black?style=flat-square&logo=next.js" alt="Next.js" />
-    </a>
-    <a href="https://www.typescriptlang.org/">
-      <img src="https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript" alt="TypeScript" />
-    </a>
-    <a href="https://tailwindcss.com/">
-      <img src="https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=flat-square&logo=tailwind-css" alt="Tailwind CSS" />
-    </a>
-    <a href="https://tauri.app/">
-      <img src="https://img.shields.io/badge/Tauri-v2-FFC131?style=flat-square&logo=tauri" alt="Tauri" />
-    </a>
-  </p>
-
-  <p align="center">
-    <strong>العربية</strong> • <a href="#-البدء-السريع">البدء السريع</a> • <a href="docs/GUIDE_AR.md">الدليل بالعربية</a>
-  </p>
-
+  **محرر مساحة عمل محلية أولا بالعربية والإنجليزية لتحويل الأفكار والمستندات والمتطلبات الغامضة إلى موجهات ذكاء اصطناعي منظمة وقابلة لإعادة الاستخدام.**
 </div>
 
 ---
 
-## 📑 المحتويات
+## Why Muharrir?
 
-- [نبذة عن المشروع](#-نبذة-عن-المشروع)
-- [لماذا هذا المشروع؟](#-لماذا-هذا-المشروع)
-- [الميزات الأساسية](#-الميزات-الأساسية)
-- [التقنيات المستخدمة](#️-التقنيات-المستخدمة)
-- [البدء السريع](#-البدء-السريع)
-- [الإعداد](#️-الإعداد)
-- [البناء لسطح المكتب (Tauri)](#-البناء-لسطح-المكتب-tauri)
-- [اختصارات لوحة المفاتيح](#️-اختصارات-لوحة-المفاتيح)
-- [بنية المشروع](#-بنية-المشروع)
-- [البنية المعمارية](#️-البنية-المعمارية)
-- [الأسئلة الشائعة](#-الأسئلة-الشائعة)
-- [المساهمة](#-المساهمة)
-- [الرخصة](#-الرخصة)
+Muharrir is not a general chat app. It is a prompt engineering workflow that helps users move from a rough idea to a copy-ready prompt through:
 
----
+- Clarifying questions when the request is underspecified.
+- Multi-dimensional enhancement choices.
+- Structured final prompt proposals.
+- Local-first conversation and settings storage.
+- Arabic RTL and English support from the same interface.
+- Web and desktop builds from the same codebase.
 
-## 📖 نبذة عن المشروع
+## Current OSS Readiness Status
 
-**مُحسِّن الموجّهات التفاعلي** تطبيق يساعدك على تحويل فكرة غامضة إلى **موجّه (Prompt) منظّم وعالي الجودة** للذكاء الاصطناعي، عبر إرشادك بحوار تفاعلي وخيارات متعدّدة الأبعاد بدلاً من كتابة الموجّه يدويًا من الصفر.
+Muharrir is being prepared for a public open-source release. The project now targets the MIT license, but the repository should only be made public after the readiness gate is complete.
 
-الواجهة تدعم **العربية والإنجليزية** مع اتجاه RTL كامل للعربية، وكل البيانات تُحفظ **محليًا** في متصفّحك. المشروع جاهز للعمل كتطبيق ويب أو كتطبيق **سطح مكتب عبر Tauri v2** (Static Export).
+Read the internal readiness plan:
 
----
+- [OSS readiness plan](docs/oss-grant-readiness/README.md)
+- [Execution checklist](docs/oss-grant-readiness/execution-checklist.md)
+- [Decision log](docs/oss-grant-readiness/DECISIONS.md)
 
-## 🎯 لماذا هذا المشروع؟
+## Demo Preview
 
-| الطريقة التقليدية | هذا المشروع |
-|---|---|
-| ❌ تحتاج لتصميم بنية الموجّه بنفسك | ✅ إرشاد تفاعلي يولّد موجّهات منظّمة تلقائيًا |
-| ❌ تجربة وخطأ بكفاءة منخفضة | ✅ خيارات متعدّدة الأبعاد لتوضيح المتطلبات بسرعة |
-| ❌ صعوبة إعادة استخدام الموجّهات | ✅ إدارة قوالب وتطبيقها بنقرة واحدة |
-| ❌ لا يتعامل مع المستندات المعقّدة | ✅ دعم تحليل PDF وWord والصور |
-| ❌ تحتاج لحفظ صياغات معقّدة | ✅ نماذج مرئية بلا منحنى تعلّم |
+![Muharrir demo mode prompt proposal](docs/screenshots/demo-mode-flow.png)
 
----
+## Features
 
-## ✨ الميزات الأساسية
+- Arabic and English UI with RTL support.
+- Local-first history using IndexedDB.
+- Tauri desktop mode with OS Keychain API key storage when available.
+- Browser mode for local web use.
+- OpenAI-compatible providers through configurable `baseUrl`, model, and API key.
+- PDF and DOCX parsing in the browser.
+- Prompt comparison, favorites, preset modes, and import/export helpers.
+- Demo mode using the API key value `demo`, with no external provider call.
 
-- **🎯 إرشاد تفاعلي ذكي**: توضيح المتطلبات تدريجيًا عبر نماذج تفاعلية وحوار متعدّد الجولات.
-- **💾 محلي أولاً (Local-First)**:
-  - الإعدادات: `Zustand` + `LocalStorage` لحفظ مفتاح API وتفضيلات النماذج.
-  - السجلّ: `Dexie.js` (IndexedDB) لحفظ المحادثات والوصول دون اتصال.
-- **🌍 تعدّد اللغات**: دعم كامل للتبديل بين **العربية والإنجليزية** مع واجهة RTL للعربية.
-- **🎨 واجهة حديثة**: مبنية بـ Tailwind CSS + shadcn/ui، مع وضع ليلي/نهاري وتصميم متجاوب.
-- **📁 دعم الملفات**: رفع ولصق الصور (PNG/JPG/WebP)، وتحليل PDF وDOCX مباشرةً في المتصفح.
-- **🔧 إعداد مرن**: دعم مزوّدين متعدّدين (OpenAI، Claude، DeepSeek وغيرها)، و`Base URL` مخصّص، وموجّه نظام قابل للتعديل، واستيراد/تصدير الإعدادات.
-- **⌨️ اختصارات لوحة المفاتيح**: مجموعة شاملة لتسريع العمل (اضغط `Shift+/` لعرضها كلها).
-- **🖥️ جاهز لسطح المكتب**: يُصدَّر كملفات ثابتة (Static Export) ليعمل داخل Tauri v2.
+## Quick Start
 
----
-
-## 🛠️ التقنيات المستخدمة
-
-- **الإطار**: Next.js 14.2 (App Router) مع `output: 'export'`
-- **الواجهة**: Tailwind CSS 3.4، shadcn/ui، Lucide React
-- **إدارة الحالة**: Zustand 5.0
-- **قاعدة البيانات**: Dexie.js 4.2 (غلاف لـ IndexedDB)
-- **تكامل الذكاء الاصطناعي**: نداء مباشر من المتصفح لواجهة متوافقة مع OpenAI (`/chat/completions`) مع بثّ (streaming)
-- **معالجة الملفات**: pdfjs-dist (PDF) وmammoth (DOCX)
-- **التدويل**: next-intl 3.26 (عربي/إنجليزي)
-- **سطح المكتب**: Tauri v2 (مستهدَف)
-
----
-
-## 🚀 البدء السريع
-
-1. **استنساخ المستودع**
 ```bash
 git clone https://github.com/3ssiri/muharrir.git
 cd muharrir
-```
-
-2. **تثبيت الاعتماديات**
-```bash
-npm install
-```
-
-3. **تشغيل خادم التطوير**
-```bash
+npm ci
 npm run dev
 ```
 
-4. **فتح التطبيق**
-افتح المتصفح على [http://localhost:3000](http://localhost:3000)
+Open http://localhost:3000.
 
----
+The dev and build scripts copy the PDF worker before running Next.js. Use `npm run dev` and `npm run build` instead of calling `next` directly.
 
-## ⚙️ الإعداد
+## Try Demo Mode
 
-1. انقر على أيقونة **الإعدادات (⚙️)** أعلى الواجهة.
-2. أدخل إعدادات الذكاء الاصطناعي:
-   - **مفتاح API**: مفتاح OpenAI/Claude أو أي مزوّد متوافق.
-   - **Base URL**: عنوان واجهة المزوّد (الافتراضي: `https://api.openai.com/v1`).
-   - **النموذج**: اختر النموذج المطلوب.
-   - **نموذج التصحيح**: نموذج تصحيح الصيغة تلقائيًا (الافتراضي: `grok-beta-fast`).
-   - **موجّه النظام**: موجّه نظام مخصّص (اختياري).
-3. احفظ لتبدأ الاستخدام.
+You can try the first-use flow without a real API key:
 
-> 💡 جميع الإعدادات تُحفظ محليًا في المتصفّح ولا تُرفع لأي خادم.
+1. Open settings.
+2. Click **Use demo**, or set the API key to `demo`.
+3. Send a rough idea, for example:
 
-### النماذج المدعومة
+```text
+حوّل فكرة دورة قصيرة عن أساسيات الذكاء الاصطناعي إلى موجه منظم
+```
 
-- **OpenAI**: gpt-4o، gpt-4o-mini، gpt-4-turbo، o1، o1-mini
-- **Anthropic Claude**: claude-3-5-sonnet، claude-3-5-haiku، claude-3-opus
-- **نماذج أخرى متوافقة**: deepseek-chat، deepseek-reasoner، GLM-4-Plus، Qwen-Max، moonshot-v1-128k وغيرها
+Demo mode is simulated locally. It does not call OpenAI, DeepSeek, or any other provider.
 
----
+## Web vs Desktop
 
-## 🖥️ البناء لسطح المكتب (Tauri)
+| Area | Web browser | Tauri desktop |
+|---|---|---|
+| App runtime | Static Next.js export | Static Next.js export inside Tauri |
+| API calls | Directly to the configured provider; browser CORS may apply | Directly to the configured provider from the desktop app |
+| API key storage | Browser local storage | OS Keychain when available |
+| Keychain fallback | Not applicable | Fails closed; keys are not saved to localStorage |
+| File parsing | Local browser parsing | Local WebView parsing |
+| Project backend | None | None |
 
-التطبيق مُهيّأ للتصدير الثابت (`output: 'export'`) ليعمل داخل Tauri v2 بلا خادم.
+See [Privacy](docs/PRIVACY.md) for the detailed data flow.
+
+## Configuration
+
+Muharrir works with OpenAI-compatible providers. Configure:
+
+- API key.
+- Base URL, for example `https://api.deepseek.com` or another compatible endpoint.
+- Model name.
+- Optional correction model.
+- Optional custom system prompt.
+
+Some providers do not allow direct browser requests because of CORS. In those cases, the desktop app may work better.
+
+## Commands
 
 ```bash
-# توليد الواجهة الثابتة في مجلد out/
+npm run dev          # Start local web dev server on :3000
+npm run build        # Static export to out/
+npm run lint         # ESLint
+npm run typecheck    # TypeScript check
+npm run test:unit    # Vitest unit tests
+npm test             # Playwright tests; requires npm run dev on :3000
+npm run tauri dev    # Tauri desktop development
+npm run tauri build  # Desktop packages
+```
+
+## Architecture
+
+Muharrir is a client-side app by design:
+
+- `src/lib/chat-client.ts` replaces a server `/api/chat` route and streams OpenAI-compatible provider responses into the app protocol.
+- `src/lib/chat-stream.ts` parses streamed text, tool calls, and error events.
+- `src/lib/file-parser-client.ts` parses PDF and DOCX files in the browser.
+- `src/lib/store.ts` stores settings with Zustand.
+- `src/lib/db.ts` stores conversations and favorites with Dexie/IndexedDB.
+- `src/lib/tauri-bridge.ts` wraps browser/Tauri differences for API key storage and connection testing.
+- `src-tauri/src/lib.rs` provides desktop commands, tray behavior, global shortcut, updater setup, and provider connection checks.
+
+No Next.js API routes or middleware are used because the app must remain compatible with static export and Tauri.
+
+## Privacy
+
+Muharrir does not run a central project server for prompts, files, or chat history.
+
+- Conversations are stored locally.
+- Uploaded PDF/DOCX files are parsed locally.
+- With a real API key, prompts and selected file text are sent to the configured provider.
+- With `demo`, no provider request is made.
+- Desktop builds store API keys in OS Keychain and do not fall back to localStorage.
+
+Read [docs/PRIVACY.md](docs/PRIVACY.md) before using sensitive prompts or documents.
+
+## Contributing
+
+Contributions are welcome after the public readiness gate. Until then, the project is being cleaned up for a safer OSS launch.
+
+Useful docs:
+
+- [Contributing guide](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+- [Code of conduct](CODE_OF_CONDUCT.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Provider and CORS guide](docs/providers.md)
+- [Testing guide](docs/test-guide.md)
+- [Changelog](CHANGELOG.md)
+
+Before opening a PR, run:
+
+```bash
+npm run lint
+npm run typecheck
+npm run test:unit
 npm run build
-
-# تشغيل نافذة Tauri في وضع التطوير (بعد تهيئة src-tauri/)
-npm run tauri dev
-
-# بناء حزمة سطح المكتب للتوزيع
-npm run tauri build
 ```
 
-> 📌 لأن التصدير الثابت لا يدعم مسارات الخادم، يتم استدعاء الذكاء الاصطناعي وتحليل الملفات **من جانب المتصفح مباشرةً** عبر `src/lib/chat-client.ts` و`src/lib/file-parser-client.ts`. راجع [الدليل بالعربية](docs/GUIDE_AR.md) لتفاصيل التحويل والإعداد.
+Do not paste API keys, private prompts, personal data, or private documents into issues, pull requests, screenshots, or test fixtures.
 
----
+## License
 
-## ⌨️ اختصارات لوحة المفاتيح
-
-| الاختصار | الوظيفة |
-|---|---|
-| `Ctrl+K` / `⌘+K` | فتح بحث Spotlight |
-| `Ctrl+N` / `⌘+N` | محادثة جديدة |
-| `Ctrl+/` / `⌘+/` | التركيز على حقل الإدخال |
-| `Alt+S` | فتح الإعدادات |
-| `Ctrl+B` / `⌘+B` | إظهار/إخفاء الشريط الجانبي |
-| `Tab` | التبديل بين المحادثة والمفضّلة |
-| `Shift+/` | عرض لوحة الاختصارات |
-| `Enter` | إرسال الرسالة |
-| `Shift+Enter` | سطر جديد |
-
----
-
-## 📁 بنية المشروع
-
-```
-├── src/
-│   ├── app/
-│   │   ├── [locale]/          # صفحات التدويل (عربي/إنجليزي)
-│   │   │   ├── layout.tsx     # التخطيط + RTL + generateStaticParams
-│   │   │   └── page.tsx       # الصفحة الرئيسية للمحادثة
-│   │   ├── layout.tsx
-│   │   └── page.tsx           # إعادة توجيه الجذر حسب اللغة
-│   ├── components/            # مكوّنات React (وui/ من shadcn)
-│   ├── i18n/                  # إعداد next-intl + ملفات الترجمة (ar/en)
-│   └── lib/
-│       ├── chat-client.ts     # نداء الذكاء الاصطناعي client-side (بديل /api/chat)
-│       ├── file-parser-client.ts # تحليل PDF/DOCX في المتصفح
-│       ├── store.ts           # حالة Zustand
-│       └── db.ts              # قاعدة Dexie.js
-├── public/                    # موارد ثابتة (مع pdf.worker)
-├── next.config.mjs            # output: 'export' + إعداد next-intl
-└── package.json
-```
-
----
-
-## 🏗️ البنية المعمارية
-
-```mermaid
-graph TB
-    A[إدخال المستخدم] --> B{نوع الإدخال}
-    B -->|نص| C[معالجة النص]
-    B -->|ملف| D[تحليل الملف في المتصفح]
-    D -->|PDF| E[pdfjs-dist]
-    D -->|DOCX| F[mammoth]
-    C --> G[chat-client.ts]
-    E --> G
-    F --> G
-    G --> H[مزوّد الذكاء الاصطناعي]
-    H --> I{استدعاء أداة؟}
-    I -->|نعم| J[suggest_enhancements]
-    I -->|نعم| K[propose_prompt]
-    I -->|لا| L[بثّ نصّي]
-    J --> M[نموذج تفاعلي]
-    M --> N[اختيار المستخدم]
-    N --> G
-    K --> O[موجّه منظّم]
-    L --> P[عرض الرد]
-    O --> P
-```
-
----
-
-## ❓ الأسئلة الشائعة
-
-**١) كيف أضبط مفتاح API؟**
-انقر أيقونة الإعدادات، أدخل المفتاح و`Base URL`، ثم احفظ.
-
-**٢) هل تُدعَم المزوّدات الأخرى؟**
-نعم، أي واجهة متوافقة مع OpenAI (DeepSeek، GLM، Qwen وغيرها).
-
-**٣) هل بياناتي آمنة؟**
-كل البيانات تُحفظ محليًا في المتصفح (IndexedDB)، ولا يُرفع مفتاح API لأي خادم.
-
-**٤) هل تعمل على الجوال؟**
-نعم، الواجهة متجاوبة وتدعم متصفّحات الجوال.
-
-**٥) كيف أبني نسخة سطح المكتب؟**
-راجع قسم [البناء لسطح المكتب](#-البناء-لسطح-المكتب-tauri) و[الدليل بالعربية](docs/GUIDE_AR.md).
-
----
-
-## 🤝 المساهمة
-
-المساهمات مُرحَّب بها:
-
-1. اعمل Fork للمستودع.
-2. أنشئ فرعًا للميزة (`git checkout -b feature/AmazingFeature`).
-3. ثبّت تغييراتك (`git commit -m 'Add some AmazingFeature'`).
-4. ادفع الفرع (`git push origin feature/AmazingFeature`).
-5. افتح Pull Request.
-
----
-
-## 📄 الرخصة
-
-هذا المشروع مرخّص بموجب رخصة MIT — راجع ملف [LICENSE](LICENSE) للتفاصيل.
-
----
-
-## 🙏 شكر وتقدير
-
-- [Next.js](https://nextjs.org/) — إطار React
-- [Tauri](https://tauri.app/) — إطار سطح المكتب
-- [shadcn/ui](https://ui.shadcn.com/) — مكتبة مكوّنات الواجهة
-- [Dexie.js](https://dexie.org/) — غلاف IndexedDB
-
----
-
-<div align="center">
-  <p>⭐ إذا أفادك هذا المشروع، فلا تنسَ منحه نجمة!</p>
-</div>
+Muharrir is licensed under the [MIT License](LICENSE).

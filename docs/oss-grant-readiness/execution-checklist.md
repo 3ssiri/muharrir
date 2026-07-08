@@ -15,12 +15,12 @@
 
 ## المرحلة 0: قرارات قبل التنفيذ
 
-- [ ] تحديد هل سنفتح المستودع الحالي أم ننشئ نسخة عامة جديدة.
-- [ ] تحديد الرخصة: MIT أو Apache-2.0.
-- [ ] تحديد هل سيبقى الاسم `muharrir` أم يستخدم اسم عرض `Muharrir` فقط.
-- [ ] تحديد هل ننشر نسخة Desktop release الآن أم لاحقا.
-- [ ] تحديد هل نحتاج Demo URL أم يكفي local + screenshots.
-- [ ] تحديد هل نستخدم شعار/أيقونة المشروع الحالية أم نحدثها.
+- [x] تحديد هل سنفتح المستودع الحالي أم ننشئ نسخة عامة جديدة: تجهيز المستودع الحالي داخليا وفتحه لاحقا بعد بوابة الجاهزية.
+- [x] تحديد الرخصة: MIT.
+- [x] تحديد هل سيبقى الاسم `muharrir` أم يستخدم اسم عرض `Muharrir` فقط: `muharrir` للحزمة و`Muharrir` كاسم عرض.
+- [x] تحديد هل ننشر نسخة Desktop release الآن أم لاحقا: لاحقا بعد اكتمال بوابة الجاهزية.
+- [x] تحديد هل نحتاج Demo URL أم يكفي local + screenshots: يكفي local + screenshots/GIF مبدئيا، ويعاد تقييم Demo URL لاحقا.
+- [x] تحديد هل نستخدم شعار/أيقونة المشروع الحالية أم نحدثها: استخدام الهوية الحالية في أول تمريرة جاهزية.
 
 قرار موصى به:
 
@@ -28,22 +28,24 @@
 - استخدم MIT إذا كان الهدف تبني واسع وسرعة قبول مساهمات.
 - استخدم Apache-2.0 إذا كنت تريد صياغة مؤسسية أقوى.
 
+سجل القرارات المعتمد: [DECISIONS.md](DECISIONS.md).
+
 ---
 
 ## المرحلة 1: تنظيف الرخصة والهوية
 
 ### مهام
 
-- [ ] مراجعة `LICENSE` الحالي.
-- [ ] إصلاح التعارض بين README وLICENSE.
-- [ ] تحديث `package.json`:
-  - [ ] تغيير `name` من `app` إلى `muharrir` أو `@3ssiri/muharrir` إذا كان سينشر لاحقا.
-  - [ ] مراجعة `private: true`.
-  - [ ] إضافة description مناسب.
-  - [ ] إضافة repository, license, keywords.
-- [ ] البحث عن أي نص `proprietary`, `confidential`, `all rights reserved`.
-- [ ] حذف أو تعديل النصوص المغلقة إذا كان القرار فتح المصدر.
-- [ ] إضافة `NOTICE` إذا لزم.
+- [x] مراجعة `LICENSE` الحالي.
+- [x] إصلاح التعارض بين README وLICENSE.
+- [x] تحديث `package.json`:
+  - [x] تغيير `name` من `app` إلى `muharrir` أو `@3ssiri/muharrir` إذا كان سينشر لاحقا.
+  - [x] مراجعة `private: true`.
+  - [x] إضافة description مناسب.
+  - [x] إضافة repository, license, keywords.
+- [x] البحث عن أي نص `proprietary`, `confidential`, `all rights reserved`: المتبقي سياق تخطيطي أو مقارنة سوقية، لا صياغة ترخيص نشطة.
+- [x] حذف أو تعديل النصوص المغلقة إذا كان القرار فتح المصدر.
+- [x] إضافة `NOTICE` إذا لزم: غير لازم حاليا؛ لا توجد إشعارات طرف ثالث مخصصة تتطلب ملف NOTICE.
 
 ### شروط القبول
 
@@ -57,25 +59,25 @@
 
 ### ملفات مطلوبة
 
-- [ ] `CONTRIBUTING.md`
-- [ ] `SECURITY.md`
-- [ ] `CODE_OF_CONDUCT.md`
-- [ ] `CHANGELOG.md`
-- [ ] `docs/ROADMAP.md`
-- [ ] `docs/PRIVACY.md`
-- [ ] `.github/PULL_REQUEST_TEMPLATE.md`
-- [ ] `.github/ISSUE_TEMPLATE/bug_report.yml`
-- [ ] `.github/ISSUE_TEMPLATE/feature_request.yml`
-- [ ] `.github/ISSUE_TEMPLATE/documentation.yml`
+- [x] `CONTRIBUTING.md`
+- [x] `SECURITY.md`
+- [x] `CODE_OF_CONDUCT.md`
+- [x] `CHANGELOG.md`
+- [x] `docs/ROADMAP.md`
+- [x] `docs/PRIVACY.md`
+- [x] `.github/PULL_REQUEST_TEMPLATE.md`
+- [x] `.github/ISSUE_TEMPLATE/bug_report.yml`
+- [x] `.github/ISSUE_TEMPLATE/feature_request.yml`
+- [x] `.github/ISSUE_TEMPLATE/documentation.yml`
 
 ### محتوى مهم
 
-- [ ] شرح أن المشروع local-first.
-- [ ] تحذير من نشر مفاتيح API في Issues.
-- [ ] توضيح الفرق بين Web وTauri في حفظ المفاتيح.
-- [ ] طريقة تشغيل الاختبارات.
-- [ ] طريقة إضافة ترجمة جديدة.
-- [ ] طريقة إضافة مزود AI جديد.
+- [x] شرح أن المشروع local-first.
+- [x] تحذير من نشر مفاتيح API في Issues.
+- [x] توضيح الفرق بين Web وTauri في حفظ المفاتيح.
+- [x] طريقة تشغيل الاختبارات.
+- [x] طريقة إضافة ترجمة جديدة.
+- [x] طريقة إضافة مزود AI جديد.
 
 ### شروط القبول
 
@@ -89,25 +91,25 @@
 
 ### README
 
-- [ ] تحديث وصف المشروع بالإنجليزية والعربية.
-- [ ] إضافة عنوان واضح:
+- [x] تحديث وصف المشروع بالإنجليزية والعربية.
+- [x] إضافة عنوان واضح:
   - `Local-first Arabic/English prompt engineering workspace`
-- [ ] إضافة صور أو placeholders للصور.
-- [ ] إضافة Quick Start.
-- [ ] إضافة Demo Mode.
-- [ ] إضافة Web vs Desktop table.
-- [ ] إضافة Privacy section.
-- [ ] إضافة Architecture مختصرة.
-- [ ] إضافة Contributing section.
-- [ ] إضافة Roadmap مختصر.
+- [x] إضافة صور أو placeholders للصور.
+- [x] إضافة Quick Start.
+- [x] إضافة Demo Mode.
+- [x] إضافة Web vs Desktop table.
+- [x] إضافة Privacy section.
+- [x] إضافة Architecture مختصرة.
+- [x] إضافة Contributing section.
+- [x] إضافة Roadmap مختصر.
 
 ### تجربة المستخدم
 
-- [ ] المستخدم يعرف كيف يبدأ بدون API key عبر demo mode.
-- [ ] الإعدادات مفهومة.
-- [ ] رسالة CORS مفهومة في المتصفح.
-- [ ] رسالة Tauri/desktop واضحة.
-- [ ] أول prompt final يمكن نسخه بسهولة.
+- [x] المستخدم يعرف كيف يبدأ بدون API key عبر demo mode.
+- [x] الإعدادات مفهومة.
+- [x] رسالة CORS مفهومة في المتصفح.
+- [x] رسالة Tauri/desktop واضحة.
+- [x] أول prompt final يمكن نسخه بسهولة.
 
 ### شروط القبول
 
@@ -121,33 +123,33 @@
 
 ### Demo Mode
 
-- [ ] تحقق أن `demo` يعمل بلا اتصال خارجي.
-- [ ] أضف زر أو خيار واضح لتفعيل demo mode.
-- [ ] أضف رسالة توضح أن demo لا يستخدم مزود AI حقيقي.
-- [ ] أضف بيانات مثال جيدة بالعربية والإنجليزية.
+- [x] تحقق أن `demo` يعمل بلا اتصال خارجي.
+- [x] أضف زر أو خيار واضح لتفعيل demo mode.
+- [x] أضف رسالة توضح أن demo لا يستخدم مزود AI حقيقي.
+- [x] أضف بيانات مثال جيدة بالعربية والإنجليزية.
 
 ### Prompt Workflow
 
-- [ ] تحسين `ask_questions` لأسئلة مختصرة ومفيدة.
-- [ ] تحسين `suggest_enhancements` لخيارات قابلة للفهم.
-- [ ] تحسين `propose_prompt` لنسخة نهائية منظمة.
-- [ ] إضافة زر Copy واضح.
-- [ ] إضافة Save to favorites.
-- [ ] إضافة Export prompt.
+- [x] تحسين `ask_questions` لأسئلة مختصرة ومفيدة.
+- [x] تحسين `suggest_enhancements` لخيارات قابلة للفهم.
+- [x] تحسين `propose_prompt` لنسخة نهائية منظمة.
+- [x] إضافة زر Copy واضح.
+- [x] إضافة Save to favorites.
+- [x] إضافة Export prompt.
 
 ### Multi-provider
 
-- [ ] مراجعة قائمة المزودين.
-- [ ] إضافة provider presets واضحة.
-- [ ] إضافة custom provider docs.
-- [ ] توضيح أن بعض المزودين قد لا يسمحون بالنداء من المتصفح بسبب CORS.
+- [x] مراجعة قائمة المزودين.
+- [x] إضافة provider presets واضحة.
+- [x] إضافة custom provider docs.
+- [x] توضيح أن بعض المزودين قد لا يسمحون بالنداء من المتصفح بسبب CORS.
 
 ### الملفات
 
-- [ ] اختبار PDF صغير.
-- [ ] اختبار DOCX صغير.
-- [ ] توضيح حدود حجم الملفات.
-- [ ] إضافة تحذير الخصوصية: الملفات تحلل محليا في المتصفح.
+- [x] اختبار PDF صغير.
+- [x] اختبار DOCX صغير.
+- [x] توضيح حدود حجم الملفات.
+- [x] إضافة تحذير الخصوصية: الملفات تحلل محليا في المتصفح.
 
 ### شروط القبول
 
@@ -161,15 +163,15 @@
 
 ### package scripts
 
-- [ ] إضافة `typecheck`:
+- [x] إضافة `typecheck`:
   - `tsc --noEmit`
-- [ ] التأكد من `lint` يعمل أو تحديثه إذا `next lint` deprecated لاحقا.
-- [ ] التأكد من `test:unit`.
-- [ ] التأكد من `build`.
+- [x] التأكد من `lint` يعمل أو تحديثه إذا `next lint` deprecated لاحقا.
+- [x] التأكد من `test:unit`.
+- [x] التأكد من `build`.
 
 ### GitHub Actions
 
-- [ ] workflow للويب:
+- [x] workflow للويب:
   - checkout
   - setup node
   - npm ci
@@ -177,28 +179,28 @@
   - typecheck
   - test:unit
   - build
-- [ ] workflow اختياري Playwright smoke.
-- [ ] workflow اختياري desktop build عند tags فقط.
+- [x] workflow اختياري Playwright smoke.
+- [x] workflow اختياري desktop build عند tags فقط.
 
 ### اختبارات وحدة
 
-- [ ] chat stream parser.
-- [ ] format validator.
-- [ ] error classification.
-- [ ] providers.
-- [ ] import/export utils.
-- [ ] token estimate.
-- [ ] text diff.
+- [x] chat stream parser.
+- [x] format validator.
+- [x] error classification.
+- [x] providers.
+- [x] import/export utils.
+- [x] token estimate.
+- [x] text diff.
 
 ### اختبارات واجهة
 
-- [ ] `/ar` يعمل.
-- [ ] `/en` يعمل.
-- [ ] settings dialog.
-- [ ] demo message.
-- [ ] language switch.
-- [ ] prompt proposal copy/save.
-- [ ] file upload smoke إن أمكن.
+- [x] `/ar` يعمل.
+- [x] `/en` يعمل.
+- [x] settings dialog.
+- [x] demo message.
+- [x] language switch.
+- [x] prompt proposal copy/save.
+- [x] file upload smoke إن أمكن.
 
 ### شروط القبول
 
@@ -212,18 +214,19 @@
 
 ### فحص حساس
 
-- [ ] عدم طباعة API key في console.
-- [ ] عدم حفظ API key في localStorage داخل Tauri.
-- [ ] عدم إرسال الملفات إلى خادم المشروع.
-- [ ] عدم وجود telemetry افتراضي.
-- [ ] عدم وجود مفاتيح أو أسرار في repo.
-- [ ] `.gitignore` يغطي `.env`, build outputs, Tauri secrets, logs.
+- [x] عدم طباعة API key في console.
+- [x] عدم حفظ API key في localStorage داخل Tauri: فشل Keychain لا يفعّل fallback محلي في تطبيق سطح المكتب.
+- [x] عدم إرسال الملفات إلى خادم المشروع.
+- [x] عدم وجود telemetry افتراضي.
+- [x] عدم وجود مفاتيح أو أسرار في repo.
+- [x] `.gitignore` يغطي `.env`, build outputs, Tauri secrets, logs.
+- [x] توثيق نتيجة التدقيق في `docs/oss-grant-readiness/security-privacy-audit.md`.
 
 ### وثائق
 
-- [ ] `docs/PRIVACY.md`
-- [ ] `SECURITY.md`
-- [ ] قسم Privacy في README.
+- [x] `docs/PRIVACY.md`
+- [x] `SECURITY.md`
+- [x] قسم Privacy في README.
 
 ### شروط القبول
 
@@ -237,28 +240,28 @@
 
 ### Issues مقترحة
 
-- [ ] Add provider preset for OpenRouter.
-- [ ] Improve Arabic prompt proposal templates.
-- [ ] Add screenshot/GIF to README.
-- [ ] Add English README mirror.
-- [ ] Add Playwright demo-mode test.
-- [ ] Add provider CORS troubleshooting guide.
-- [ ] Add prompt template import/export.
-- [ ] Add accessibility audit.
-- [ ] Add offline PWA support.
-- [ ] Add desktop release documentation.
+- [x] Add provider preset for OpenRouter.
+- [x] Improve Arabic prompt proposal templates.
+- [x] Add screenshot/GIF to README.
+- [x] Add English README mirror.
+- [x] Add Playwright demo-mode test.
+- [x] Add provider CORS troubleshooting guide.
+- [x] Add prompt template import/export.
+- [x] Add accessibility audit.
+- [x] Add offline PWA support.
+- [x] Add desktop release documentation.
 
 ### Labels
 
-- [ ] good first issue
-- [ ] help wanted
-- [ ] documentation
-- [ ] i18n
-- [ ] privacy
-- [ ] testing
-- [ ] desktop
-- [ ] provider
-- [ ] accessibility
+- [x] good first issue
+- [x] help wanted
+- [x] documentation
+- [x] i18n
+- [x] privacy
+- [x] testing
+- [x] desktop
+- [x] provider
+- [x] accessibility
 
 ### شروط القبول
 
@@ -272,14 +275,14 @@
 
 ### قبل الإصدار
 
-- [ ] حسم رقم الإصدار.
-- [ ] تحديث CHANGELOG.
-- [ ] تشغيل كل الاختبارات.
-- [ ] تشغيل build.
-- [ ] التقاط صور/GIF.
-- [ ] التأكد من README.
-- [ ] التأكد من LICENSE.
-- [ ] التأكد من SECURITY.
+- [x] حسم رقم الإصدار: `0.2.3`.
+- [x] تحديث CHANGELOG.
+- [x] تشغيل كل الاختبارات.
+- [x] تشغيل build.
+- [x] التقاط صور/GIF.
+- [x] التأكد من README.
+- [x] التأكد من LICENSE.
+- [x] التأكد من SECURITY.
 
 ### Release notes template
 
@@ -313,24 +316,24 @@ Verification:
 ### قبل التقديم
 
 - [ ] المستودع Public.
-- [ ] الرخصة مفتوحة.
-- [ ] README مقنع.
+- [x] الرخصة مفتوحة.
+- [x] README مقنع.
 - [ ] CI أخضر.
 - [ ] Release موجود.
-- [ ] Demo أو screenshots موجودة.
-- [ ] Issues للمساهمين موجودة.
-- [ ] Roadmap موجود.
-- [ ] وصف قصير وطويل جاهز.
+- [x] Demo أو screenshots موجودة.
+- [x] Issues للمساهمين موجودة.
+- [x] Roadmap موجود.
+- [x] وصف قصير وطويل جاهز.
 
 ### مواد التقديم
 
-- [ ] وصف 300 حرف.
-- [ ] وصف 1000 حرف.
-- [ ] خطة 6 أشهر.
-- [ ] أثر المشروع على OSS.
-- [ ] لماذا Arabic-first مهم.
-- [ ] كيف يساعد المطورين.
-- [ ] لماذا يحتاج دعم أدوات AI.
+- [x] وصف 300 حرف.
+- [x] وصف 1000 حرف.
+- [x] خطة 6 أشهر.
+- [x] أثر المشروع على OSS.
+- [x] لماذا Arabic-first مهم.
+- [x] كيف يساعد المطورين.
+- [x] لماذا يحتاج دعم أدوات AI.
 
 ### شروط القبول الذاتية
 

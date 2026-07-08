@@ -1,0 +1,43 @@
+name: Feature request
+description: Suggest an improvement for Muharrir.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please avoid sharing private prompts, API keys, or confidential documents.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the feature or workflow.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Prompt workflow
+        - Arabic/RTL
+        - Providers
+        - Privacy/security
+        - Desktop/Tauri
+        - Documentation
+        - Testing
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional notes about other approaches.
