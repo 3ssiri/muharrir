@@ -23,6 +23,7 @@ Muharrir is technically demo-ready, but not fully submission-ready until the pub
 - [provider-program-fit.md](provider-program-fit.md): Which Anthropic/OpenAI routes fit Muharrir and what each requires.
 - [anthropic-startups.md](anthropic-startups.md): Draft answers for Anthropic Claude for Startups.
 - [openai-startups.md](openai-startups.md): Draft answers for OpenAI startup/community routes.
+- [official-statement.md](official-statement.md): Official one-line positioning for forms, README snippets, and outreach.
 - [application-fields.md](application-fields.md): Shared short, medium, and long form copy.
 - [demo-script.md](demo-script.md): 90-second demo video script and shot list.
 - [submission-checklist.md](submission-checklist.md): Final gate before pressing submit.
