@@ -4,7 +4,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [master]
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
@@ -23,10 +23,40 @@ jobs:
           cache: npm
 
       - name: Install npm dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test:unit
 
       - name: Build static export
         run: npm run build
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright smoke
+        shell: bash
+        run: |
+          npm run dev > /tmp/muharrir-next.log 2>&1 &
+          DEV_PID=$!
+          trap 'kill "$DEV_PID" 2>/dev/null || true' EXIT
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000/ar >/dev/null; then
+              break
+            fi
+            if [ "$i" = "60" ]; then
+              cat /tmp/muharrir-next.log
+              exit 1
+            fi
+            sleep 1
+          done
+          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 npm test -- --workers=1
 
   # فحص كود Rust الخاص بـ Tauri (cargo check)
   rust:
