@@ -40,6 +40,8 @@ test.describe('اختبار تحسين واجهة المستخدم', () => {
   test('اختبار تحميل الصفحة الرئيسية', async ({ page }) => {
     // التحقق من وجود العنوان
     await expect(page.locator('text=Prompt Iterator')).toBeVisible();
+    await expect(page.getByText('لست بحاجة إلى مفتاح API للتجربة الأولى')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'جرّب بدون مفتاح' })).toBeVisible();
 
     // التحقق من أزرار الأمثلة السريعة
     await expect(page.locator('text=مقال تحليل اتجاهات الذكاء الاصطناعي')).toBeVisible();
@@ -80,17 +82,8 @@ test.describe('اختبار تحسين واجهة المستخدم', () => {
   });
 
   test('تفعيل الوضع التجريبي من الإعدادات وتشغيل تدفق prompt', async ({ page }) => {
-    await page.locator('[data-settings-trigger]').click();
-
-    const dialog = page.getByRole('dialog');
-    await expect(dialog.getByText('الوضع التجريبي')).toBeVisible();
-
-    await dialog.getByRole('button', { name: 'تفعيل التجربة' }).click();
-    await expect(dialog.locator('input[type="password"]')).toHaveValue('demo');
-    await expect(dialog.getByText('الوضع التجريبي مفعّل محليًا')).toBeVisible();
-
-    await dialog.getByRole('button', { name: 'حفظ التغييرات' }).click();
-    await expect(dialog).toBeHidden();
+    await page.getByRole('button', { name: 'جرّب بدون مفتاح' }).click();
+    await expect(page.getByText('الوضع التجريبي مفعّل محليًا')).toBeVisible();
 
     const input = page.getByRole('textbox', { name: /مهمتك/ });
     await input.fill('حوّل فكرة دورة قصيرة عن أساسيات الذكاء الاصطناعي إلى موجه منظم');

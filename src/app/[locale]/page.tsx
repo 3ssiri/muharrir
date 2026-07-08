@@ -36,7 +36,7 @@ const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 
 export default function Home() {
   const t = useTranslations();
-  const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, setModel, hydrateApiKey } = useAppStore()
+  const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, setApiKey, setModel, hydrateApiKey } = useAppStore()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // عند بدء التطبيق على سطح المكتب: حمّل مفتاح API من الـ OS Keychain
@@ -826,6 +826,11 @@ export default function Home() {
     }
   }
 
+  const handleEnableDemoMode = () => {
+    setApiKey('demo')
+    toast.success(t('settings.demoConnectionMessage'))
+  }
+
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden">
       {/* Sidebar */}
@@ -957,6 +962,25 @@ export default function Home() {
                   <p className="text-lg text-muted-foreground max-w-[600px] mx-auto">
                     {t('welcome.subtitle')}
                   </p>
+                  {!apiKey && (
+                    <div className="mx-auto flex max-w-xl flex-col items-center gap-3 rounded-lg border border-primary/25 bg-primary/5 px-4 py-4">
+                      <p className="text-sm font-medium text-foreground">
+                        {t('welcome.demoPrompt')}
+                      </p>
+                      <div className="flex flex-col gap-2 sm:flex-row">
+                        <Button type="button" onClick={handleEnableDemoMode}>
+                          {t('welcome.demoCta')}
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => setSettingsOpen(true)}
+                        >
+                          {t('welcome.realProviderCta')}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Quick examples */}
