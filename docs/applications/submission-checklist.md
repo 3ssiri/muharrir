@@ -10,8 +10,8 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 - [ ] `docs/PRIVACY.md` is current.
 - [ ] `SECURITY.md` exists and does not overpromise.
 - [ ] Roadmap is current.
-- [ ] Demo video is recorded and uploaded.
-- [ ] Stable release or beta tag exists.
+- [x] Demo video is recorded and uploaded.
+- [x] Stable release or beta tag exists.
 - [ ] CI status is green.
 
 ## Product Proof
@@ -29,7 +29,7 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 - [ ] Claude Console account exists.
 - [ ] Company email exists.
 - [ ] Company website or project landing page exists.
-- [ ] Native Claude API support is implemented, or a public milestone is linked.
+- [x] Native Claude API support is implemented, or a public milestone is linked.
 - [ ] Application clearly says how Claude will power the workflow.
 - [ ] If asking for credits/extras, funding and eligibility details are truthful.
 
