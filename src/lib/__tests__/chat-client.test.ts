@@ -141,3 +141,119 @@ describe('streamChat local providers', () => {
     expect(result.content).toContain('The local model replied with plain text')
   })
 })
+
+describe('streamChat Anthropic provider', () => {
+  it('sends a native Messages API request with Anthropic headers and tool schemas', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        [
+          'event: content_block_start',
+          'data: {"type":"content_block_start","index":0,"content_block":{"type":"text","text":""}}',
+          '',
+          'event: content_block_delta',
+          'data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"hello"}}',
+          '',
+          'event: message_stop',
+          'data: {"type":"message_stop"}',
+          '',
+        ].join('\n')
+      )
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const response = await streamChat({
+      messages: [{ role: 'user', content: 'حوّل الفكرة إلى موجه' }],
+      apiKey: 'anth-key',
+      baseUrl: 'https://api.anthropic.com/v1',
+      model: 'claude-sonnet-5',
+      systemPrompt: 'Use Muharrir tools.',
+    })
+
+    expect(response.ok).toBe(true)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(url).toBe('https://api.anthropic.com/v1/messages')
+    expect(init.headers).toMatchObject({
+      'Content-Type': 'application/json',
+      'x-api-key': 'anth-key',
+      'anthropic-version': '2023-06-01',
+    })
+    expect(init.headers).not.toHaveProperty('Authorization')
+
+    const body = JSON.parse(init.body)
+    expect(body).toMatchObject({
+      model: 'claude-sonnet-5',
+      system: 'Use Muharrir tools.',
+      tool_choice: { type: 'any' },
+      stream: true,
+    })
+    expect(body.messages).toEqual([{ role: 'user', content: 'حوّل الفكرة إلى موجه' }])
+    expect(body.tools[0]).toMatchObject({
+      name: 'ask_questions',
+      input_schema: expect.objectContaining({ type: 'object' }),
+    })
+  })
+
+  it('parses streamed Anthropic tool_use blocks into Muharrir tool calls', async () => {
+    const args = {
+      dimensions: [
+        {
+          key: 'audience',
+          title: 'Audience',
+          options: [
+            {
+              label: 'Developers',
+              value: 'developers',
+              description: 'Use technical implementation details.',
+            },
+          ],
+          allowCustom: true,
+        },
+      ],
+    }
+    const rawArgs = JSON.stringify(args)
+    const splitAt = Math.floor(rawArgs.length / 2)
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          [
+            'event: content_block_start',
+            'data: {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"toolu_1","name":"suggest_enhancements","input":{}}}',
+            '',
+            'event: content_block_delta',
+            `data: ${JSON.stringify({ type: 'content_block_delta', index: 0, delta: { type: 'input_json_delta', partial_json: rawArgs.slice(0, splitAt) } })}`,
+            '',
+            'event: content_block_delta',
+            `data: ${JSON.stringify({ type: 'content_block_delta', index: 0, delta: { type: 'input_json_delta', partial_json: rawArgs.slice(splitAt) } })}`,
+            '',
+            'event: content_block_stop',
+            'data: {"type":"content_block_stop","index":0}',
+            '',
+            'event: message_stop',
+            'data: {"type":"message_stop"}',
+            '',
+          ].join('\n')
+        )
+      )
+    )
+
+    const response = await streamChat({
+      messages: [{ role: 'user', content: 'Build a prompt workflow' }],
+      apiKey: 'anth-key',
+      baseUrl: 'https://api.anthropic.com/v1',
+      model: 'claude-sonnet-5',
+    })
+
+    const result = await consumeChatStream(response, () => {})
+
+    expect(result.toolInvocations).toHaveLength(1)
+    expect(result.toolInvocations[0]).toMatchObject({
+      toolCallId: 'toolu_1',
+      toolName: 'suggest_enhancements',
+      args,
+    })
+  })
+})

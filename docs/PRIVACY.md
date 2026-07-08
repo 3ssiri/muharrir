@@ -27,7 +27,7 @@ If the keychain is unavailable, the desktop app fails closed and does not save t
 
 ## When Data Leaves The Device
 
-User prompts, selected file text, and conversation context are sent to the configured OpenAI-compatible provider when the user sends a message with a real API key.
+User prompts, selected file text, and conversation context are sent to the configured AI provider when the user sends a message with a real API key. Supported provider formats include OpenAI-compatible chat completions and Anthropic Claude Messages API.
 
 The provider is controlled by the user's settings, including `baseUrl`, model, and API key. Muharrir does not proxy these requests through a project server.
 

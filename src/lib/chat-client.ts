@@ -14,7 +14,7 @@
  */
 
 import { validateToolCall, correctFormat } from '@/lib/format-validator';
-import { isLocalProviderBaseUrl } from '@/lib/providers';
+import { getProviderApiFormat, isLocalProviderBaseUrl } from '@/lib/providers';
 
 export interface StreamChatParams {
   messages: any[];
@@ -250,6 +250,8 @@ const TOOLS = [
   },
 ];
 
+const ANTHROPIC_VERSION = '2023-06-01';
+
 // Normalize the Base URL (remove a trailing slash)
 function normalizeBaseUrl(baseUrl: string): string {
   return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
@@ -263,6 +265,24 @@ function toProviderMessages(messages: any[]): Array<{ role: string; content: str
       role: m.role,
       content: typeof m.content === 'string' ? m.content : '',
     }));
+}
+
+function toAnthropicMessages(messages: any[]): Array<{ role: 'user' | 'assistant'; content: string }> {
+  return messages
+    .filter((m) => m && (m.role === 'user' || m.role === 'assistant'))
+    .map((m) => ({
+      role: m.role,
+      content: typeof m.content === 'string' ? m.content : '',
+    }))
+    .filter((m) => m.content.trim().length > 0);
+}
+
+function toAnthropicTools() {
+  return TOOLS.map((tool) => ({
+    name: tool.function.name,
+    description: tool.function.description,
+    input_schema: tool.function.parameters,
+  }));
 }
 
 // Cap on how much of a raw provider error we surface to the UI. Some providers
@@ -344,6 +364,148 @@ function buildDemoResponse(): Response {
   });
 }
 
+async function streamAnthropicChat(params: StreamChatParams, apiKey: string): Promise<Response> {
+  const { messages, model, systemPrompt, baseUrl, signal } = params;
+  const modelId = model || 'claude-sonnet-5';
+
+  let upstream: Response;
+  try {
+    upstream = await fetch(`${normalizeBaseUrl(baseUrl)}/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': ANTHROPIC_VERSION,
+      },
+      body: JSON.stringify({
+        model: modelId,
+        max_tokens: 4096,
+        system: systemPrompt || DEFAULT_SYSTEM_PROMPT,
+        messages: toAnthropicMessages(messages),
+        tools: toAnthropicTools(),
+        tool_choice: { type: 'any' },
+        stream: true,
+      }),
+      signal,
+    });
+  } catch {
+    return new Response(`Connection Failed: Could not reach ${baseUrl}. Please check your Base URL settings.`, { status: 504 });
+  }
+
+  if (!upstream.ok || !upstream.body) {
+    let raw = '';
+    try { raw = await upstream.text(); } catch {}
+    return new Response(mapError(upstream.status, raw, modelId), { status: upstream.status || 502 });
+  }
+
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      const toolAcc: Record<number, { id: string; name: string; args: string; emitted: boolean }> = {};
+      let buffer = '';
+
+      const flushToolCall = (idx: number) => {
+        const tc = toolAcc[idx];
+        if (!tc || tc.emitted || !tc.name) return;
+
+        let parsed: unknown = {};
+        try {
+          parsed = tc.args ? JSON.parse(tc.args) : {};
+        } catch {
+          parsed = tc.args;
+        }
+
+        const validation = validateToolCall(tc.name, parsed);
+        if (!validation.valid) {
+          controller.enqueue(encoder.encode(`e:{"type":"correction","status":"failed"}\n`));
+        }
+
+        const toolData = { toolCallId: tc.id || `call_${idx}`, toolName: tc.name, args: parsed };
+        controller.enqueue(encoder.encode(`9:${JSON.stringify(toolData)}\n`));
+        tc.emitted = true;
+      };
+
+      try {
+        const reader = upstream.body!.getReader();
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || !trimmed.startsWith('data:')) continue;
+
+            let json: any;
+            try {
+              json = JSON.parse(trimmed.slice(5).trim());
+            } catch {
+              continue;
+            }
+
+            const index = typeof json.index === 'number' ? json.index : 0;
+
+            if (json.type === 'content_block_start' && json.content_block?.type === 'tool_use') {
+              toolAcc[index] = {
+                id: json.content_block.id || `call_${index}`,
+                name: json.content_block.name || '',
+                args: json.content_block.input && Object.keys(json.content_block.input).length > 0
+                  ? JSON.stringify(json.content_block.input)
+                  : '',
+                emitted: false,
+              };
+            }
+
+            if (json.type === 'content_block_delta' && json.delta?.type === 'text_delta') {
+              const text = json.delta.text;
+              if (typeof text === 'string' && text.length > 0) {
+                controller.enqueue(encoder.encode(`0:${JSON.stringify(text)}\n`));
+              }
+            }
+
+            if (json.type === 'content_block_delta' && json.delta?.type === 'input_json_delta') {
+              if (!toolAcc[index]) toolAcc[index] = { id: `call_${index}`, name: '', args: '', emitted: false };
+              if (typeof json.delta.partial_json === 'string') {
+                toolAcc[index].args += json.delta.partial_json;
+              }
+            }
+
+            if (json.type === 'content_block_stop') {
+              flushToolCall(index);
+            }
+          }
+        }
+
+        Object.keys(toolAcc).forEach((idx) => flushToolCall(Number(idx)));
+        controller.close();
+      } catch (streamError: any) {
+        if (streamError?.name === 'AbortError') {
+          controller.close();
+          return;
+        }
+        const errorData = {
+          type: 'error',
+          message: streamError?.message || 'Unknown streaming error',
+        };
+        controller.enqueue(encoder.encode(`e:${JSON.stringify(errorData)}\n`));
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'X-Vercel-AI-Data-Stream': 'v1',
+    },
+  });
+}
+
 /**
  * Main function: sends the request and returns a streamed Response using the
  * same protocol. Designed as a drop-in replacement for fetch('/api/chat', ...)
@@ -364,6 +526,10 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
 
   if (!apiKey && !isLocalProvider) {
     return new Response('Configuration Error: Missing API Key. Please configure it in Settings.', { status: 401 });
+  }
+
+  if (getProviderApiFormat(baseUrl) === 'anthropic') {
+    return streamAnthropicChat(params, apiKey);
   }
 
   const url = `${normalizeBaseUrl(baseUrl)}/chat/completions`;

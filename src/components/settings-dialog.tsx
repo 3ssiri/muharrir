@@ -28,7 +28,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useAppStore } from '@/lib/store'
 import { isTauriApp, openExternal } from '@/lib/tauri-bridge'
-import { BUILTIN_PROVIDERS, findProviderByBaseUrl, isLocalProviderBaseUrl, selectPreferredLocalChatModel, type Provider } from '@/lib/providers'
+import { BUILTIN_PROVIDERS, findProviderByBaseUrl, getProviderApiFormat, isLocalProviderBaseUrl, selectPreferredLocalChatModel, type Provider } from '@/lib/providers'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslations, useLocale } from 'next-intl'
@@ -148,7 +148,7 @@ Assistant response:
    - Knowledge Boundaries: Based on React 18+ version, covering latest server-side rendering practices`
 
 // إصدار التطبيق (يطابق tauri.conf.json و package.json)
-const APP_VERSION = '0.1.0'
+const APP_VERSION = '0.3.0-beta.1'
 
 interface SettingsDialogProps {
     open?: boolean
@@ -254,11 +254,17 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
             }
 
             const cleanUrl = normalizeUrl(localConfig.baseUrl)
+            const apiFormat = getProviderApiFormat(cleanUrl, customProviders)
             const headers: Record<string, string> = {
                 'Content-Type': 'application/json'
             }
             if (localConfig.apiKey && localConfig.apiKey !== 'demo') {
-                headers['Authorization'] = `Bearer ${localConfig.apiKey}`
+                if (apiFormat === 'anthropic') {
+                    headers['x-api-key'] = localConfig.apiKey.trim()
+                    headers['anthropic-version'] = '2023-06-01'
+                } else {
+                    headers['Authorization'] = `Bearer ${localConfig.apiKey}`
+                }
             }
 
             const response = await fetch(`${cleanUrl}/models`, {

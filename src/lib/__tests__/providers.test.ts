@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   BUILTIN_PROVIDERS,
   findProviderByBaseUrl,
+  getProviderApiFormat,
+  isAnthropicProviderBaseUrl,
   isLocalProviderBaseUrl,
   normalizeBaseUrl,
   selectPreferredLocalChatModel,
@@ -38,8 +40,17 @@ describe('providers', () => {
 
   it('keeps required public provider presets available', () => {
     expect(BUILTIN_PROVIDERS.map((provider) => provider.id)).toEqual(
-      expect.arrayContaining(['deepseek', 'openai', 'openrouter', 'ollama', 'lmstudio'])
+      expect.arrayContaining(['anthropic', 'deepseek', 'openai', 'openrouter', 'ollama', 'lmstudio'])
     )
+  })
+
+  it('marks Anthropic as a native Messages API provider', () => {
+    const provider = findProviderByBaseUrl('https://api.anthropic.com/v1/')
+
+    expect(provider?.apiFormat).toBe('anthropic')
+    expect(isAnthropicProviderBaseUrl('https://api.anthropic.com/v1')).toBe(true)
+    expect(getProviderApiFormat('https://api.anthropic.com/v1')).toBe('anthropic')
+    expect(getProviderApiFormat('https://openrouter.ai/api/v1')).toBe('openai-compatible')
   })
 
   it('detects local provider URLs that do not require API keys', () => {

@@ -1,6 +1,6 @@
 # Provider Configuration And CORS
 
-Muharrir talks to OpenAI-compatible chat completion APIs directly from the client. It does not proxy prompts through a Muharrir server.
+Muharrir talks to provider APIs directly from the client. It does not proxy prompts through a Muharrir server.
 
 ## Built-in Providers
 
@@ -8,21 +8,38 @@ The built-in provider list lives in `src/lib/providers.ts`. Each preset includes
 
 - `id`: stable internal identifier.
 - `name`: display name.
-- `baseUrl`: OpenAI-compatible API base URL.
+- `baseUrl`: API base URL.
 - `models`: suggested starting models.
 - `docsUrl`: where users can create or manage API keys.
 - `isLocal`: true for local runtimes such as Ollama and LM Studio.
+- `apiFormat`: optional API format override. Defaults to `openai-compatible`; Anthropic uses `anthropic`.
 
 The list currently includes OpenAI, Anthropic, Google Gemini, DeepSeek, xAI, OpenRouter, Hugging Face Router, NVIDIA NIM, Groq, Mistral, Qwen, Moonshot, Zhipu, Ollama, and LM Studio.
+
+## API Formats
+
+Most providers use OpenAI-compatible chat completions:
+
+- Chat endpoint: `{baseUrl}/chat/completions`
+- Auth header: `Authorization: Bearer <key>`
+- Tools format: OpenAI `tools: [{ type: "function", function: ... }]`
+
+Anthropic is handled as a native Claude Messages API provider:
+
+- Messages endpoint: `{baseUrl}/messages`
+- Auth headers: `x-api-key: <key>` and `anthropic-version: 2023-06-01`
+- Tools format: Claude `tools: [{ name, description, input_schema }]`
+- Streaming parser: Claude `content_block_delta` events are converted into Muharrir's internal stream protocol.
 
 ## Adding A Provider
 
 1. Add a preset to `BUILTIN_PROVIDERS` in `src/lib/providers.ts`.
 2. Use a stable lowercase `id`.
-3. Set `baseUrl` to the provider's OpenAI-compatible endpoint, not a dashboard URL.
-4. Add at least two useful default models when the provider is remote.
-5. Add `docsUrl` for key creation.
-6. Run `npm run test:unit`.
+3. Set `baseUrl` to the provider API endpoint, not a dashboard URL.
+4. Set `apiFormat` only when the provider is not OpenAI-compatible.
+5. Add at least two useful default models when the provider is remote.
+6. Add `docsUrl` for key creation.
+7. Run `npm run test:unit`.
 
 ## Browser CORS
 

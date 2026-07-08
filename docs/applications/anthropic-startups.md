@@ -9,12 +9,10 @@ Official references:
 
 ## Submission Strategy
 
-Anthropic is the strongest fit if Muharrir is framed as a Claude-native prompt refinement workspace. The current product story fits Claude well, but the technical submission should be honest:
+Anthropic is the strongest fit if Muharrir is framed as a Claude-native prompt refinement workspace. The product story fits Claude well, and the technical submission should be honest:
 
-- Current: OpenAI-compatible provider architecture, local Ollama, demo mode.
-- Next milestone: first-party Claude API support with tool-use flow.
-
-If native Claude support is not implemented before submission, make it a near-term milestone rather than pretending it exists.
+- Current: OpenAI-compatible provider architecture, native Claude Messages API adapter, local Ollama, demo mode.
+- Remaining gate: run a real Claude Console API-key smoke test before pressing submit.
 
 Current public Claude integration tracker:
 
@@ -37,7 +35,7 @@ Muharrir is especially focused on Arabic-first and bilingual workflows, where hi
 
 Claude is a strong fit for Muharrir because the core workflow depends on instruction following, document understanding, tool use, writing quality, and careful multi-step refinement.
 
-We plan to add first-party Claude API support so users can run Muharrir's guided prompt-refinement workflow directly on Claude. Claude would power:
+Muharrir includes first-party Claude API support so users can run the guided prompt-refinement workflow directly on Claude. Claude would power:
 
 - clarifying questions for ambiguous user intent,
 - multi-dimensional prompt improvement options,
@@ -45,7 +43,7 @@ We plan to add first-party Claude API support so users can run Muharrir's guided
 - document-to-prompt workflows from local PDF/DOCX text,
 - bilingual Arabic/English refinement with high-quality writing.
 
-The immediate integration milestone is a native Claude provider adapter and tool-use mapping so Muharrir can use Claude through the Claude Console API rather than relying on OpenAI-compatible intermediaries.
+The native Claude provider adapter maps Muharrir's three structured tools to Claude tool-use schemas and consumes Claude Messages API streaming events through the same UI stream protocol used by the rest of the app.
 
 ## Why Claude?
 
@@ -69,6 +67,7 @@ Muharrir serves:
 - Arabic/English UI with RTL support.
 - Demo mode that works without an external provider call.
 - OpenAI-compatible provider configuration.
+- Native Claude Messages API configuration and tool-use mapping.
 - Local Ollama detection and one-click setup without an API key.
 - Browser-side PDF/DOCX parsing.
 - Local IndexedDB history and favorites.
@@ -88,9 +87,9 @@ Anthropic support would help us:
 
 ## Honest Risk / Gap
 
-The current public architecture is OpenAI-compatible. The next step for the Anthropic track is native Claude API support. We should either ship that before applying or include a public milestone with implementation status.
+Native Claude support is implemented, but it should still be smoke-tested with a real Claude Console API key before submission. Do not claim production Claude usage, Anthropic credits, or an Anthropic partnership unless those are actually granted.
 
 ## Paste-Ready 1,000 Character Answer
 
-Muharrir is a local-first Arabic/English prompt engineering workspace that helps users turn rough ideas, documents, and requirements into structured, reusable AI prompts. It is not a generic chat app; it guides users through clarification, enhancement choices, and final prompt proposals they can copy, save, compare, and reuse. The app supports RTL Arabic and English, local IndexedDB history, browser-side PDF/DOCX parsing, demo mode without external calls, local Ollama, and Tauri desktop builds with OS Keychain API key storage when available. Claude is a strong fit because the workflow depends on instruction following, writing quality, document understanding, and careful multi-step refinement. Our next milestone is first-party Claude API support so Muharrir can run this workflow directly on Claude through the Claude Console API.
+Muharrir is a local-first Arabic/English prompt engineering workspace that helps users turn rough ideas, documents, and requirements into structured, reusable AI prompts. It is not a generic chat app; it guides users through clarification, enhancement choices, and final prompt proposals they can copy, save, compare, and reuse. The app supports RTL Arabic and English, local IndexedDB history, browser-side PDF/DOCX parsing, demo mode without external calls, local Ollama, native Claude Messages API support, OpenAI-compatible providers, and Tauri desktop builds with OS Keychain API key storage when available. Claude is a strong fit because the workflow depends on instruction following, writing quality, document understanding, tool use, and careful multi-step refinement.
 
