@@ -21,9 +21,9 @@ OpenAI is the most immediately aligned provider route because Muharrir already u
 If applying for startup credits through a VC partner, prepare:
 
 - VC referral code: TODO
-- company name: TODO
+- company/project name: Muharrir
 - business email: TODO
-- company website: TODO
+- company/project website: https://github.com/3ssiri/muharrir
 - OpenAI Organization ID: TODO
 - product/API-use description: use the sections below
 - basic funding details: TODO, do not invent
@@ -31,6 +31,10 @@ If applying for startup credits through a VC partner, prepare:
 Current public demo link:
 
 - https://github.com/3ssiri/muharrir-demo-assets/raw/master/muharrir-application-demo.mp4
+
+Current public repository:
+
+- https://github.com/3ssiri/muharrir
 
 Current release:
 
@@ -82,6 +86,7 @@ Prompt quality is a hidden infrastructure layer for AI adoption. Many users have
 ## Current Progress
 
 - OpenAI-compatible provider architecture.
+- Native Claude provider architecture for cross-provider readiness.
 - Streaming chat and tool-call adapter.
 - Demo mode without external provider calls.
 - Local Ollama detection and no-key setup.

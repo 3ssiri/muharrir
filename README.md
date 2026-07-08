@@ -23,11 +23,11 @@ Muharrir is not a general chat app. It is a prompt engineering workflow that hel
 - Arabic RTL and English support from the same interface.
 - Web and desktop builds from the same codebase.
 
-## Current OSS Readiness Status
+## Current OSS Status
 
-Muharrir is being prepared for a public open-source release. The project now targets the MIT license, but the repository should only be made public after the readiness gate is complete.
+Muharrir is public open source under the MIT license. The current beta is ready for local demos, provider testing, and early community review.
 
-Read the internal readiness plan:
+Read the readiness and application package:
 
 - [OSS readiness plan](docs/oss-grant-readiness/README.md)
 - [Execution checklist](docs/oss-grant-readiness/execution-checklist.md)
@@ -44,6 +44,7 @@ Read the internal readiness plan:
 - Local-first history using IndexedDB.
 - Tauri desktop mode with OS Keychain API key storage when available.
 - Browser mode for local web use.
+- Native Claude Messages API support.
 - OpenAI-compatible providers through configurable `baseUrl`, model, and API key.
 - PDF and DOCX parsing in the browser.
 - Prompt comparison, favorites, preset modes, and import/export helpers.
@@ -91,10 +92,10 @@ See [Privacy](docs/PRIVACY.md) for the detailed data flow.
 
 ## Configuration
 
-Muharrir works with OpenAI-compatible providers. Configure:
+Muharrir works with native Claude API and OpenAI-compatible providers. Configure:
 
 - API key.
-- Base URL, for example `https://api.deepseek.com` or another compatible endpoint.
+- Base URL, for example `https://api.anthropic.com/v1`, `https://api.openai.com/v1`, `https://api.deepseek.com`, or another compatible endpoint.
 - Model name.
 - Optional correction model.
 - Optional custom system prompt.
@@ -118,7 +119,7 @@ npm run tauri build  # Desktop packages
 
 Muharrir is a client-side app by design:
 
-- `src/lib/chat-client.ts` replaces a server `/api/chat` route and streams OpenAI-compatible provider responses into the app protocol.
+- `src/lib/chat-client.ts` replaces a server `/api/chat` route and streams native Claude or OpenAI-compatible provider responses into the app protocol.
 - `src/lib/chat-stream.ts` parses streamed text, tool calls, and error events.
 - `src/lib/file-parser-client.ts` parses PDF and DOCX files in the browser.
 - `src/lib/store.ts` stores settings with Zustand.
@@ -142,7 +143,7 @@ Read [docs/PRIVACY.md](docs/PRIVACY.md) before using sensitive prompts or docume
 
 ## Contributing
 
-Contributions are welcome after the public readiness gate. Until then, the project is being cleaned up for a safer OSS launch.
+Contributions are welcome. Please keep issues and pull requests free of API keys, private prompts, personal data, and private documents.
 
 Useful docs:
 
