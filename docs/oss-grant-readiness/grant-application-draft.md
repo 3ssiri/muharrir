@@ -152,6 +152,32 @@ Before submitting, update this section with real links:
 
 Muharrir is my open-source Arabic/English, local-first prompt engineering workspace. It helps users transform vague ideas, documents, and rough requirements into structured, reusable AI prompts through guided multi-step refinement. The project is especially focused on Arabic-first workflows, RTL support, privacy-conscious local storage, multi-provider OpenAI-compatible configuration, and desktop use through Tauri. I am applying because I want to develop Muharrir into a reliable OSS tool for developers, educators, and AI builders who need better prompt workflows without relying on a closed cloud service.
 
+## حقول جاهزة للنماذج
+
+### وصف 300 حرف
+
+Muharrir is a local-first Arabic/English prompt engineering workspace that turns vague ideas, documents, and requirements into structured, reusable AI prompts through guided refinement, RTL support, local storage, provider choice, and desktop-ready privacy.
+
+### وصف 1000 حرف
+
+Muharrir is an open-source, local-first Arabic/English prompt engineering workspace for developers, educators, researchers, and creators. It helps users transform rough ideas, long documents, and unclear requirements into structured, reusable AI prompts through a guided workflow: clarification questions, enhancement choices, and final copy-ready prompt proposals. The project supports Arabic RTL and English from the same interface, local IndexedDB history, browser-side PDF/DOCX parsing, configurable OpenAI-compatible providers, demo mode without external calls, and Tauri desktop builds with OS Keychain API key storage when available. The goal is to make high-quality prompt engineering more accessible for Arabic-first and privacy-conscious users without forcing their prompts, files, or keys through a central project server.
+
+### أثر المشروع على OSS
+
+Muharrir fills an open-source gap for Arabic-first AI tooling. It gives users and contributors an inspectable local-first alternative to closed prompt tools, with clear provider boundaries and extension points for new prompt workflows.
+
+### لماذا Arabic-first مهم
+
+Arabic users need tools that treat RTL layout, Arabic examples, bilingual prompts, and regional workflows as first-class requirements. Muharrir makes Arabic prompt engineering usable without requiring users to switch mental models into English-only tools.
+
+### كيف يساعد المطورين
+
+Developers can use Muharrir to turn bug reports, specs, code review goals, and documentation tasks into structured prompts for coding agents. The app keeps reusable prompts, comparisons, favorites, and exports close to the developer workflow.
+
+### لماذا يحتاج دعم أدوات AI
+
+The project needs AI-tooling support to improve prompt quality, provider compatibility, desktop releases, test coverage, Arabic examples, and contribution-ready workflows while keeping the product local-first rather than becoming a closed hosted service.
+
 ## صياغة عربية لاستخدامها في الشرح
 
 محرر مشروع مفتوح المصدر يهدف إلى سد فجوة واضحة في أدوات الذكاء الاصطناعي العربية. أغلب الأدوات الحالية إما إنجليزية أولا، أو مجرد واجهات دردشة، أو خدمات مغلقة. محرر يقدم مساحة عمل محلية أولا لتحسين الموجهات، تدعم العربية والإنجليزية، وتساعد المستخدم على تحويل الفكرة الخام أو المستند الطويل إلى Prompt منظم وقابل لإعادة الاستخدام. قوته في أنه لا يجمع بيانات المستخدم على خادم مركزي، ويدعم مزودين متعددين، ويمكن تشغيله كتطبيق ويب أو سطح مكتب.

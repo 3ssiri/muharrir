@@ -4,6 +4,17 @@
 
 ## غير مُصدَر (Unreleased)
 
+### جاهزية المصدر المفتوح والمنح
+- تحديث هوية الحزمة إلى `muharrir` مع رخصة MIT وبيانات repository وkeywords.
+- إضافة وثائق الحوكمة: `CONTRIBUTING.md` و`SECURITY.md` و`CODE_OF_CONDUCT.md` وقوالب issues/PR.
+- إعادة كتابة README حول التموضع المحلي أولًا، Demo Mode، الخصوصية، المعمارية، والمساهمة.
+- إضافة وثائق الخصوصية، خارطة الطريق، مزوّدي OpenAI-compatible، وسجل قرارات جاهزية OSS.
+- تحسين CI ليشغّل `npm ci` وlint وtypecheck واختبارات الوحدة والبناء وPlaywright smoke.
+- تحسين Demo Mode بتدفق محلي واقعي وأدوات `suggest_enhancements` و`propose_prompt`.
+- إضافة تصدير للموجّه المقترح، واختبارات Playwright للنسخ/الحفظ/التصدير ورفع TXT/PDF/DOCX.
+- إضافة اختبارات وحدة للمزوّدين، استيراد/تصدير المفضّلة، وتحليل الملفات النصية.
+- منع fallback حفظ مفتاح API في `localStorage` داخل Tauri عند فشل OS Keychain.
+
 ## 0.2.3 — 2026-06-21
 
 ### القوالب
