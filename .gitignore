@@ -20,10 +20,16 @@ public/pdf.worker.min.mjs
 
 # production
 /build
+src-tauri/target/
+src-tauri/gen/
 
 # misc
 .DS_Store
 *.pem
+*.key
+*.p12
+*.mobileprovision
+*.sig
 
 # debug
 npm-debug.log*
@@ -61,6 +67,7 @@ tests/screenshots/
 docs/screenshots/*
 !docs/screenshots/demo-*.gif
 !docs/screenshots/demo-*.webp
+!docs/screenshots/demo-*.png
 *.log
 temp_frames/
 

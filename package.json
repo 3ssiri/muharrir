@@ -1,13 +1,33 @@
 {
-  "name": "app",
+  "name": "muharrir",
   "version": "0.2.3",
   "private": true,
+  "description": "Local-first Arabic/English prompt engineering workspace for turning vague ideas and documents into structured AI prompts.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3ssiri/muharrir.git"
+  },
+  "bugs": {
+    "url": "https://github.com/3ssiri/muharrir/issues"
+  },
+  "homepage": "https://github.com/3ssiri/muharrir#readme",
+  "keywords": [
+    "prompt-engineering",
+    "arabic",
+    "rtl",
+    "local-first",
+    "tauri",
+    "nextjs",
+    "ai-tools"
+  ],
   "scripts": {
     "copy-pdf-worker": "node -e \"require('fs').copyFileSync('node_modules/pdfjs-dist/build/pdf.worker.min.mjs', 'public/pdf.worker.min.mjs')\"",
     "dev": "npm run copy-pdf-worker && next dev",
     "build": "npm run copy-pdf-worker && next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:unit": "vitest run",
