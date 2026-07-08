@@ -8,11 +8,12 @@ export interface Provider {
   models: string[]
   docsUrl?: string   // رابط الحصول على مفتاح API (اختياري)
   isLocal?: boolean  // محلي (Ollama/LM Studio) — لا يحتاج مفتاحًا
+  apiFormat?: 'openai-compatible' | 'anthropic'
 }
 
 export const BUILTIN_PROVIDERS: Provider[] = [
   { id: 'openai', name: 'OpenAI', baseUrl: 'https://api.openai.com/v1', models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4.1', 'gpt-4.1-mini', 'o3', 'o4-mini'], docsUrl: 'https://platform.openai.com/api-keys' },
-  { id: 'anthropic', name: 'Anthropic (Claude)', baseUrl: 'https://api.anthropic.com/v1', models: ['claude-opus-4', 'claude-sonnet-4', 'claude-3-5-haiku'], docsUrl: 'https://console.anthropic.com/settings/keys' },
+  { id: 'anthropic', name: 'Anthropic (Claude)', baseUrl: 'https://api.anthropic.com/v1', models: ['claude-sonnet-5', 'claude-haiku-4-5', 'claude-opus-4-8', 'claude-fable-5'], docsUrl: 'https://console.anthropic.com/settings/keys', apiFormat: 'anthropic' },
   { id: 'google', name: 'Google (Gemini)', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai', models: ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash'], docsUrl: 'https://aistudio.google.com/apikey' },
   { id: 'deepseek', name: 'DeepSeek', baseUrl: 'https://api.deepseek.com', models: ['deepseek-chat', 'deepseek-reasoner'], docsUrl: 'https://platform.deepseek.com/api_keys' },
   { id: 'xai', name: 'xAI (Grok)', baseUrl: 'https://api.x.ai/v1', models: ['grok-4', 'grok-3', 'grok-3-mini'], docsUrl: 'https://console.x.ai' },
@@ -51,6 +52,24 @@ export function isLocalProviderBaseUrl(baseUrl: string): boolean {
   } catch {
     return false
   }
+}
+
+export function isAnthropicProviderBaseUrl(baseUrl: string): boolean {
+  try {
+    const { hostname } = new URL(normalizeBaseUrl(baseUrl))
+    return hostname === 'api.anthropic.com'
+  } catch {
+    return false
+  }
+}
+
+export function getProviderApiFormat(
+  baseUrl: string,
+  customProviders: Provider[] = []
+): NonNullable<Provider['apiFormat']> {
+  const provider = findProviderByBaseUrl(baseUrl, customProviders)
+  if (provider?.apiFormat) return provider.apiFormat
+  return isAnthropicProviderBaseUrl(baseUrl) ? 'anthropic' : 'openai-compatible'
 }
 
 const NON_CHAT_LOCAL_MODEL_PATTERN = /(embed|embedding|bge|nomic|ocr|vision|vl|clip|rerank|minicpm)/i

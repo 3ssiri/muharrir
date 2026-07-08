@@ -20,5 +20,4 @@ Muharrir uses OpenAI-compatible chat and tool-calling flows to help users transf
 
 ### Anthropic
 
-Muharrir is prepared as a local-first prompt engineering workspace, with native Claude API support planned as the next integration milestone for running guided prompt refinement directly on Claude.
-
+Muharrir is a local-first prompt engineering workspace with native Claude Messages API support for running guided prompt refinement directly on Claude.

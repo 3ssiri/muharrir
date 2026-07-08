@@ -6,16 +6,16 @@ Use these files as the source package before copying answers into external forms
 
 ## Current Readiness Verdict
 
-Muharrir is technically demo-ready, but not fully submission-ready until the public-facing assets are complete.
+Muharrir is technically demo-ready, but not fully submission-ready until the private application fields are filled with verified account/company details.
 
 | Area | Status | Notes |
 |---|---:|---|
 | Local demo | Ready | Demo mode works without a provider key. |
 | Local models | Ready | Ollama can be detected and selected without an API key. |
 | OpenAI fit | Strong | The app is already built around OpenAI-compatible provider settings. |
-| Anthropic fit | Medium | The product story fits Claude, but native Claude API support should be added or clearly listed as the next milestone. |
-| Public repo | TODO | Confirm repository visibility before submission. |
-| Website/demo URL | TODO | Add a stable project URL, release page, or demo video. |
+| Anthropic fit | Stronger | Native Claude Messages API support is implemented; run one real-key smoke test before submitting. |
+| Public repo | TODO | The code repository is currently private; use a private review link or make it public before submission. |
+| Website/demo URL | Ready/TODO | Release and public demo video exist; a dedicated project website is still optional/TODO. |
 | Traction | TODO | Do not invent user counts. Use honest early-stage language. |
 
 ## Files
@@ -33,9 +33,9 @@ Muharrir is technically demo-ready, but not fully submission-ready until the pub
 
 1. Publish/confirm the repository and public docs.
 2. Record the 90-second demo using [demo-script.md](demo-script.md).
-3. Submit OpenAI Startup Community first because Muharrir is already OpenAI-compatible.
-4. Add native Claude API support or open a clearly scoped public milestone.
-5. Submit Anthropic Claude for Startups with the Claude integration story front and center.
+3. Run a real-key smoke test for OpenAI-compatible and Claude provider paths.
+4. Submit OpenAI Startup Community first because Muharrir is already OpenAI-compatible.
+5. Submit Anthropic Claude for Startups with the native Claude integration story front and center.
 
 ## Current Public Links
 

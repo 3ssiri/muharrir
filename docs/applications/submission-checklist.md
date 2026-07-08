@@ -18,6 +18,7 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 
 - [ ] Demo mode works without an API key.
 - [ ] OpenAI-compatible provider path is tested.
+- [ ] Native Claude provider path is tested with a real Claude Console API key.
 - [ ] Local Ollama path is tested.
 - [ ] PDF/DOCX local parsing is tested.
 - [ ] Arabic RTL flow is shown.
@@ -29,7 +30,8 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 - [ ] Claude Console account exists.
 - [ ] Company email exists.
 - [ ] Company website or project landing page exists.
-- [x] Native Claude API support is implemented, or a public milestone is linked.
+- [x] Native Claude API support is implemented.
+- [ ] Claude Messages API real-key smoke test is recorded in notes.
 - [ ] Application clearly says how Claude will power the workflow.
 - [ ] If asking for credits/extras, funding and eligibility details are truthful.
 
@@ -48,7 +50,7 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 - [ ] No invented traction.
 - [ ] No invented funding.
 - [ ] No implied partnership with OpenAI or Anthropic.
-- [ ] No claim of native Claude support unless shipped.
+- [x] No claim of native Claude support unless shipped.
 - [ ] No claim that provider prompts are never stored by providers.
 - [ ] No claim that browser mode bypasses CORS for every provider.
 

@@ -11,7 +11,7 @@ This document maps Muharrir to current Anthropic and OpenAI routes. Keep it cons
 | OpenAI Startup Community | Strong | OpenAI asks for startup/company details and an Organization ID; Muharrir already supports OpenAI-compatible provider configuration. |
 | OpenAI startup credits through VC partner | Conditional | OpenAI says VC-backed startups may access credits, rate limit upgrades, and technical support through partner VCs. Needs VC referral/basic funding details. |
 | OpenAI Researcher Access Program | Conditional | Good only if positioning Muharrir as a research project about Arabic prompt workflows, fairness, representation, or human-AI interaction. It is not the default startup route. |
-| Anthropic Claude for Startups | Medium now, strong after Claude adapter | Anthropic accepts early-stage founders/startups building with Claude. For credits/extras, they emphasize Claude Console and first-party Claude API. |
+| Anthropic Claude for Startups | Stronger after Claude adapter | Anthropic accepts early-stage founders/startups building with Claude. Muharrir now has native Claude Messages API support; run a real-key smoke test before submission. |
 | Anthropic AI for Science | Weak | Muharrir is a developer/productivity tool, not primarily a science research project. |
 
 ## Anthropic Notes
@@ -27,19 +27,19 @@ Official page highlights:
 
 Muharrir is a strong product fit for Claude because it turns rough ideas and documents into structured instructions, which aligns with Claude strengths in writing, coding, document understanding, and tool use.
 
-The current technical gap is that Muharrir is OpenAI-compatible rather than native Anthropic-compatible. A stronger Anthropic submission should include one of these:
+The previous technical gap was that Muharrir was OpenAI-compatible rather than native Anthropic-compatible. The current submission should include:
 
-1. A merged native Claude provider adapter.
-2. A public issue/milestone titled "Native Claude API provider support".
-3. A demo branch showing Claude API tool-use flow.
+1. The merged native Claude provider adapter.
+2. Unit-test evidence for Claude request shape and stream parsing.
+3. A real Claude Console API-key smoke test before pressing submit.
 
 Recommended claim:
 
-> Muharrir is prepared as a local-first prompt engineering workspace, and the next integration milestone is first-party Claude API support so users can run the guided prompt-refinement workflow directly on Claude.
+> Muharrir is prepared as a local-first prompt engineering workspace with native Claude Messages API support, so users can run the guided prompt-refinement workflow directly on Claude.
 
 Avoid claiming:
 
-> Muharrir already fully runs on Claude startup credits.
+> Muharrir has Anthropic credits, an Anthropic partnership, or production Claude usage.
 
 ## OpenAI Notes
 
@@ -70,9 +70,9 @@ Avoid claiming:
 
 ## Technical Milestones That Improve Both Applications
 
-1. Add native Anthropic Claude API support.
+1. Run real-key smoke tests for OpenAI-compatible and Claude provider paths.
 2. Add a first-run provider wizard with OpenAI and Claude side by side.
-3. Record a demo with three paths: demo mode, OpenAI-compatible provider, local Ollama.
+3. Record a demo with four paths: demo mode, Claude, OpenAI-compatible provider, local Ollama.
 4. Publish a stable release with signed desktop artifacts or a documented unsigned beta.
 5. Add public good-first-issues for provider adapters, prompt packs, and Arabic examples.
 
