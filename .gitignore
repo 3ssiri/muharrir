@@ -68,6 +68,8 @@ docs/screenshots/*
 !docs/screenshots/demo-*.gif
 !docs/screenshots/demo-*.webp
 !docs/screenshots/demo-*.png
+!docs/screenshots/muharrir-application-demo.mp4
+!docs/screenshots/muharrir-application-demo-final.png
 *.log
 temp_frames/
 

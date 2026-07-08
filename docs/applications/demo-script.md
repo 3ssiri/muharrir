@@ -79,3 +79,16 @@ Voiceover:
 - Include captions if possible.
 - Save as: `docs/screenshots/muharrir-demo-90s.mp4` or upload externally and paste URL into application forms.
 
+## Generated Local Demo
+
+A short local demo can be regenerated with:
+
+```bash
+DEMO_BASE_URL=http://127.0.0.1:3111 node scripts/record-application-demo.js
+```
+
+Current generated assets:
+
+- `docs/screenshots/muharrir-application-demo.mp4`
+- `docs/screenshots/muharrir-application-demo-final.png`
+
