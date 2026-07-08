@@ -32,6 +32,7 @@ Read the internal readiness plan:
 - [OSS readiness plan](docs/oss-grant-readiness/README.md)
 - [Execution checklist](docs/oss-grant-readiness/execution-checklist.md)
 - [Decision log](docs/oss-grant-readiness/DECISIONS.md)
+- [Anthropic/OpenAI application package](docs/applications/README.md)
 
 ## Demo Preview
 
