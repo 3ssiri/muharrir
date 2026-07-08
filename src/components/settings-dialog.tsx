@@ -28,7 +28,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useAppStore } from '@/lib/store'
 import { isTauriApp, openExternal } from '@/lib/tauri-bridge'
-import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/providers'
+import { BUILTIN_PROVIDERS, findProviderByBaseUrl, isLocalProviderBaseUrl, type Provider } from '@/lib/providers'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslations, useLocale } from 'next-intl'
@@ -274,6 +274,12 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
             if (data && Array.isArray(data.data)) {
                 const models = data.data.map((m: any) => m.id).sort()
                 setAvailableModels(models)
+                if (models.length > 0) {
+                    setLocalConfig(prev => ({
+                        ...prev,
+                        model: models.includes(prev.model) ? prev.model : models[0],
+                    }))
+                }
                 setCheckStatus('success')
                 setCheckMessage(t('settings.connectionSuccess', { count: models.length }))
             } else {
@@ -302,7 +308,12 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
 
     // تطبيق مزوّد: ملء Base URL + النماذج + النموذج الافتراضي
     const applyProvider = (provider: Provider) => {
-        setLocalConfig(prev => ({ ...prev, baseUrl: provider.baseUrl, model: provider.models[0] ?? prev.model }))
+        setLocalConfig(prev => ({
+            ...prev,
+            baseUrl: provider.baseUrl,
+            apiKey: provider.isLocal || isLocalProviderBaseUrl(provider.baseUrl) ? '' : prev.apiKey,
+            model: provider.models[0] ?? prev.model,
+        }))
         setAvailableModels(provider.models)
         setCheckStatus('idle')
         setCheckMessage('')

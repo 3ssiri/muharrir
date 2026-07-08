@@ -28,6 +28,7 @@ import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
 import { useTranslations } from 'next-intl'
 import { streamChat } from '@/lib/chat-client'
 import { consumeChatStream, classifyChatError, type UiMessage, type ToolInvocation } from '@/lib/chat-stream'
+import { isLocalProviderBaseUrl } from '@/lib/providers'
 import { estimateTokens } from '@/lib/token-estimate'
 import { log } from '@/lib/logger'
 import { isTauriApp } from '@/lib/tauri-bridge'
@@ -273,8 +274,8 @@ export default function Home() {
     e.preventDefault()
     if (!localInput.trim()) return
 
-    // Check whether the API key is configured (KISS principle - keep it simple!)
-    if (!apiKey) {
+    // Local providers such as Ollama and LM Studio do not require API keys.
+    if (!apiKey && !isLocalProviderBaseUrl(baseUrl)) {
       setApiKeyDialogOpen(true)
       return
     }

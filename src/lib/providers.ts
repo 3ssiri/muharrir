@@ -43,3 +43,12 @@ export function findProviderByBaseUrl(
     (p) => normalizeBaseUrl(p.baseUrl) === target
   )
 }
+
+export function isLocalProviderBaseUrl(baseUrl: string): boolean {
+  try {
+    const { hostname } = new URL(normalizeBaseUrl(baseUrl))
+    return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1'
+  } catch {
+    return false
+  }
+}

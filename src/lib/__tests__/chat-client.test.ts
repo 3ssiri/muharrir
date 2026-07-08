@@ -1,6 +1,10 @@
-import { describe, it, expect } from 'vitest'
+import { afterEach, describe, it, expect, vi } from 'vitest'
 import { consumeChatStream } from '@/lib/chat-stream'
 import { mapError, extractProviderMessage, normalizeApiKey, streamChat } from '@/lib/chat-client'
+
+afterEach(() => {
+  vi.restoreAllMocks()
+})
 
 describe('extractProviderMessage', () => {
   it('extracts error.message from a provider JSON body', () => {
@@ -84,5 +88,27 @@ describe('streamChat demo mode', () => {
       title: 'Document-to-Prompt Assistant',
       finalPrompt: expect.stringContaining('{{user_idea}}'),
     })
+  })
+})
+
+describe('streamChat local providers', () => {
+  it('allows local OpenAI-compatible providers without an API key', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response('data: [DONE]\n\n'))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const response = await streamChat({
+      messages: [{ role: 'user', content: 'اكتب موجهًا قصيرًا' }],
+      apiKey: '',
+      baseUrl: 'http://localhost:11434/v1',
+      model: 'qwen2.5:7b',
+    })
+
+    expect(response.ok).toBe(true)
+    expect(fetchMock).toHaveBeenCalledWith(
+      'http://localhost:11434/v1/chat/completions',
+      expect.objectContaining({
+        headers: { 'Content-Type': 'application/json' },
+      })
+    )
   })
 })
