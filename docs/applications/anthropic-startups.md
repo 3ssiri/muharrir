@@ -16,6 +16,11 @@ Anthropic is the strongest fit if Muharrir is framed as a Claude-native prompt r
 
 If native Claude support is not implemented before submission, make it a near-term milestone rather than pretending it exists.
 
+Current public Claude integration tracker:
+
+- Issue: https://github.com/3ssiri/muharrir/issues/16
+- Milestone: https://github.com/3ssiri/muharrir/milestone/1
+
 ## Short Product Description
 
 Muharrir is a local-first Arabic/English prompt engineering workspace that helps users turn rough ideas, documents, and requirements into structured, reusable AI prompts through guided multi-step refinement.

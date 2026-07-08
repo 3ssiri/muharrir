@@ -28,6 +28,14 @@ If applying for startup credits through a VC partner, prepare:
 - product/API-use description: use the sections below
 - basic funding details: TODO, do not invent
 
+Current public demo link:
+
+- https://github.com/3ssiri/muharrir-demo-assets/raw/master/muharrir-application-demo.mp4
+
+Current release:
+
+- https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1
+
 ## Short Product Description
 
 Muharrir is a local-first Arabic/English prompt engineering workspace that turns rough ideas, documents, and requirements into structured, reusable AI prompts through guided refinement.

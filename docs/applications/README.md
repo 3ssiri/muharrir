@@ -24,6 +24,7 @@ Muharrir is technically demo-ready, but not fully submission-ready until the pub
 - [anthropic-startups.md](anthropic-startups.md): Draft answers for Anthropic Claude for Startups.
 - [openai-startups.md](openai-startups.md): Draft answers for OpenAI startup/community routes.
 - [official-statement.md](official-statement.md): Official one-line positioning for forms, README snippets, and outreach.
+- [private-submission-data.template.md](private-submission-data.template.md): Private form fields template; copy locally and fill with real account/company details.
 - [application-fields.md](application-fields.md): Shared short, medium, and long form copy.
 - [demo-script.md](demo-script.md): 90-second demo video script and shot list.
 - [submission-checklist.md](submission-checklist.md): Final gate before pressing submit.
@@ -35,6 +36,13 @@ Muharrir is technically demo-ready, but not fully submission-ready until the pub
 3. Submit OpenAI Startup Community first because Muharrir is already OpenAI-compatible.
 4. Add native Claude API support or open a clearly scoped public milestone.
 5. Submit Anthropic Claude for Startups with the Claude integration story front and center.
+
+## Current Public Links
+
+- Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1
+- Public demo video: https://github.com/3ssiri/muharrir-demo-assets/raw/master/muharrir-application-demo.mp4
+- Claude API support issue: https://github.com/3ssiri/muharrir/issues/16
+- Claude API support milestone: https://github.com/3ssiri/muharrir/milestone/1
 
 ## Official Program References
 
