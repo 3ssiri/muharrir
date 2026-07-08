@@ -188,6 +188,11 @@
     "demoPrompt": "You do not need an API key for the first try. Enable demo mode, choose an example or type your task, then press send.",
     "demoCta": "Try without a key",
     "realProviderCta": "Set up a real provider",
+    "useOllama": "Use local Ollama",
+    "checkingOllama": "Checking for local Ollama...",
+    "ollamaDetected": "Found local Ollama with {count} models.",
+    "ollamaNotDetected": "If Ollama is running, open settings and choose Ollama manually.",
+    "ollamaActivated": "Local Ollama configured with {model}",
     "modes": "Or start from a ready-made mode",
     "modeStarter": "I want to craft a professional prompt for «{mode}». Help me step by step.",
     "example1Title": "AI Trend Analysis Article",
@@ -206,6 +211,12 @@
   "tabs": {
     "chat": "Chat",
     "favorites": "Favorites"
+  },
+  "providerStatus": {
+    "demo": "Demo",
+    "local": "Local Ollama",
+    "configured": "Provider ready",
+    "missing": "No provider"
   },
   "fileUpload": {
     "upload": "Upload file",

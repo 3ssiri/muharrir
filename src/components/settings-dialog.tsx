@@ -28,7 +28,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useAppStore } from '@/lib/store'
 import { isTauriApp, openExternal } from '@/lib/tauri-bridge'
-import { BUILTIN_PROVIDERS, findProviderByBaseUrl, isLocalProviderBaseUrl, type Provider } from '@/lib/providers'
+import { BUILTIN_PROVIDERS, findProviderByBaseUrl, isLocalProviderBaseUrl, selectPreferredLocalChatModel, type Provider } from '@/lib/providers'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslations, useLocale } from 'next-intl'
@@ -272,12 +272,16 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
 
             const data = await response.json()
             if (data && Array.isArray(data.data)) {
-                const models = data.data.map((m: any) => m.id).sort()
+                const models = data.data
+                    .map((m: { id?: unknown }) => m.id)
+                    .filter((id: unknown): id is string => typeof id === 'string' && id.length > 0)
+                    .sort()
                 setAvailableModels(models)
                 if (models.length > 0) {
+                    const preferredModel = selectPreferredLocalChatModel(models)
                     setLocalConfig(prev => ({
                         ...prev,
-                        model: models.includes(prev.model) ? prev.model : models[0],
+                        model: models.includes(prev.model) ? prev.model : preferredModel,
                     }))
                 }
                 setCheckStatus('success')

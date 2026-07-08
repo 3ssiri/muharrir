@@ -413,6 +413,8 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
       // Accumulate tool calls by index (their parts arrive incrementally)
       const toolAcc: Record<number, { id: string; name: string; args: string }> = {};
       let buffer = '';
+      let emittedText = '';
+      let emittedToolCall = false;
 
       // Emit the accumulated tool calls after validation/correction
       const flushToolCalls = async () => {
@@ -455,6 +457,7 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
 
           const toolData = { toolCallId: tc.id || `call_${idx}`, toolName: tc.name, args: parsed };
           controller.enqueue(encoder.encode(`9:${JSON.stringify(toolData)}\n`));
+          emittedToolCall = true;
         }
       };
 
@@ -487,6 +490,7 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
             // Text content
             if (typeof delta.content === 'string' && delta.content.length > 0) {
               controller.enqueue(encoder.encode(`0:${JSON.stringify(delta.content)}\n`));
+              emittedText += delta.content;
             }
 
             // Tool call fragments
@@ -504,6 +508,11 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
 
         // Emit any accumulated tool calls when the stream ends
         await flushToolCalls();
+        if (isLocalProvider && emittedText.trim() && !emittedToolCall) {
+          const fallbackNotice =
+            '\n\n[Ollama] النموذج المحلي رد كنص عادي بدل استدعاء أدوات محرر، لذلك لم يتم إنشاء جدول التحسينات التفاعلي. جرّب نموذجًا يدعم الأدوات مثل qwen2.5:7b، أو استخدم وضع Demo لمعاينة التجربة الكاملة.\n\n[Ollama] The local model replied with plain text instead of calling Muharrir tools, so the interactive enhancement table was not generated. Try a tool-capable model such as qwen2.5:7b, or use Demo mode to preview the full workflow.';
+          controller.enqueue(encoder.encode(`0:${JSON.stringify(fallbackNotice)}\n`));
+        }
         controller.close();
       } catch (streamError: any) {
         if (streamError?.name === 'AbortError') {

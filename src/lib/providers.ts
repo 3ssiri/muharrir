@@ -52,3 +52,24 @@ export function isLocalProviderBaseUrl(baseUrl: string): boolean {
     return false
   }
 }
+
+const NON_CHAT_LOCAL_MODEL_PATTERN = /(embed|embedding|bge|nomic|ocr|vision|vl|clip|rerank|minicpm)/i
+const PREFERRED_LOCAL_CHAT_MODEL_PATTERN = /(qwen2\.5.*7b|qwen3.*8b|qwen.*instruct|llama.*instruct|mistral|gemma.*it)/i
+
+function localChatModelScore(model: string): number {
+  if (PREFERRED_LOCAL_CHAT_MODEL_PATTERN.test(model)) return 100
+  if (NON_CHAT_LOCAL_MODEL_PATTERN.test(model)) return -100
+  if (/(qwen|llama|mistral|gemma|deepseek|phi)/i.test(model)) return 50
+  return 0
+}
+
+export function selectPreferredLocalChatModel(models: string[]): string {
+  const candidates = models.filter(Boolean)
+  if (candidates.length === 0) return ''
+
+  return [...candidates].sort((a, b) => {
+    const scoreDelta = localChatModelScore(b) - localChatModelScore(a)
+    if (scoreDelta !== 0) return scoreDelta
+    return a.localeCompare(b)
+  })[0]
+}

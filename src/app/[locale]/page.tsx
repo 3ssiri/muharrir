@@ -28,7 +28,7 @@ import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
 import { useTranslations } from 'next-intl'
 import { streamChat } from '@/lib/chat-client'
 import { consumeChatStream, classifyChatError, type UiMessage, type ToolInvocation } from '@/lib/chat-stream'
-import { isLocalProviderBaseUrl } from '@/lib/providers'
+import { isLocalProviderBaseUrl, selectPreferredLocalChatModel } from '@/lib/providers'
 import { estimateTokens } from '@/lib/token-estimate'
 import { log } from '@/lib/logger'
 import { isTauriApp } from '@/lib/tauri-bridge'
@@ -37,7 +37,19 @@ const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 
 export default function Home() {
   const t = useTranslations();
-  const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, setApiKey, setModel, hydrateApiKey } = useAppStore()
+  const {
+    apiKey,
+    baseUrl,
+    model,
+    systemPrompt,
+    availableModels,
+    correctionModel,
+    setApiKey,
+    setBaseUrl,
+    setModel,
+    setAvailableModels,
+    hydrateApiKey,
+  } = useAppStore()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // عند بدء التطبيق على سطح المكتب: حمّل مفتاح API من الـ OS Keychain
@@ -68,6 +80,8 @@ export default function Home() {
   const [settingsOpen, setSettingsOpen] = useState(false) // settings dialog state
   const [isDesktopApp, setIsDesktopApp] = useState(false)
   const [isCheckingForUpdate, setIsCheckingForUpdate] = useState(false)
+  const [ollamaModels, setOllamaModels] = useState<string[]>([])
+  const [isCheckingOllama, setIsCheckingOllama] = useState(false)
 
   // File upload state - supports multiple files
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ file: File; preview?: string; text?: string }>>([])
@@ -87,6 +101,33 @@ export default function Home() {
   useEffect(() => {
     setIsDesktopApp(isTauriApp())
   }, [])
+
+  const detectOllama = useCallback(async () => {
+    setIsCheckingOllama(true)
+    try {
+      const response = await fetch('http://localhost:11434/v1/models')
+      if (!response.ok) {
+        setOllamaModels([])
+        return
+      }
+      const data: { data?: Array<{ id?: unknown }> } = await response.json()
+      const models = Array.isArray(data?.data)
+        ? data.data
+            .map((item) => item.id)
+            .filter((id): id is string => typeof id === 'string' && id.length > 0)
+            .sort()
+        : []
+      setOllamaModels(models)
+    } catch {
+      setOllamaModels([])
+    } finally {
+      setIsCheckingOllama(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    detectOllama()
+  }, [detectOllama])
 
   // Abort the in-flight request when the component unmounts
   useEffect(() => {
@@ -832,6 +873,24 @@ export default function Home() {
     toast.success(t('settings.demoConnectionMessage'))
   }
 
+  const handleUseOllama = () => {
+    if (ollamaModels.length === 0) return
+    const preferredModel = selectPreferredLocalChatModel(ollamaModels)
+    setApiKey('')
+    setBaseUrl('http://localhost:11434/v1')
+    setAvailableModels(ollamaModels)
+    setModel(preferredModel)
+    toast.success(t('welcome.ollamaActivated', { model: preferredModel }))
+  }
+
+  const providerStatus = apiKey === 'demo'
+    ? t('providerStatus.demo')
+    : isLocalProviderBaseUrl(baseUrl)
+      ? t('providerStatus.local')
+      : apiKey
+        ? t('providerStatus.configured')
+        : t('providerStatus.missing')
+
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden">
       {/* Sidebar */}
@@ -876,6 +935,9 @@ export default function Home() {
               </SelectContent>
             </Select>
             <LanguageSwitcher />
+            <span className="hidden rounded-full border border-border bg-muted/40 px-2.5 py-1 text-xs font-medium text-muted-foreground sm:inline-flex">
+              {providerStatus}
+            </span>
             {isDesktopApp && (
               <TooltipProvider>
                 <Tooltip>
@@ -969,6 +1031,11 @@ export default function Home() {
                         {t('welcome.demoPrompt')}
                       </p>
                       <div className="flex flex-col gap-2 sm:flex-row">
+                        {ollamaModels.length > 0 && (
+                          <Button type="button" onClick={handleUseOllama}>
+                            {t('welcome.useOllama')}
+                          </Button>
+                        )}
                         <Button type="button" onClick={handleEnableDemoMode}>
                           {t('welcome.demoCta')}
                         </Button>
@@ -980,6 +1047,13 @@ export default function Home() {
                           {t('welcome.realProviderCta')}
                         </Button>
                       </div>
+                      <p className="text-xs text-muted-foreground">
+                        {ollamaModels.length > 0
+                          ? t('welcome.ollamaDetected', { count: ollamaModels.length })
+                          : isCheckingOllama
+                            ? t('welcome.checkingOllama')
+                            : t('welcome.ollamaNotDetected')}
+                      </p>
                     </div>
                   )}
                 </div>
