@@ -14,6 +14,7 @@
  */
 
 import { validateToolCall, correctFormat } from '@/lib/format-validator';
+import { isLocalProviderBaseUrl } from '@/lib/providers';
 
 export interface StreamChatParams {
   messages: any[];
@@ -359,7 +360,9 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
     return buildDemoResponse();
   }
 
-  if (!apiKey) {
+  const isLocalProvider = isLocalProviderBaseUrl(baseUrl);
+
+  if (!apiKey && !isLocalProvider) {
     return new Response('Configuration Error: Missing API Key. Please configure it in Settings.', { status: 401 });
   }
 
@@ -373,12 +376,16 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
 
   let upstream: Response;
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (apiKey) {
+      headers.Authorization = `Bearer ${apiKey}`;
+    }
+
     upstream = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
+      headers,
       body: JSON.stringify({
         model: modelId,
         messages: providerMessages,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BUILTIN_PROVIDERS, findProviderByBaseUrl, normalizeBaseUrl } from '@/lib/providers'
+import { BUILTIN_PROVIDERS, findProviderByBaseUrl, isLocalProviderBaseUrl, normalizeBaseUrl } from '@/lib/providers'
 
 describe('providers', () => {
   it('normalizes whitespace and trailing slashes from base URLs', () => {
@@ -35,5 +35,10 @@ describe('providers', () => {
       expect.arrayContaining(['deepseek', 'openai', 'openrouter', 'ollama', 'lmstudio'])
     )
   })
-})
 
+  it('detects local provider URLs that do not require API keys', () => {
+    expect(isLocalProviderBaseUrl('http://localhost:11434/v1')).toBe(true)
+    expect(isLocalProviderBaseUrl('http://127.0.0.1:1234/v1/')).toBe(true)
+    expect(isLocalProviderBaseUrl('https://api.deepseek.com')).toBe(false)
+  })
+})
