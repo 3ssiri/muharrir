@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Copy, Check, RefreshCw, Sparkles, Send, Maximize2, X, Star } from '@/components/icons'
+import { Copy, Check, RefreshCw, Sparkles, Send, Maximize2, X, Star, Download } from '@/components/icons'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -87,6 +87,18 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
         setTimeout(() => setCopied(false), 2000)
     }
 
+    const handleExport = () => {
+        const markdown = `# ${proposal.title}\n\n${promptText}\n`
+        const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `muharrir-prompt-${Date.now()}.md`
+        a.click()
+        URL.revokeObjectURL(url)
+        toast.success(t('promptProposal.exported'))
+    }
+
     const handleAccept = () => {
         setAccepted(true)
         addToolResult({
@@ -151,7 +163,10 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
 
     return (
         <>
-        <Card className="w-full max-w-5xl border-border shadow-elevated overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-500 py-0 gap-0">
+        <Card
+            className="w-full max-w-5xl border-border shadow-elevated overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-500 py-0 gap-0"
+            data-testid="prompt-proposal-card"
+        >
             <CardHeader className="bg-primary text-primary-foreground pb-4 pt-5">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -164,7 +179,9 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                             variant="secondary"
                             className={`h-8 w-8 transition-colors border-0 ${favorited ? 'bg-gold hover:bg-gold/90 text-gold-foreground' : 'bg-white/20 hover:bg-white/30 text-primary-foreground'}`}
                             onClick={handleFavorite}
+                            aria-label={favorited ? t('promptProposal.unfavorite') : t('promptProposal.favorite')}
                             title={favorited ? t('promptProposal.unfavorite') : t('promptProposal.favorite')}
+                            data-testid="prompt-favorite-button"
                         >
                             <Star className={`w-4 h-4 transition-all duration-300 ${favorited ? 'fill-current' : ''}`} />
                         </Button>
@@ -210,8 +227,21 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                                         variant="secondary"
                                         className="h-8 w-8 opacity-80 hover:opacity-100"
                                         onClick={handleCopy}
+                                        aria-label={t('promptProposal.copy')}
+                                        data-testid="prompt-copy-button"
                                     >
                                         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                                    </Button>
+                                    <Button
+                                        size="icon"
+                                        variant="secondary"
+                                        className="h-8 w-8 opacity-80 hover:opacity-100"
+                                        onClick={handleExport}
+                                        aria-label={t('promptProposal.export')}
+                                        title={t('promptProposal.export')}
+                                        data-testid="prompt-export-button"
+                                    >
+                                        <Download className="w-4 h-4" />
                                     </Button>
                                 </div>
                             </div>
@@ -290,6 +320,10 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                         <Button onClick={handleCopy}>
                             {copied ? <Check className="w-4 h-4 me-2" /> : <Copy className="w-4 h-4 me-2" />}
                             {t('promptProposal.copy')}
+                        </Button>
+                        <Button onClick={handleExport} variant="secondary">
+                            <Download className="w-4 h-4 me-2" />
+                            {t('promptProposal.export')}
                         </Button>
                     </div>
                 </div>

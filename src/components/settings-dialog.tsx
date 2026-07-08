@@ -27,7 +27,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useAppStore } from '@/lib/store'
-import { openExternal } from '@/lib/tauri-bridge'
+import { isTauriApp, openExternal } from '@/lib/tauri-bridge'
 import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/providers'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -228,6 +228,18 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         return cleanUrl
     }
 
+    const enableDemoMode = () => {
+        setLocalConfig(prev => ({ ...prev, apiKey: 'demo' }))
+        setCheckStatus('success')
+        setCheckMessage(t('settings.demoConnectionMessage'))
+    }
+
+    const connectionFailureMessage = (error: any) => {
+        const detail = error?.message || t('settings.connectionFailed')
+        const hint = isTauriApp() ? t('settings.desktopConnectionHint') : t('settings.browserCorsHint')
+        return `${detail}. ${hint}`
+    }
+
     const checkConnection = async () => {
         setIsChecking(true)
         setCheckStatus('idle')
@@ -235,6 +247,12 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         setAvailableModels([])
 
         try {
+            if (localConfig.apiKey.trim() === 'demo') {
+                setCheckStatus('success')
+                setCheckMessage(t('settings.demoConnectionMessage'))
+                return
+            }
+
             const cleanUrl = normalizeUrl(localConfig.baseUrl)
             const headers: Record<string, string> = {
                 'Content-Type': 'application/json'
@@ -263,7 +281,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
             }
         } catch (error: any) {
             setCheckStatus('error')
-            setCheckMessage(error.message || t('settings.connectionFailed'))
+            setCheckMessage(connectionFailureMessage(error))
         } finally {
             setIsChecking(false)
         }
@@ -502,6 +520,9 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                         placeholder="https://api.openai.com/v1"
                                     />
                                     <p className="text-xs text-muted-foreground">{t('settings.baseUrlHint')}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {isTauriApp() ? t('settings.desktopConnectionHint') : t('settings.browserCorsHint')}
+                                    </p>
                                 </div>
                                 <div className="space-y-2">
                                     <Label>{t('settings.apiKey')}</Label>
@@ -512,6 +533,24 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                                         className="font-mono text-sm"
                                         placeholder="sk-..."
                                     />
+                                    <p className="text-xs text-muted-foreground">
+                                        {isTauriApp() ? t('settings.apiKeyStorageHintDesktop') : t('settings.apiKeyStorageHintBrowser')}
+                                    </p>
+                                </div>
+
+                                <div className="flex items-center justify-between gap-3 rounded-md border bg-muted/30 p-3">
+                                    <div className="space-y-1">
+                                        <div className="text-sm font-medium">{t('settings.demoMode')}</div>
+                                        <p className="text-xs text-muted-foreground">{t('settings.demoModeHint')}</p>
+                                    </div>
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant={localConfig.apiKey.trim() === 'demo' ? 'default' : 'outline'}
+                                        onClick={enableDemoMode}
+                                    >
+                                        {localConfig.apiKey.trim() === 'demo' ? t('settings.demoModeActive') : t('settings.useDemoMode')}
+                                    </Button>
                                 </div>
 
                                 <div className="flex items-center justify-between bg-muted/40 p-3 rounded-md border">

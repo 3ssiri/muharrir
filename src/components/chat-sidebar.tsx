@@ -234,6 +234,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                             <Button
                                 variant="ghost"
                                 size="icon"
+                                aria-label={t('sidebar.clearSearch')}
                                 className="absolute end-0.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-md hover:bg-muted transition-all duration-200 animate-in fade-in zoom-in"
                                 onClick={() => setSearchQuery('')}
                             >
