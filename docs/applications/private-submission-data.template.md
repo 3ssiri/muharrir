@@ -18,7 +18,7 @@ Create a private local copy named `private-submission-data.md` and fill it befor
 - OpenAI Organization ID: TODO
 - OpenAI Project ID, if requested: TODO
 - Business email: TODO
-- Company/project website: TODO
+- Company/project website: https://github.com/3ssiri/muharrir
 - Company legal name, if different from project name: TODO
 - VC referral code, if using the VC credits route: TODO
 - Basic funding details: TODO
@@ -28,14 +28,13 @@ Create a private local copy named `private-submission-data.md` and fill it befor
 
 - Claude Console account email: TODO
 - Company email: TODO
-- Company/project website: TODO
+- Company/project website: https://github.com/3ssiri/muharrir
 - Funding status: TODO
 - Investor/accelerator, if any: TODO
-- Short Claude integration plan: Native Claude API provider support is tracked in https://github.com/3ssiri/muharrir/issues/16.
+- Short Claude integration plan: Native Claude API provider support is implemented; issue https://github.com/3ssiri/muharrir/issues/16 remains open only for a real Claude Console API-key smoke test.
 
 ## Safe Early-Stage Traction Wording
 
 Use this if there are no public users or revenue yet:
 
 > Muharrir is currently an early-stage open-source beta. The project has a working local demo, automated tests, public release materials, and a roadmap for provider integrations and Arabic-first prompt workflows. I am not claiming production traction yet.
-

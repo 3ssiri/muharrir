@@ -14,8 +14,8 @@ Muharrir is technically demo-ready, but not fully submission-ready until the pri
 | Local models | Ready | Ollama can be detected and selected without an API key. |
 | OpenAI fit | Strong | The app is already built around OpenAI-compatible provider settings. |
 | Anthropic fit | Stronger | Native Claude Messages API support is implemented; run one real-key smoke test before submitting. |
-| Public repo | TODO | The code repository is currently private; use a private review link or make it public before submission. |
-| Website/demo URL | Ready/TODO | Release and public demo video exist; a dedicated project website is still optional/TODO. |
+| Public repo | Ready | The repository is public at https://github.com/3ssiri/muharrir. |
+| Website/demo URL | Ready | The public repository can serve as the project site; release and demo video links are ready. |
 | Traction | TODO | Do not invent user counts. Use honest early-stage language. |
 
 ## Files
@@ -31,14 +31,14 @@ Muharrir is technically demo-ready, but not fully submission-ready until the pri
 
 ## Recommended Submission Order
 
-1. Publish/confirm the repository and public docs.
-2. Record the 90-second demo using [demo-script.md](demo-script.md).
-3. Run a real-key smoke test for OpenAI-compatible and Claude provider paths.
-4. Submit OpenAI Startup Community first because Muharrir is already OpenAI-compatible.
-5. Submit Anthropic Claude for Startups with the native Claude integration story front and center.
+1. Fill the private application fields in a local, uncommitted copy of [private-submission-data.template.md](private-submission-data.template.md).
+2. Run a real-key smoke test for OpenAI-compatible and Claude provider paths.
+3. Submit OpenAI Startup Community first because Muharrir is already OpenAI-compatible.
+4. Submit Anthropic Claude for Startups with the native Claude integration story front and center.
 
 ## Current Public Links
 
+- Repository: https://github.com/3ssiri/muharrir
 - Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1
 - Public demo video: https://github.com/3ssiri/muharrir-demo-assets/raw/master/muharrir-application-demo.mp4
 - Claude API support issue: https://github.com/3ssiri/muharrir/issues/16

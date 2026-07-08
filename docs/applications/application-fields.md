@@ -82,12 +82,12 @@ Support would help Muharrir remain open, local-first, and provider-flexible whil
 
 ## Evidence To Attach
 
-- Repository: https://github.com/3ssiri/muharrir (confirm visibility or provide a private review link)
-- Website or landing page: TODO
+- Repository: https://github.com/3ssiri/muharrir
+- Website or landing page: https://github.com/3ssiri/muharrir
 - Demo video: https://github.com/3ssiri/muharrir-demo-assets/raw/master/muharrir-application-demo.mp4
 - Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1
-- CI status: confirm latest `master` run before submission
-- Roadmap: TODO
+- CI status: latest `master` run passed after native Claude support
+- Roadmap: https://github.com/3ssiri/muharrir/blob/master/docs/ROADMAP.md
 - Privacy/security docs: `docs/PRIVACY.md`, `SECURITY.md`
 
 ## Do Not Claim Unless True
