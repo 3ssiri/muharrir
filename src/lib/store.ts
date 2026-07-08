@@ -53,23 +53,15 @@ export const useAppStore = create<AppState>()(
       ...defaultSettings,
       setApiKey: (apiKey) => {
         set({ apiKey })
-        // داخل Tauri: نخزّن المفتاح بأمان في الـ OS Keychain (لا نتركه في localStorage).
-        // إن تعذّر الوصول إلى الـ Keychain (مثلاً لا توجد خدمة أسرار على Linux)
-        // فإن tauri-bridge يحفظه محليًّا كحلٍّ بديل ونُعلِم المستخدم بذلك.
+        // داخل Tauri: نخزّن المفتاح في OS Keychain فقط. إذا تعذّر الوصول إليه
+        // لا نحفظ المفتاح في localStorage.
         if (isTauriApp() && apiKey) {
           keychainSave(KEYCHAIN_PROVIDER, apiKey)
-            .then((storage) => {
-              if (storage === 'localStorage-fallback') {
-                toast.warning(
-                  'تعذّر الوصول إلى مخزن مفاتيح النظام؛ حُفظ المفتاح محليًّا بدلاً من ذلك. ' +
-                  'قد يتطلّب نظامك خدمة أسرار (مثل gnome-keyring) لتخزينٍ أكثر أمانًا.',
-                  { duration: 7000 }
-                )
-              }
-            })
             .catch((e) => {
               log.error('فشل حفظ المفتاح:', e)
-              toast.error('فشل حفظ مفتاح API. يرجى المحاولة مجددًا.')
+              toast.error(
+                'فشل حفظ مفتاح API في مخزن مفاتيح النظام. لن يُحفظ المفتاح محليًا داخل تطبيق سطح المكتب.'
+              )
             })
         }
       },

@@ -3,7 +3,7 @@
 import { memo } from 'react'
 import { useTranslations } from 'next-intl'
 import type { UiMessage, ToolInvocation } from '@/lib/chat-stream'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Bot, User, Copy, Pencil, RotateCcw, Trash2, AlertCircle, Sparkles } from '@/components/icons'
 import { ImagePreview } from '@/components/image-preview'
@@ -53,7 +53,6 @@ function MessageItemComponent({
       {m.role !== 'user' && (
         <Avatar className="w-8 h-8 mt-1 shrink-0 bg-primary">
           <AvatarFallback className="bg-transparent"><Bot className="w-5 h-5 text-primary-foreground" /></AvatarFallback>
-          <AvatarImage src="/ai-avatar.png" className="opacity-0" />
         </Avatar>
       )}
 
@@ -265,7 +264,6 @@ function MessageItemComponent({
       {m.role === 'user' && (
         <Avatar className="w-8 h-8 mt-1 border border-border shrink-0 bg-accent">
           <AvatarFallback className="bg-transparent"><User className="w-5 h-5 text-primary" /></AvatarFallback>
-          <AvatarImage src="/user-avatar.png" className="opacity-0" />
         </Avatar>
       )}
 

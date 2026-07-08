@@ -44,20 +44,13 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
     // Parse args safely with better error handling
     let formConfig: { dimensions: EnhancementDimension[] } | null = null
     try {
-        // Debugging: output the original args
-        console.log('EnhancementForm args:', args)
-        console.log('EnhancementForm args type:', typeof args)
-
         // Handle streaming data: args may be an object or a string
         let parsed = typeof args === 'string' ? JSON.parse(args) : args
-        console.log('EnhancementForm parsed:', parsed)
 
         // Validate the structure of the parsed result
         if (parsed && typeof parsed === 'object') {
             // Check that a dimensions field exists and is an array
             if (Array.isArray(parsed.dimensions) && parsed.dimensions.length > 0) {
-                console.log('Found dimensions:', parsed.dimensions.length)
-
                 // Additional validation of each dimension's structure
                 const validDimensions = parsed.dimensions.filter((dim: any) =>
                     dim &&
@@ -67,8 +60,6 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
                     Array.isArray(dim.options) &&
                     dim.options.length > 0
                 )
-
-                console.log('Valid dimensions:', validDimensions.length)
 
                 if (validDimensions.length > 0) {
                     formConfig = { dimensions: validDimensions }
@@ -80,7 +71,6 @@ export function EnhancementForm({ toolInvocation, addToolResult, onSubmit }: Enh
     } catch (e) {
         // JSON parsing failed, perhaps the streaming data is not complete yet
         console.error('Enhancement form config parsing error:', e)
-        console.error('Args value:', args)
     }
 
     // If the config is invalid or empty, show a loading state

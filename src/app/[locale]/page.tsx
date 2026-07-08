@@ -32,6 +32,8 @@ import { estimateTokens } from '@/lib/token-estimate'
 import { log } from '@/lib/logger'
 import { isTauriApp } from '@/lib/tauri-bridge'
 
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+
 export default function Home() {
   const t = useTranslations();
   const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, setModel, hydrateApiKey } = useAppStore()
@@ -544,6 +546,7 @@ export default function Home() {
 
         const file = item.getAsFile()
         if (!file) continue
+        if (!validateUploadFile(file)) continue
 
         // Read the image and set the preview
         const reader = new FileReader()
@@ -560,7 +563,28 @@ export default function Home() {
     }
   }
 
+  const validateUploadFile = useCallback((file: File) => {
+    const isImage = file.type.startsWith('image/')
+    const isPDF = file.type === 'application/pdf'
+    const isDoc = file.type.includes('wordprocessing') || file.name.endsWith('.docx')
+    const isText = file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md')
+
+    if (!isImage && !isPDF && !isDoc && !isText) {
+      toast.error(t('fileUploadComponent.unsupportedFormat'))
+      return false
+    }
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      toast.error(t('fileUploadComponent.fileTooLarge'))
+      return false
+    }
+
+    return true
+  }, [t])
+
   const handleFileSelect = async (file: File, preview?: string) => {
+    if (!validateUploadFile(file)) return
+
     let fileText: string | undefined = undefined
 
     // If it is a PDF file, use client-side parsing
@@ -681,7 +705,7 @@ export default function Home() {
         toast.success(t('toasts.messageDeleted'))
       }
     }
-  }, [])
+  }, [t])
 
   const append = useCallback(async (message: { content: string; role?: string }) => {
     // Add the user message
@@ -769,7 +793,7 @@ export default function Home() {
     } finally {
       setIsLoading(false)
     }
-  }, [model, systemPrompt, apiKey, baseUrl, correctionModel])
+  }, [model, systemPrompt, apiKey, baseUrl, correctionModel, t])
 
   const handleRetry = useCallback(async (messageIndex: number) => {
     // Find the last user message before the current assistant message
@@ -1104,6 +1128,9 @@ export default function Home() {
                 </Button>
               )}
             </form>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {t('fileUploadComponent.privacyHint')}
+            </p>
             <div className="flex items-center justify-center gap-2 mt-2">
               <span className="text-xs text-muted-foreground">{t('chat.disclaimer')}</span>
               {localInput.trim() && (

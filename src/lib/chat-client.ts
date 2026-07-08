@@ -47,18 +47,118 @@ Your only job is to **help the user design and optimize prompts**, not to perfor
 
 ## Phase 2: Immediately call the tool to show an interactive table
 **Most important: you must call the \`suggest_enhancements\` tool immediately; do not settle for a text description**
+- Use 3-5 dimensions at most.
+- Each dimension should use plain user-facing labels, not internal jargon.
+- Each option description should explain the practical difference in one short sentence.
 
 ## Phase 3: Generate the prompt
 **You must call the tool**: \`propose_prompt\` to generate the final structured prompt.
+- The final prompt should be copy-ready and include role, objective, context, constraints, workflow, and output format when relevant.
+- If the user's request is too vague to create useful enhancement choices, call \`ask_questions\` first with at most three essential questions.
 
 # Important principles
 1. **Mandatory tool call**: after receiving the user's input, call the suggest_enhancements tool immediately.
 2. **Stay in role**: you are a prompt optimization assistant, not a task executor.
 3. **No text analysis**: do not output phrases like "I understand" or "let me analyze"; call the tool directly.
-4. **Quality assurance**: the generated prompt must be clear, structured, and ready to use directly.`;
+4. **Quality assurance**: the generated prompt must be clear, structured, and ready to use directly.
+5. **Bilingual care**: when the user writes Arabic, preserve natural Arabic phrasing and RTL-friendly structure.`;
 
-// Demo mode text
-const DEMO_TEXT = "[Demo Mode]\n\nThis is a simulated demo response. In real mode, I would call the tools to generate a structured prompt. Since no real API key is currently configured, only the text streaming effect is shown.\n\nYou can enter an OpenAI or DeepSeek key in the settings to try the full features.";
+const DEMO_INTRO =
+  "Demo Mode\n\nThis is a local simulated run. No external AI provider is called.\n\nPick a direction from the enhancement table, then review the sample structured prompt below.";
+
+const DEMO_ENHANCEMENTS = {
+  dimensions: [
+    {
+      key: 'audience',
+      title: 'Audience / الجمهور',
+      options: [
+        {
+          label: 'Developers',
+          value: 'developers',
+          description: 'Use technical language, constraints, and implementation details.',
+        },
+        {
+          label: 'Educators',
+          value: 'educators',
+          description: 'Use learning goals, examples, and assessment criteria.',
+        },
+        {
+          label: 'Product teams',
+          value: 'product-teams',
+          description: 'Use goals, trade-offs, acceptance criteria, and user impact.',
+        },
+      ],
+      allowCustom: true,
+    },
+    {
+      key: 'output_style',
+      title: 'Output style / نمط المخرجات',
+      options: [
+        {
+          label: 'Structured brief',
+          value: 'structured-brief',
+          description: 'Concise sections with context, task, constraints, and output format.',
+        },
+        {
+          label: 'Agent instructions',
+          value: 'agent-instructions',
+          description: 'Step-by-step instructions suitable for coding or research agents.',
+        },
+        {
+          label: 'Arabic-first',
+          value: 'arabic-first',
+          description: 'Arabic phrasing with clear RTL-friendly structure.',
+        },
+      ],
+      allowCustom: true,
+    },
+    {
+      key: 'quality_bar',
+      title: 'Quality bar / معيار الجودة',
+      options: [
+        {
+          label: 'Fast draft',
+          value: 'fast-draft',
+          description: 'Prioritize a usable first version.',
+        },
+        {
+          label: 'Review-ready',
+          value: 'review-ready',
+          description: 'Include assumptions, risks, and verification steps.',
+        },
+        {
+          label: 'Production-grade',
+          value: 'production-grade',
+          description: 'Add strict constraints, examples, and acceptance checks.',
+        },
+      ],
+      allowCustom: true,
+    },
+  ],
+};
+
+const DEMO_PROMPT = {
+  title: 'Document-to-Prompt Assistant',
+  role: 'You are a bilingual Arabic/English prompt engineering assistant.',
+  objective: 'Turn a vague user idea or uploaded document summary into a clear, reusable AI prompt.',
+  context:
+    'The user may be a developer, educator, writer, or product builder. They need guidance without sending data to a Muharrir server.',
+  constraints: [
+    'Ask only essential clarification questions.',
+    'Preserve Arabic RTL readability when the user writes in Arabic.',
+    'State assumptions explicitly.',
+    'Return a prompt the user can copy directly.',
+  ],
+  workflow: [
+    'Identify the user goal and missing context.',
+    'Offer enhancement choices for audience, output style, and quality bar.',
+    'Generate a final prompt with role, task, constraints, and output format.',
+  ],
+  outputFormat:
+    'Markdown with sections: Role, Objective, Context, Constraints, Workflow, Output Format, and Final Prompt.',
+  finalPrompt:
+    'You are a bilingual prompt engineering assistant. Help me transform the following rough idea into a structured AI prompt. Ask up to three clarification questions if needed, then produce a copy-ready prompt with Role, Objective, Context, Constraints, Workflow, and Output Format. Preserve Arabic readability when Arabic is used. Rough idea: {{user_idea}}',
+};
 
 // Tool definitions in OpenAI function format (the same three tools)
 const TOOLS = [
@@ -66,7 +166,7 @@ const TOOLS = [
     type: 'function',
     function: {
       name: 'ask_questions',
-      description: 'Call this tool to ask the user questions when their request is unclear.',
+      description: 'Ask up to three essential clarification questions only when the request is too vague to produce useful enhancement choices.',
       parameters: {
         type: 'object',
         properties: {
@@ -76,7 +176,7 @@ const TOOLS = [
               type: 'object',
               properties: {
                 id: { type: 'string' },
-                text: { type: 'string', description: 'The question to ask the user' },
+                text: { type: 'string', description: 'A concise, user-facing question with no more than one idea' },
                 type: { type: 'string', enum: ['text', 'select', 'checkbox'], description: 'Type of input required' },
                 options: { type: 'array', items: { type: 'string' }, description: 'Options for select/checkbox' },
               },
@@ -92,7 +192,7 @@ const TOOLS = [
     type: 'function',
     function: {
       name: 'suggest_enhancements',
-      description: 'Phase 1: provide multi-dimensional optimization suggestions for the user to choose from.',
+      description: 'Phase 1: provide 3-5 clear, user-facing optimization dimensions with practical choices the user can understand quickly.',
       parameters: {
         type: 'object',
         properties: {
@@ -102,7 +202,7 @@ const TOOLS = [
               type: 'object',
               properties: {
                 key: { type: 'string' },
-                title: { type: 'string', description: 'Dimension title, e.g. "Tone style"' },
+                title: { type: 'string', description: 'Short dimension title, e.g. "Audience", "Output style", or "Quality bar"' },
                 options: {
                   type: 'array',
                   items: {
@@ -110,7 +210,7 @@ const TOOLS = [
                     properties: {
                       label: { type: 'string' },
                       value: { type: 'string' },
-                      description: { type: 'string' },
+                      description: { type: 'string', description: 'One short sentence explaining when to choose this option' },
                     },
                     required: ['label', 'value'],
                   },
@@ -130,7 +230,7 @@ const TOOLS = [
     type: 'function',
     function: {
       name: 'propose_prompt',
-      description: 'Phase 2: generate the final structured prompt based on the user selections.',
+      description: 'Phase 2: generate a copy-ready structured prompt based on the user selections, preserving Arabic readability when relevant.',
       parameters: {
         type: 'object',
         properties: {
@@ -222,16 +322,25 @@ export function mapError(status: number, raw: string, modelId?: string): string 
 // Demo mode stream
 function buildDemoResponse(): Response {
   const encoder = new TextEncoder();
+  const chunks = [
+    `0:${JSON.stringify(DEMO_INTRO)}\n`,
+    `9:${JSON.stringify({ toolCallId: 'demo_enhancements', toolName: 'suggest_enhancements', args: DEMO_ENHANCEMENTS })}\n`,
+    `9:${JSON.stringify({ toolCallId: 'demo_prompt', toolName: 'propose_prompt', args: DEMO_PROMPT })}\n`,
+  ];
   const stream = new ReadableStream({
     async start(controller) {
-      for (let i = 0; i < DEMO_TEXT.length; i++) {
-        controller.enqueue(encoder.encode('0:' + JSON.stringify(DEMO_TEXT[i]) + '\n'));
-        await new Promise((r) => setTimeout(r, 20));
+      for (const chunk of chunks) {
+        controller.enqueue(encoder.encode(chunk));
       }
       controller.close();
     },
   });
-  return new Response(stream, { headers: { 'Content-Type': 'text/x-unknown; charset=utf-8' } });
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'X-Vercel-AI-Data-Stream': 'v1',
+    },
+  });
 }
 
 /**

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { mapError, extractProviderMessage, normalizeApiKey } from '@/lib/chat-client'
+import { consumeChatStream } from '@/lib/chat-stream'
+import { mapError, extractProviderMessage, normalizeApiKey, streamChat } from '@/lib/chat-client'
 
 describe('extractProviderMessage', () => {
   it('extracts error.message from a provider JSON body', () => {
@@ -50,5 +51,38 @@ describe('mapError', () => {
 describe('normalizeApiKey', () => {
   it('trims surrounding whitespace and newlines', () => {
     expect(normalizeApiKey('  sk-abc123 \n')).toBe('sk-abc123')
+  })
+})
+
+describe('streamChat demo mode', () => {
+  it('returns a local structured prompt workflow without calling a provider', async () => {
+    const response = await streamChat({
+      messages: [{ role: 'user', content: 'حوّل فكرة تطبيق تعليم إلى prompt' }],
+      apiKey: ' demo ',
+      baseUrl: 'https://example.invalid/v1',
+    })
+
+    expect(response.ok).toBe(true)
+    expect(response.headers.get('X-Vercel-AI-Data-Stream')).toBe('v1')
+
+    const result = await consumeChatStream(response, () => {})
+
+    expect(result.content).toContain('Demo Mode')
+    expect(result.content).toContain('No external AI provider is called')
+    expect(result.toolInvocations).toHaveLength(2)
+    expect(result.toolInvocations.map((tool) => tool.toolName)).toEqual([
+      'suggest_enhancements',
+      'propose_prompt',
+    ])
+    expect(result.toolInvocations[0].args).toMatchObject({
+      dimensions: expect.arrayContaining([
+        expect.objectContaining({ key: 'audience' }),
+        expect.objectContaining({ key: 'output_style' }),
+      ]),
+    })
+    expect(result.toolInvocations[1].args).toMatchObject({
+      title: 'Document-to-Prompt Assistant',
+      finalPrompt: expect.stringContaining('{{user_idea}}'),
+    })
   })
 })
