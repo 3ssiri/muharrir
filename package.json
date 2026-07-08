@@ -1,6 +1,6 @@
 {
   "name": "muharrir",
-  "version": "0.2.3",
+  "version": "0.3.0-beta.1",
   "private": true,
   "description": "Local-first Arabic/English prompt engineering workspace for turning vague ideas and documents into structured AI prompts.",
   "license": "MIT",

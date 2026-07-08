@@ -8,6 +8,11 @@ on:
 
 jobs:
   build:
+    # Beta/application-package tags are used for GitHub prereleases and should
+    # not try to produce signed desktop updater artifacts. Run the desktop
+    # matrix for stable v* tags or manual dispatch after signing secrets are
+    # confirmed valid.
+    if: ${{ github.event_name == 'workflow_dispatch' || !contains(github.ref_name, '-') }}
     strategy:
       fail-fast: false
       matrix:
