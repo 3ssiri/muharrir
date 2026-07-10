@@ -11,6 +11,10 @@ const nextConfig = {
   trailingSlash: true,
   // Next Image لا يعمل مع static export، لذا نعطّل التحسين
   images: { unoptimized: true },
+  // تحديد جذر Workspace صراحةً لتفادي تحذير Turbopack بسبب lockfile خارجي
+  turbopack: {
+    root: import.meta.dirname,
+  },
   // تحسين أداء الترجمة في وضع التطوير
   webpack: (config, { dev, isServer }) => {
     if (dev) {
