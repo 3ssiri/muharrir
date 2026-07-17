@@ -19,7 +19,7 @@ const rubik = Rubik({
 // PWA: make the app installable (manifest + theme color).
 export const metadata = {
   manifest: '/manifest.webmanifest',
-  applicationName: 'Prompt Iterator',
+  applicationName: 'Muharrir',
   appleWebApp: { capable: true, title: 'Muharrir', statusBarStyle: 'default' as const },
 };
 

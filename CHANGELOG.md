@@ -4,7 +4,10 @@
 
 ## غير مُصدَر (Unreleased)
 
-لا توجد تغييرات غير موثقة حاليا.
+- Align public-facing app and desktop metadata on the Muharrir name and `0.3.0-beta.1`.
+- Add root governance/privacy entry points for public OSS review.
+- Clarify grant checklists, repository visibility, and deferred signed desktop release status.
+- Add a desktop release workflow preflight for malformed Tauri signing secrets.
 
 ## 0.3.0-beta.1 — 2026-07-08
 

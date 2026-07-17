@@ -148,7 +148,7 @@ Assistant response:
    - Knowledge Boundaries: Based on React 18+ version, covering latest server-side rendering practices`
 
 // إصدار التطبيق (يطابق tauri.conf.json و package.json)
-const APP_VERSION = '0.3.0-beta.1'
+const APP_VERSION = '0.3.0'
 
 interface SettingsDialogProps {
     open?: boolean
@@ -770,7 +770,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                         {/* About tab */}
                         <TabsContent value="about" className="space-y-6 mt-0">
                             <div className="flex flex-col items-center text-center gap-2 py-2">
-                                <h3 className="text-lg font-semibold">مُحسِّن الموجّهات — Prompt Iterator</h3>
+                                <h3 className="text-lg font-semibold">Muharrir</h3>
                                 <p className="text-sm text-muted-foreground max-w-md">{t('settings.aboutTagline')}</p>
                                 <span className="text-xs text-muted-foreground">{t('settings.version')} {APP_VERSION}</span>
                             </div>

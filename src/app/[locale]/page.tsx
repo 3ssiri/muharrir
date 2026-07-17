@@ -911,7 +911,7 @@ export default function Home() {
             <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
               <Code2 className="w-5 h-5 text-primary-foreground" />
             </div>
-            <h1 className="text-xl font-bold tracking-tight font-display text-gradient">Prompt Iterator</h1>
+            <h1 className="text-xl font-bold tracking-tight font-display text-gradient">Muharrir</h1>
             <VersionBadge />
           </div>
           <div className="flex items-center gap-2">

@@ -4,7 +4,7 @@ This log records project-readiness decisions that should stay visible while Muha
 
 ## Status
 
-Muharrir remains private while OSS readiness work is completed. The repository should become public only after the readiness gate passes: license consistency, privacy/security documentation, CI confidence, README clarity, and a credible first-use demo.
+Muharrir remains private on GitHub while OSS readiness work is completed. The repository should become public only after the readiness gate passes: license consistency, privacy/security documentation, CI confidence, README clarity, a credible first-use demo, and an explicit owner decision to switch visibility.
 
 ## Decisions
 
@@ -19,6 +19,7 @@ Muharrir remains private while OSS readiness work is completed. The repository s
 | 2026-07-08 | Preserve the current icon and visual identity for the first OSS readiness pass. | The current assets are usable; readiness risk is higher in licensing, trust, docs, and CI. | Accepted |
 | 2026-07-08 | Preserve the local-first static-export architecture. | Public readiness must not introduce a backend or cloud dependency. | Accepted |
 | 2026-07-08 | Remove Tauri localStorage fallback for API keys. | Public readiness should fail closed when OS Keychain access fails instead of persisting desktop API keys in localStorage. | Accepted |
+| 2026-07-09 | Treat `v0.3.0-beta.1` as a source/demo prerelease, not a signed desktop release. | The failed desktop workflow was caused by a malformed `TAURI_SIGNING_PRIVATE_KEY`; signed installers require corrected secrets and a stable release workflow run. | Accepted |
 
 ## Release Gate
 
@@ -27,6 +28,8 @@ Do not make the repository public until these checks are true:
 - `LICENSE`, `README.md`, and `package.json` agree on MIT.
 - `npm run lint`, `npm run typecheck`, `npm run test:unit`, and `npm run build` pass without API secrets.
 - `CONTRIBUTING.md`, `SECURITY.md`, `docs/PRIVACY.md`, and `docs/ROADMAP.md` exist.
+- `GOVERNANCE.md` and root `PRIVACY.md` exist for public community-health entry points.
 - README explains quick start, demo mode, privacy, Web vs Desktop behavior, and contribution path.
 - Demo mode is understandable for a first-time user without a real provider key.
 - No active source or root documentation claims the project is proprietary or confidential.
+- GitHub repository visibility is public, if the target grant requires a public OSS URL.

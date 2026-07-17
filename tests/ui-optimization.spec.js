@@ -39,7 +39,7 @@ test.describe('اختبار تحسين واجهة المستخدم', () => {
 
   test('اختبار تحميل الصفحة الرئيسية', async ({ page }) => {
     // التحقق من وجود العنوان
-    await expect(page.locator('text=Prompt Iterator')).toBeVisible();
+    await expect(page.locator('text=Muharrir')).toBeVisible();
     await expect(page.getByText('لست بحاجة إلى مفتاح API للتجربة الأولى')).toBeVisible();
     await expect(page.getByRole('button', { name: 'جرّب بدون مفتاح' })).toBeVisible();
     const ollamaButton = page.getByRole('button', { name: 'استخدم Ollama المحلي' });

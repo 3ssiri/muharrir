@@ -1,4 +1,4 @@
-// منطق Tauri لتطبيق "Prompt Iterator Desktop"
+// منطق Tauri لتطبيق Muharrir Desktop
 // يوفّر أوامر لحفظ مفاتيح API في الـ OS Keychain واختبار الاتصال بالمزوّد.
 
 use keyring::Entry;
@@ -9,7 +9,7 @@ use tauri::{
 };
 
 // اسم الخدمة المستخدَم في الـ Keychain
-const SERVICE_NAME: &str = "prompt-iterator-desktop";
+const SERVICE_NAME: &str = "muharrir-desktop";
 
 /// حفظ مفتاح API في الـ OS Keychain
 /// Windows: Credential Manager | macOS: Keychain | Linux: Secret Service
@@ -101,7 +101,7 @@ fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
 
     TrayIconBuilder::with_id("main-tray")
         .icon(app.default_window_icon().unwrap().clone())
-        .tooltip("Prompt Iterator")
+        .tooltip("Muharrir")
         .menu(&menu)
         .show_menu_on_left_click(false) // القائمة باليمين فقط
         .on_menu_event(|app, event| match event.id.as_ref() {
