@@ -34,7 +34,7 @@ Resolution: removed the raw argument and parsed payload logs.
 
 ### Accepted Tradeoff: Tauri Keychain Fallback
 
-Tauri desktop builds prefer OS Keychain storage through `src-tauri/src/lib.rs` and `src/lib/tauri-bridge.ts`. If the OS Keychain is unavailable, the app currently falls back to localStorage so users can continue using the desktop app.
+Tauri desktop builds prefer OS Keychain storage through `src-tauri/src/lib.rs` and `src/lib/tauri-bridge.ts`. If the OS Keychain is unavailable, the app fails closed for persistence and does not save the key to localStorage.
 
 Current documentation:
 
@@ -49,4 +49,4 @@ Release recommendation: before a broad public release, document setup guidance f
 
 Before public launch, complete one of these:
 
-The current private/grant-readiness path proceeds with fail-closed desktop key storage.
+The current private/grant-readiness path proceeds with fail-closed desktop key storage. The `v0.3.0-beta.1` desktop workflow failure was not a source build failure; the installers built, then updater artifact signing failed because `TAURI_SIGNING_PRIVATE_KEY` was malformed base64. Signed desktop releases remain gated on corrected signing secrets.

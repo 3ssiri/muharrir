@@ -5,7 +5,7 @@ Use this file as the final copy/paste packet for OpenAI and Anthropic forms.
 ## Public Links
 
 - Repository: https://github.com/3ssiri/muharrir
-- Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1
+- Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1 (prerelease with demo assets; no signed desktop installers yet)
 - Demo video: https://github.com/3ssiri/muharrir-demo-assets/raw/master/muharrir-application-demo.mp4
 - Privacy: https://github.com/3ssiri/muharrir/blob/master/docs/PRIVACY.md
 - Security: https://github.com/3ssiri/muharrir/blob/master/SECURITY.md
@@ -42,7 +42,7 @@ Muharrir includes native Claude Messages API support for running guided prompt r
 
 ## Honest Early-Stage Traction Wording
 
-Muharrir is currently an early-stage open-source beta. The project has a working local demo, automated tests, public release materials, native Claude support, local Ollama support, and a roadmap for provider integrations and Arabic-first prompt workflows. I am not claiming production traction yet.
+Muharrir is currently an early-stage open-source beta candidate. The project has a working local demo, automated tests, release materials, native Claude support, local Ollama support, and a roadmap for provider integrations and Arabic-first prompt workflows. I am not claiming production traction yet.
 
 ## Private Fields Still Required
 
@@ -63,4 +63,6 @@ Do not invent these values. Fill them from the real account/company before submi
 
 - Run one real Claude Console API-key smoke test before claiming production Claude usage.
 - Run one real OpenAI-compatible provider smoke test before submitting OpenAI API usage claims.
+- Switch the GitHub repository to public, or confirm the grant program accepts a private review link.
+- Do not claim signed desktop installers until the Tauri signing secret is corrected and a release workflow produces artifacts.
 - Keep provider privacy claims conservative: prompts are local until the user sends them to the selected provider.

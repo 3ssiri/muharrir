@@ -4,7 +4,7 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## نظرة عامة
 
-**مُحسِّن الموجّهات (Prompt Iterator / Muharrir)** — تطبيق Next.js 14 + Tauri v2 يساعد المستخدم على تحويل فكرة غامضة إلى موجّه (Prompt) منظّم عبر حوار تفاعلي. ثنائي اللغة (عربي RTL / إنجليزي)، محلي أولاً (Local-First)، ويعمل كتطبيق ويب أو كتطبيق سطح مكتب من نفس الكود.
+**Muharrir / مُحسِّن الموجّهات** — تطبيق Next.js 14 + Tauri v2 يساعد المستخدم على تحويل فكرة غامضة إلى موجّه (Prompt) منظّم عبر حوار تفاعلي. ثنائي اللغة (عربي RTL / إنجليزي)، محلي أولاً (Local-First)، ويعمل كتطبيق ويب أو كتطبيق سطح مكتب من نفس الكود.
 
 > **التحويل من Next.js إلى Tauri مكتمل** (مع system tray واختصار عام Ctrl+Shift+K وتحديث تلقائي). أي توثيق يصف التحويل كعمل مستقبلي قديمٌ — انظر git history.
 
@@ -57,7 +57,7 @@ npm run test:ui                                     # واجهة Playwright ال
 **حلقة التصحيح:** تُتحقَّق وسائط الأدوات بـ Zod في [src/lib/format-validator.ts](src/lib/format-validator.ts)؛ عند الفشل يُستدعى نموذج تصحيح (مثبَّت على `grok-beta-fast`) حتى 3 مرات لإصلاح صيغة JSON دون تغيير المعنى. تغطّي اختبارات Vitest هذا المنطق ومنطق `chat-stream`/`token-estimate`/`text-diff`.
 
 ### 4) الحالة والتخزين المحلي + أمان مفتاح API
-- **[src/lib/store.ts](src/lib/store.ts)** — متجر Zustand للإعدادات (مفتاح API، baseUrl، النموذج، system prompt، نماذج التصحيح، إعادة المحاولة) محفوظ في localStorage باسم `prompt-iterator-storage`.
+- **[src/lib/store.ts](src/lib/store.ts)** — متجر Zustand للإعدادات (مفتاح API، baseUrl، النموذج، system prompt، نماذج التصحيح، إعادة المحاولة) محفوظ في localStorage باسم `prompt-iterator-storage` لأجل استمرارية بيانات الإصدارات السابقة.
 - **[src/lib/db.ts](src/lib/db.ts)** — Dexie/IndexedDB (`PromptIteratorDB`) للمحادثات والرسائل والموجّهات المفضّلة.
 - **أمان المفتاح:** داخل Tauri لا يُخزَّن مفتاح API في localStorage إطلاقًا — `partialize` في المتجر يستبعده، ويُحفَظ بدلًا منه في OS Keychain عبر Rust، ويُحمَّل عند الإقلاع بـ `hydrateApiKey()`. في المتصفح يعود إلى localStorage.
 

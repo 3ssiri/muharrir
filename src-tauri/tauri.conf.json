@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Prompt Iterator",
-  "version": "0.3.0-beta.1",
-  "identifier": "com.assiri.prompt-iterator",
+  "productName": "Muharrir",
+  "version": "0.3.0",
+  "identifier": "com.assiri.muharrir",
   "build": {
     "frontendDist": "../out",
     "devUrl": "http://localhost:3000",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Prompt Iterator",
+        "title": "Muharrir",
         "width": 1200,
         "height": 800,
         "minWidth": 800,

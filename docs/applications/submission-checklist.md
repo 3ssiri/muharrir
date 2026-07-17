@@ -4,7 +4,7 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 
 ## Public Assets
 
-- [x] Repository is public or accessible through a private review link.
+- [ ] Repository is public or accessible through a private review link.
 - [x] License is consistent in README, `LICENSE`, and `package.json`.
 - [x] README has screenshots, quick start, privacy summary, and provider setup.
 - [x] `docs/PRIVACY.md` is current.
@@ -12,7 +12,8 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 - [ ] Roadmap is current.
 - [x] Demo video is recorded and uploaded.
 - [x] Stable release or beta tag exists.
-- [x] CI status is green.
+- [x] CI status is green for the main CI workflow.
+- [ ] Signed desktop release is either published or explicitly not claimed.
 
 ## Product Proof
 
@@ -24,6 +25,7 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 - [x] Arabic RTL flow is shown.
 - [x] English flow is shown.
 - [ ] No screenshots contain API keys, personal data, or private documents.
+- [ ] Repository visibility has been checked immediately before submission.
 
 ## Anthropic-Specific
 

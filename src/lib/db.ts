@@ -60,7 +60,7 @@ export class PromptIteratorDB extends Dexie {
         this.version(2).stores({
             chatSessions: '++id, title, updatedAt, createdAt',
             messages: '++id, sessionId, role, createdAt',
-            favoritePrompts: '++id, title, updatedAt, createdAt'
+            favoritePrompts: '++id, title, content, updatedAt, createdAt'
         });
     }
 }

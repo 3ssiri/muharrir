@@ -62,6 +62,8 @@
 - [x] `CONTRIBUTING.md`
 - [x] `SECURITY.md`
 - [x] `CODE_OF_CONDUCT.md`
+- [x] `GOVERNANCE.md`
+- [x] `PRIVACY.md`
 - [x] `CHANGELOG.md`
 - [x] `docs/ROADMAP.md`
 - [x] `docs/PRIVACY.md`
@@ -180,7 +182,7 @@
   - test:unit
   - build
 - [x] workflow اختياري Playwright smoke.
-- [x] workflow اختياري desktop build عند tags فقط.
+- [x] workflow اختياري desktop build عند tags فقط، مع تخطي beta tags وفحص مبكر لسر توقيع Tauri.
 
 ### اختبارات وحدة
 
@@ -204,7 +206,7 @@
 
 ### شروط القبول
 
-- CI أخضر بدون أسرار.
+- CI الأساسي أخضر بدون أسرار؛ بناء سطح المكتب الموقّع يتطلب أسرار Tauri صحيحة ولا يدخل بوابة التقديم الحالية.
 - الاختبارات لا تحتاج API key.
 - build ينجح.
 
@@ -275,11 +277,11 @@
 
 ### قبل الإصدار
 
-- [x] حسم رقم الإصدار: `0.2.3`.
+- [x] حسم رقم الإصدار: `0.3.0-beta.1`.
 - [x] تحديث CHANGELOG.
 - [x] تشغيل كل الاختبارات.
 - [x] تشغيل build.
-- [x] التقاط صور/GIF.
+- [x] التقاط صور/فيديو demo.
 - [x] التأكد من README.
 - [x] التأكد من LICENSE.
 - [x] التأكد من SECURITY.
@@ -315,11 +317,11 @@ Verification:
 
 ### قبل التقديم
 
-- [ ] المستودع Public.
+- [ ] المستودع Public: تحقق GitHub الحالي لا يزال `PRIVATE`.
 - [x] الرخصة مفتوحة.
 - [x] README مقنع.
-- [ ] CI أخضر.
-- [ ] Release موجود.
+- [x] CI أخضر: آخر تشغيل `CI` على `master` نجح في 2026-07-08.
+- [x] Release موجود: `v0.3.0-beta.1` منشور كـ prerelease مع demo assets، وليس desktop installers.
 - [x] Demo أو screenshots موجودة.
 - [x] Issues للمساهمين موجودة.
 - [x] Roadmap موجود.
@@ -345,6 +347,7 @@ Verification:
 - لا يوجد build ناجح.
 - لا توجد طريقة تجربة بدون مفتاح.
 - لا توجد وثائق خصوصية.
+- المستودع لا يزال خاصا إذا كان البرنامج يشترط رابط OSS عاما.
 
 ---
 

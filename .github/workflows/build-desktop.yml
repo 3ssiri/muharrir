@@ -1,5 +1,8 @@
 name: Build Desktop
 
+permissions:
+  contents: write
+
 on:
   push:
     tags:
@@ -68,6 +71,13 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
+      - name: Validate updater signing secret
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          node -e "const key = process.env.TAURI_SIGNING_PRIVATE_KEY || ''; if (!key.trim()) { throw new Error('TAURI_SIGNING_PRIVATE_KEY is required for signed desktop updater artifacts.'); } const first = key.charCodeAt(0); if (first === 0xFEFF || first === 239) { throw new Error('TAURI_SIGNING_PRIVATE_KEY starts with a BOM/hidden character. Re-copy the Tauri private key secret as plain text.'); }"
+
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
@@ -77,11 +87,11 @@ jobs:
         with:
           args: ${{ matrix.args }}
           tagName: ${{ github.ref_name }}
-          releaseName: 'Prompt Iterator ${{ github.ref_name }}'
+          releaseName: 'Muharrir ${{ github.ref_name }}'
           releaseDraft: true
           prerelease: false
           releaseBody: |
-            ## 🖥️ Prompt Iterator — إصدار سطح المكتب
+            ## 🖥️ Muharrir — إصدار سطح المكتب
 
             ### ملفات التحميل حسب النظام
             - **Windows**: مثبّت `.msi` أو `.exe` (NSIS)

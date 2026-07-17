@@ -6,7 +6,7 @@ Use these files as the source package before copying answers into external forms
 
 ## Current Readiness Verdict
 
-Muharrir is technically demo-ready, but not fully submission-ready until the private application fields are filled with verified account/company details.
+Muharrir is technically demo-ready, but not fully submission-ready until the repository visibility is public or the program accepts a private review link, the private application fields are filled with verified account/company details, and real-key provider smoke tests are recorded.
 
 | Area | Status | Notes |
 |---|---:|---|
@@ -14,8 +14,8 @@ Muharrir is technically demo-ready, but not fully submission-ready until the pri
 | Local models | Ready | Ollama can be detected and selected without an API key. |
 | OpenAI fit | Strong | The app is already built around OpenAI-compatible provider settings. |
 | Anthropic fit | Stronger | Native Claude Messages API support is implemented; run one real-key smoke test before submitting. |
-| Public repo | Ready | The repository is public at https://github.com/3ssiri/muharrir. |
-| Website/demo URL | Ready | The public repository can serve as the project site; release and demo video links are ready. |
+| Public repo | Blocked | GitHub currently reports the repository as private. Switch visibility before submitting to programs that require public OSS. |
+| Website/demo URL | Partial | Release and demo video links exist, but private-repo links may not be accessible to reviewers until visibility changes or access is granted. |
 | Traction | TODO | Do not invent user counts. Use honest early-stage language. |
 
 ## Files
@@ -39,7 +39,7 @@ Muharrir is technically demo-ready, but not fully submission-ready until the pri
 ## Current Public Links
 
 - Repository: https://github.com/3ssiri/muharrir
-- Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1
+- Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1 (prerelease with demo assets; no signed desktop installers yet)
 - Public demo video: https://github.com/3ssiri/muharrir-demo-assets/raw/master/muharrir-application-demo.mp4
 - Claude API support issue: https://github.com/3ssiri/muharrir/issues/16
 - Claude API support milestone: https://github.com/3ssiri/muharrir/milestone/1

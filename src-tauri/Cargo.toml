@@ -1,12 +1,12 @@
 [package]
-name = "prompt-iterator"
-version = "0.2.3"
-description = "Prompt Iterator Desktop"
+name = "muharrir"
+version = "0.3.0"
+description = "Muharrir Desktop"
 edition = "2021"
 
 # مكتبة التطبيق (يستدعيها main.rs ونقطة دخول الجوال)
 [lib]
-name = "prompt_iterator_lib"
+name = "muharrir_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
