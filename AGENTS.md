@@ -4,7 +4,7 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## نظرة عامة
 
-**Muharrir / مُحسِّن الموجّهات** — تطبيق Next.js 14 + Tauri v2 يساعد المستخدم على تحويل فكرة غامضة إلى موجّه (Prompt) منظّم عبر حوار تفاعلي. ثنائي اللغة (عربي RTL / إنجليزي)، محلي أولاً (Local-First)، ويعمل كتطبيق ويب أو كتطبيق سطح مكتب من نفس الكود.
+**Muharrir / مُحسِّن الموجّهات** — تطبيق Next.js 16 + Tauri v2 يساعد المستخدم على تحويل فكرة غامضة إلى موجّه (Prompt) منظّم عبر حوار تفاعلي. ثنائي اللغة (عربي RTL / إنجليزي)، محلي أولاً (Local-First)، ويعمل كتطبيق ويب أو كتطبيق سطح مكتب من نفس الكود.
 
 > **التحويل من Next.js إلى Tauri مكتمل** (مع system tray واختصار عام Ctrl+Shift+K وتحديث تلقائي). أي توثيق يصف التحويل كعمل مستقبلي قديمٌ — انظر git history.
 
@@ -68,7 +68,7 @@ npm run test:ui                                     # واجهة Playwright ال
 خمسة أوامر: `save/get/delete/has_api_key` (عبر `keyring`) و`test_api_connection` (عبر `reqwest` — يُنفَّذ في Rust **لتجاوز CORS**). إضافةً إلى: أيقونة شريط النظام (إظهار/إخفاء/خروج، والنقر الأيسر يبدّل النافذة)، اختصار عام `Ctrl+Shift+K`، تحديث تلقائي موقَّع، وإغلاق-إلى-الدرج (زر X يُخفي بدل الإنهاء). `main.rs` يستدعي `run()` فقط.
 
 ### 7) i18n والتصدير الثابت
-next-intl باللغتين `['ar','en']`، الافتراضية `ar`، `localePrefix: 'as-needed'` ([routing.ts](src/i18n/routing.ts)). الصفحات تحت `src/app/[locale]/`. التصدير الثابت يفرض `generateStaticParams` + `unstable_setRequestLocale` في [layout.tsx](src/app/[locale]/layout.tsx)، وفيه يُضبط اتجاه RTL والخطّ (Cairo للعربية). الجذر [src/app/page.tsx](src/app/page.tsx) يعيد التوجيه حسب اللغة المحفوظة/المتصفّح/الافتراضية.
+next-intl باللغتين `['ar','en']`، الافتراضية `ar`، `localePrefix: 'as-needed'` ([routing.ts](src/i18n/routing.ts)). الصفحات تحت `src/app/[locale]/`. التصدير الثابت يفرض `generateStaticParams` + `setRequestLocale` في [layout.tsx](src/app/[locale]/layout.tsx)، وفيه يُضبط اتجاه RTL والخطّ (Cairo للعربية). الجذر [src/app/page.tsx](src/app/page.tsx) يعيد التوجيه حسب اللغة المحفوظة/المتصفّح/الافتراضية.
 
 **كل النصوص الظاهرة موطّنة** في [src/i18n/locales/ar.json](src/i18n/locales/ar.json) و[en.json](src/i18n/locales/en.json) عبر مساحات أسماء (`common`, `a11y`, `toasts`, `chat`, `settings`, `promptProposal`, `enhancementForm`, `fileUpload`, …). لا تُضِف نصًّا عربيًّا ثابتًا في JSX/الإشعارات/التلميحات — أضِف مفتاحًا للّغتين واستعمل `t('namespace.key')`. الاستثناءات المقصودة الوحيدة: اسم المؤلّف وحقوق النشر، والنصوص الموجَّهة للنموذج (الـ system prompt وفواصل التنسيق الداخلية).
 
