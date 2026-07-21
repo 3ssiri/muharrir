@@ -23,13 +23,13 @@ npm run tauri build  # حزم سطح المكتب (msi/exe/dmg/AppImage/deb/rpm)
 # وحدات (Vitest) — منطق نقي بلا متصفّح، سريع، لا يحتاج خادمًا
 npm run test:unit                                   # كل اختبارات الوحدة في src/lib/__tests__/
 
-# واجهة (Playwright) — تتطلّب خادم dev قيد التشغيل
+# واجهة (Playwright) — يبدأ Playwright خادم dev تلقائيًّا على المنفذ 9173
 npm test                                            # كل اختبارات الواجهة
 npx playwright test tests/ui-optimization.spec.js   # ملف واحد
 npx playwright test -g "اسم الاختبار"               # اختبار واحد بالاسم
 npm run test:ui                                     # واجهة Playwright التفاعلية
 ```
-⚠️ `webServer` معطّل في [playwright.config.js](playwright.config.js) — يجب أن يكون `npm run dev` قيد التشغيل على `:3000` قبل اختبارات Playwright. اختبارات Vitest (في [src/lib/__tests__/](src/lib/__tests__/)) لا تحتاج ذلك.
+⚠️ `webServer` مفعّل في [playwright.config.js](playwright.config.js) — يبدأ Playwright خادم dev تلقائيًّا على المنفذ المخصص `:9173` (منفذ غير شائع لتجنّب التعارض مع تطبيبات محلية أخرى تحتجز 3000/3001؛ قابل للتغيير عبر `PLAYWRIGHT_PORT`) ويعيد استعماله محليًّا. لا حاجة لتشغيل `npm run dev` يدويًّا قبل اختبارات Playwright. لتوجيه الاختبارات إلى خادم قائم، اضبط `PLAYWRIGHT_BASE_URL` (مثلًا `http://localhost:3002`) وعندئذٍ يُلغى بدء الخادم التلقائي. اختبارات Vitest (في [src/lib/__tests__/](src/lib/__tests__/)) لا تحتاج خادمًا.
 
 **الإصدار:** ادفع تاجًا `v*` (مثل `v1.0.0`) لتشغيل [build-desktop.yml](.github/workflows/build-desktop.yml) الذي يبني للأنظمة الثلاثة. يتطلب أسرار التوقيع `TAURI_SIGNING_PRIVATE_KEY` و`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`.
 
