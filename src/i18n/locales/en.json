@@ -31,7 +31,8 @@
     "docxFailed": "DOCX parsing failed: {message}",
     "textRead": "Text file read",
     "textFailed": "File read failed: {message}",
-    "messageDeleted": "Message deleted"
+    "messageDeleted": "Message deleted",
+    "copyFailed": "Could not copy to the clipboard"
   },
   "common": {
     "appName": "Muharrir",

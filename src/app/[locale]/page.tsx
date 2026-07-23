@@ -725,9 +725,13 @@ export default function Home() {
     }
   }
 
-  const handleCopy = useCallback((content: string) => {
-    navigator.clipboard.writeText(content)
-  }, [])
+  const handleCopy = useCallback(async (content: string) => {
+    try {
+      await navigator.clipboard.writeText(content)
+    } catch {
+      toast.error(t('toasts.copyFailed'))
+    }
+  }, [t])
 
   const handleEdit = useCallback((content: string) => {
     setLocalInput(content)

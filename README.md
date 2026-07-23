@@ -25,7 +25,9 @@ Muharrir is not a general chat app. It is a prompt engineering workflow that hel
 
 ## Current OSS Status
 
-Muharrir is prepared for public open-source release under the MIT license. The current beta is ready for local demos, provider testing, and early community review; the GitHub repository visibility still needs to be switched to public before submitting it as a public OSS grant application.
+Muharrir is prepared as an early open-source beta under the MIT license. The
+repository remains private until historical credentials found by the release
+audit are rotated and removed from Git history.
 
 Read the readiness and application package:
 
