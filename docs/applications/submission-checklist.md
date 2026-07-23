@@ -12,8 +12,8 @@ another AI builder program.
 - [x] “Why does this repository qualify?” draft is within 500 characters.
 - [x] API-credit use draft is within 500 characters.
 - [ ] Current public stars, forks, issues, releases, and CI status are verified.
-- [ ] Email associated with the applicant's ChatGPT account is ready.
-- [ ] OpenAI Organization ID is ready.
+- [x] Email associated with the applicant's ChatGPT account is ready.
+- [x] OpenAI Organization ID is ready.
 - [ ] Program terms have been reviewed by the applicant.
 
 ## Public Assets
@@ -53,9 +53,9 @@ another AI builder program.
 
 ## OpenAI-Specific
 
-- [ ] OpenAI Platform account exists.
-- [ ] Organization ID is available.
-- [ ] Business email exists.
+- [x] OpenAI Platform account exists.
+- [x] Organization ID is available.
+- [x] Business email exists.
 - [x] Company/project website exists.
 - [ ] If using VC credit route, referral code is available.
 - [x] Application clearly explains API usage.
@@ -77,6 +77,6 @@ another AI builder program.
 - [x] 1,000-character answer selected.
 - [x] Demo URL added.
 - [x] Repository URL added.
-- [ ] Contact details added.
+- [x] Contact details added to the ignored local private submission file.
 - [ ] Funding/traction details updated honestly.
 

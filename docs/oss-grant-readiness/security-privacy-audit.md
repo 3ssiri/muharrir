@@ -8,9 +8,13 @@ Scope: targeted OSS/grant-readiness audit for secrets, API key storage, local fi
 
 - No committed API key pattern or obvious secret was found in the current
   tracked source scan.
-- A 2026-07-23 full-history Gitleaks scan found likely provider credentials in
-  old commits. This is a public-release blocker even though the values are not
-  present in the current tree.
+- A 2026-07-23 full-history Gitleaks scan found nine provider-credential
+  findings in old commits. All writable branches and tags in both Muharrir
+  repositories were rewritten and force-pushed; clean-room scans now report no
+  leaks in the rewritten history.
+- Both repositories are temporarily private and report zero forks. GitHub
+  Support must still purge the affected read-only pull-request refs and cached
+  commit views before public visibility is restored.
 - No default telemetry or analytics integration was found.
 - Uploaded PDF, DOCX, text, and markdown files are parsed locally in the browser.
 - Muharrir does not proxy prompts or files through a project-owned backend.
@@ -30,7 +34,7 @@ rg -n "fetch\(|XMLHttpRequest|sendBeacon|navigator\.sendBeacon" src src-tauri --
 
 ## Findings
 
-### Blocking: Likely Provider Credentials In Git History
+### Contained: Historical Provider Credentials
 
 Gitleaks scanned 166 commits and reported nine findings. Several are placeholders,
 but multiple distinct values have the length and prefix of real provider keys.
@@ -42,9 +46,29 @@ They occur in historical versions of:
 - `src/components/settings-dialog.tsx`
 - `channels.yaml`
 
-Do not publish the repository until the owner has rotated the affected
-credentials, the Git history has been sanitized, the rewritten history has been
-force-pushed, and a new full-history scan reports no unsuppressed findings.
+Resolution completed on 2026-07-23:
+
+- Removed `channels.yaml` and `quick-test.js` from every historical snapshot.
+- Replaced historical `sk-*` values elsewhere with a neutral marker.
+- Force-pushed every branch and tag in `3ssiri/muharrir` and
+  `3ssiri/interactive-prompt-iterator`.
+- Rewrote the local clone and removed the old reachable history.
+- Confirmed new full-history Gitleaks scans are clean.
+- Made both repositories private while GitHub-side cleanup is pending.
+- Confirmed both repositories report zero forks.
+
+Credential validation without exposing values found that the historical
+DeepSeek, OAIPRO, ephone, and VVEAI credentials now return unauthorized. The
+Gala endpoint is unreachable. One historical `ai.huan666.de` credential still
+returns a successful models response; its account credentials were not found
+locally or in prior project sessions, so it still requires owner/provider
+revocation.
+
+GitHub's read-only pull-request refs cannot be overwritten by a force push.
+`3ssiri/muharrir` pull request 1 and pull requests 1–4 in the legacy fork still
+reference the old history. Keep both repositories private until GitHub Support
+has dereferenced those refs, run server-side garbage collection, and removed
+cached views.
 
 The values are intentionally not copied into this report.
 
@@ -84,9 +108,12 @@ versions are available; do not force incompatible overrides.
 
 Before public launch:
 
-1. Rotate historical provider credentials.
-2. Rewrite and force-push the affected Git history.
-3. Run Gitleaks against all commits and require a clean result.
-4. Rerun lint, typecheck, unit, Playwright, build, and Rust checks.
+1. Revoke or report the still-valid Huan API credential and resolve the
+   unreachable Gala endpoint.
+2. Ask GitHub Support to purge the documented pull-request refs and cached
+   commit views.
+3. Re-run a clean clone full-history scan after GitHub confirms the purge.
+4. Require the Gitleaks CI job and the existing web/Rust checks to pass.
+5. Restore public visibility only after the preceding gates are complete.
 
 The current private/grant-readiness path proceeds with fail-closed desktop key storage. The `v0.3.0-beta.1` desktop workflow failure was not a source build failure; the installers built, then updater artifact signing failed because `TAURI_SIGNING_PRIVATE_KEY` was malformed base64. Signed desktop releases remain gated on corrected signing secrets.

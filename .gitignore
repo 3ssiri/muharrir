@@ -94,6 +94,7 @@ UNIVERSAL_PROMPT_OPTIMIZER_SUMMARY.md
 USER_GUIDE.md
 WORK_SUMMARY.md
 WORKFLOW_SUMMARY.md
+docs/applications/private-submission-data.md
 *.patch
 *.txt
 nul

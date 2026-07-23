@@ -7,27 +7,37 @@ This file tracks the remaining release-gate work for Muharrir after the OSS/gran
 - The local grant-readiness branch passes lint, typecheck, unit tests, Playwright,
   static export, and `cargo check`.
 - `v0.3.0-beta.1` exists as a prerelease with demo media assets.
-- The repository is still private on GitHub.
+- Both `3ssiri/muharrir` and the legacy fork are temporarily private on GitHub.
 - The app is MIT licensed and the README/package/Tauri metadata use the Muharrir identity.
 - The application demo was refreshed with the Muharrir identity and visually
   checked for obvious keys, personal data, and private documents.
-- A full-history Gitleaks scan found likely provider credentials in old commits.
-  Public visibility is blocked until those credentials are rotated and the
-  history is sanitized.
+- All writable branches and tags were history-rewritten and force-pushed after
+  removing historical credentials. Full-history scans of the rewritten
+  repositories are clean.
+- GitHub-side pull-request refs and cached commit views still need Support
+  purging before public visibility is restored.
+- Most historical credentials are already unauthorized; one Huan API
+  credential remains valid and must be revoked or reported to the provider.
 - Desktop updater signing is not ready yet. The failed `Build Desktop` run for `v0.3.0-beta.1` built installers, then failed while decoding `TAURI_SIGNING_PRIVATE_KEY` because the secret had an invalid hidden/BOM prefix.
 
 ## Before Public Grant Submission
 
-1. Revoke or rotate every provider credential found in historical commits.
-2. Rewrite the affected Git history, force-push the sanitized history, and rerun
-   Gitleaks across all commits.
-3. Merge the grant-readiness changes and confirm default-branch CI is green.
-4. Switch the GitHub repository visibility to public.
-5. Open the prepared contributor issues and refresh public repository metrics.
-6. Fill private submission fields locally; do not commit account emails,
-   organization IDs, referral codes, funding details, or traction numbers.
+1. Revoke or report the still-valid Huan API credential and resolve the
+   unreachable Gala endpoint.
+2. Submit the prepared GitHub Support request to purge affected pull-request
+   refs, cached commit views, and unreachable objects.
+3. After Support confirms the purge, clone and scan the remote repositories
+   again and require a clean result.
+4. Merge the post-cleanup Gitleaks CI hardening and confirm all checks are green.
+5. Switch the main GitHub repository visibility to public; the legacy fork can
+   remain private.
+6. Refresh public repository metrics.
 7. Submit the Codex for Open Source form using
    `docs/applications/codex-for-open-source.md`.
+
+The applicant name, ChatGPT email, OpenAI Organization ID, and OpenAI Project ID
+were recovered from the authenticated accounts and stored only in the ignored
+local private submission file.
 
 Real-key OpenAI-compatible and Claude smoke tests remain gates for provider
 startup applications, not for Codex for Open Source.
