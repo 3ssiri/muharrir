@@ -1,6 +1,20 @@
 # Submission Checklist
 
-Use this before submitting to Anthropic, OpenAI, or another AI builder program.
+Use this before submitting to Codex for Open Source, Anthropic, OpenAI, or
+another AI builder program.
+
+## Codex for Open Source
+
+- [ ] GitHub repository is public.
+- [x] GitHub profile is publicly reachable.
+- [x] Applicant is the primary maintainer.
+- [x] Repository uses an OSI-approved MIT license.
+- [x] “Why does this repository qualify?” draft is within 500 characters.
+- [x] API-credit use draft is within 500 characters.
+- [ ] Current public stars, forks, issues, releases, and CI status are verified.
+- [ ] Email associated with the applicant's ChatGPT account is ready.
+- [ ] OpenAI Organization ID is ready.
+- [ ] Program terms have been reviewed by the applicant.
 
 ## Public Assets
 
@@ -9,11 +23,11 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 - [x] README has screenshots, quick start, privacy summary, and provider setup.
 - [x] `docs/PRIVACY.md` is current.
 - [x] `SECURITY.md` exists and does not overpromise.
-- [ ] Roadmap is current.
+- [x] Roadmap is current.
 - [x] Demo video is recorded and uploaded.
 - [x] Stable release or beta tag exists.
-- [x] CI status is green for the main CI workflow.
-- [ ] Signed desktop release is either published or explicitly not claimed.
+- [ ] CI status is green for the latest default-branch workflow.
+- [x] Signed desktop release is explicitly not claimed.
 
 ## Product Proof
 
@@ -24,7 +38,7 @@ Use this before submitting to Anthropic, OpenAI, or another AI builder program.
 - [x] PDF/DOCX local parsing is tested.
 - [x] Arabic RTL flow is shown.
 - [x] English flow is shown.
-- [ ] No screenshots contain API keys, personal data, or private documents.
+- [x] Current application screenshots and video were visually checked for API keys, personal data, and private documents.
 - [ ] Repository visibility has been checked immediately before submission.
 
 ## Anthropic-Specific

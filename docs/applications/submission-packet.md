@@ -1,6 +1,7 @@
 # Submission Packet
 
-Use this file as the final copy/paste packet for OpenAI and Anthropic forms.
+Use this file as the shared copy/paste packet for Codex for Open Source, OpenAI,
+and Anthropic forms. Use `codex-for-open-source.md` for the exact OSS form.
 
 ## Public Links
 
@@ -14,9 +15,9 @@ Use this file as the final copy/paste packet for OpenAI and Anthropic forms.
 
 ## Official Form Links
 
-- OpenAI Startup Community: https://openai.com/leads/startup/
+- Codex for Open Source: https://openai.com/form/codex-for-oss/
 - OpenAI Startups: https://openai.com/business/why-openai/startups/
-- OpenAI Researcher Access Program: https://openai.com/form/researcher-access-program/
+- OpenAI Researcher Access Program: https://grants.openai.com/prog/openai_researcher_access_program/
 - Claude for Startups: https://claude.com/programs/startups
 - Anthropic Startup Program terms: https://www.anthropic.com/startup-program-official-terms
 

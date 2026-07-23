@@ -1,36 +1,48 @@
 # Roadmap
 
-This roadmap focuses on making Muharrir a useful local-first Arabic/English prompt engineering workspace before and after the public OSS release.
+This roadmap tracks the next practical milestones for Muharrir after its public
+open-source beta. It is intentionally conservative: priorities may change based
+on contributor feedback and real usage.
+
+## Shipped
+
+- MIT licensing and OSS governance documentation.
+- Arabic/English UI with RTL support.
+- Guided clarification, enhancement, and final prompt-proposal workflow.
+- Demo mode that works without an API key or external provider call.
+- Native Claude Messages API, OpenAI-compatible providers, and local Ollama.
+- Browser-side PDF/DOCX parsing and local IndexedDB history.
+- Shared Next.js/Tauri web and desktop codebase with OS Keychain integration.
+- Lint, typecheck, unit, Playwright, static-export, and Rust CI checks.
 
 ## Now
 
-- Resolve license and package identity.
-- Add OSS governance docs: contributing, security, privacy, roadmap, issue templates, and PR template.
-- Strengthen CI with lint, typecheck, unit tests, and production build.
-- Refresh README positioning, quick start, demo mode, privacy, and Web vs Desktop behavior.
-- Improve demo mode so first-time users understand the core prompt workflow without a provider key.
-- Add screenshots or GIFs for the README.
+- Welcome public beta users and turn feedback into reproducible issues.
+- Publish contributor-friendly issues, including small documentation and test tasks.
+- Refresh the application demo so every frame uses the Muharrir name.
+- Smoke-test native Claude and one OpenAI-compatible provider with real keys.
+- Keep dependencies current and triage remaining transitive security advisories.
 
 ## Next
 
-- Add clearer provider troubleshooting, especially browser CORS guidance.
-- Improve prompt proposal templates for Arabic-first workflows.
-- Add Playwright smoke coverage for `/ar`, `/en`, settings, language switch, and demo mode.
-- Add prompt import/export documentation.
-- Add a privacy center or settings section that explains local storage and provider boundaries in-app.
-- Prepare a signed desktop release when the release gate is otherwise ready.
+- Improve Arabic-first prompt proposal templates and examples.
+- Add provider fixtures and clearer browser CORS troubleshooting.
+- Adopt the stricter React Compiler lint rules incrementally.
+- Expand accessibility coverage for keyboard and screen-reader workflows.
+- Prepare a signed multi-platform Tauri release and verify updater artifacts.
+- Add prompt packs for developers, educators, researchers, and creators.
 
 ## Later
 
-- Prompt packs for developers, educators, product teams, and content creators.
-- Prompt versioning and comparison improvements.
-- Offline PWA support with a service worker.
-- Optional local model integrations where practical.
-- Browser extension research after the main app is stable.
+- Prompt evaluation, versioning, and comparison improvements.
+- Offline PWA support with a reviewed cache and privacy design.
+- More local-model presets and diagnostics.
+- Optional community template sharing without requiring centralized prompt storage.
+- Browser-extension research after the main app and contribution flow are stable.
 
-## Non-Goals For The First Public Release
+## Non-Goals
 
-- Cloud accounts or hosted prompt storage.
 - A project-owned backend proxy for provider calls.
-- Team collaboration features that require centralized storage.
-- Claims that Muharrir replaces provider privacy policies or enterprise compliance reviews.
+- Cloud accounts or hosted prompt storage by default.
+- Team collaboration that requires centralized user data.
+- Claims that Muharrir replaces provider privacy policies or compliance review.

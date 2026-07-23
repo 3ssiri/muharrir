@@ -4,7 +4,9 @@ This log records project-readiness decisions that should stay visible while Muha
 
 ## Status
 
-Muharrir remains private on GitHub while OSS readiness work is completed. The repository should become public only after the readiness gate passes: license consistency, privacy/security documentation, CI confidence, README clarity, a credible first-use demo, and an explicit owner decision to switch visibility.
+Muharrir completed its private OSS readiness pass. On 2026-07-23 the owner
+authorized the final CI repair, public visibility, and Codex for Open Source
+submission preparation.
 
 ## Decisions
 
@@ -20,6 +22,7 @@ Muharrir remains private on GitHub while OSS readiness work is completed. The re
 | 2026-07-08 | Preserve the local-first static-export architecture. | Public readiness must not introduce a backend or cloud dependency. | Accepted |
 | 2026-07-08 | Remove Tauri localStorage fallback for API keys. | Public readiness should fail closed when OS Keychain access fails instead of persisting desktop API keys in localStorage. | Accepted |
 | 2026-07-09 | Treat `v0.3.0-beta.1` as a source/demo prerelease, not a signed desktop release. | The failed desktop workflow was caused by a malformed `TAURI_SIGNING_PRIVATE_KEY`; signed installers require corrected secrets and a stable release workflow run. | Accepted |
+| 2026-07-23 | Publish the repository and prepare a Codex for Open Source application. | The license, trust documentation, demo mode, automated tests, and contribution path satisfy the public-readiness gate; public visibility is an explicit form requirement. | Accepted |
 
 ## Release Gate
 

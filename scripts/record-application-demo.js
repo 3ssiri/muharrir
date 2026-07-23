@@ -2,7 +2,7 @@ const { chromium } = require('playwright')
 const fs = require('fs')
 const path = require('path')
 
-const baseUrl = process.env.DEMO_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:3111'
+const baseUrl = process.env.DEMO_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3111'
 const outputDir = path.resolve(__dirname, '../docs/screenshots')
 const finalVideoPath = path.join(outputDir, 'muharrir-application-demo.webm')
 
@@ -37,16 +37,26 @@ async function main() {
   page.setDefaultTimeout(30000)
 
   try {
-    await page.goto(`${baseUrl.replace(/\/+$/, '')}/ar/`, { waitUntil: 'domcontentloaded' })
-    await wait(1500)
+    const demoUrl = `${baseUrl.replace(/\/+$/, '')}/ar/`
+    await page.goto(demoUrl, { waitUntil: 'domcontentloaded' })
+    await page.evaluate(() => localStorage.clear())
+    await page.goto(demoUrl, { waitUntil: 'networkidle' })
+    await wait(800)
 
     await clickIfVisible(page, page.getByRole('button', { name: 'جرّب بدون مفتاح' }), 8000)
-    await wait(1200)
+    await page.getByText('الوضع التجريبي مفعّل محليًا').waitFor({
+      state: 'visible',
+      timeout: 8000,
+    })
 
     const prompt =
       'حوّل فكرة دورة قصيرة عن أساسيات الذكاء الاصطناعي للمعلمين إلى موجه منظم'
     await page.locator('textarea').fill(prompt)
-    await wait(800)
+    await page.getByRole('button', { name: 'إرسال' }).waitFor({
+      state: 'visible',
+      timeout: 8000,
+    })
+    await wait(500)
 
     await page.getByRole('button', { name: 'إرسال' }).click()
     await wait(3500)

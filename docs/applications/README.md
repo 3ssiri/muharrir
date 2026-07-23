@@ -1,25 +1,30 @@
 # Muharrir Application Package
 
-This folder contains ready-to-edit materials for applying Muharrir to AI startup, developer, and research support programs, with specific tracks for Anthropic and OpenAI.
+This folder contains ready-to-edit materials for applying Muharrir to open-source,
+AI startup, developer, and research support programs.
 
 Use these files as the source package before copying answers into external forms. Replace every `TODO` with verified information before submitting.
 
 ## Current Readiness Verdict
 
-Muharrir is technically demo-ready, but not fully submission-ready until the repository visibility is public or the program accepts a private review link, the private application fields are filled with verified account/company details, and real-key provider smoke tests are recorded.
+Muharrir is technically demo-ready. Codex for Open Source is the primary OSS
+route; provider startup programs remain secondary routes with additional
+account, funding, and real-key testing requirements.
 
 | Area | Status | Notes |
 |---|---:|---|
 | Local demo | Ready | Demo mode works without a provider key. |
 | Local models | Ready | Ollama can be detected and selected without an API key. |
+| Codex for OSS fit | Ready after public CI | A dedicated form packet is prepared; refresh public metrics immediately before submission. |
 | OpenAI fit | Strong | The app is already built around OpenAI-compatible provider settings. |
 | Anthropic fit | Stronger | Native Claude Messages API support is implemented; run one real-key smoke test before submitting. |
-| Public repo | Blocked | GitHub currently reports the repository as private. Switch visibility before submitting to programs that require public OSS. |
-| Website/demo URL | Partial | Release and demo video links exist, but private-repo links may not be accessible to reviewers until visibility changes or access is granted. |
-| Traction | TODO | Do not invent user counts. Use honest early-stage language. |
+| Public repo | Verify | Codex for Open Source explicitly requires a public repository and GitHub profile. |
+| Website/demo URL | Ready | Repository, release, and public demo links are available. |
+| Traction | Early-stage | Do not invent user counts; use the honest wording in the packet. |
 
 ## Files
 
+- [codex-for-open-source.md](codex-for-open-source.md): Exact Codex for Open Source form requirements and paste-ready 500-character answers.
 - [provider-program-fit.md](provider-program-fit.md): Which Anthropic/OpenAI routes fit Muharrir and what each requires.
 - [anthropic-startups.md](anthropic-startups.md): Draft answers for Anthropic Claude for Startups.
 - [openai-startups.md](openai-startups.md): Draft answers for OpenAI startup/community routes.
@@ -31,12 +36,16 @@ Muharrir is technically demo-ready, but not fully submission-ready until the rep
 
 ## Recommended Submission Order
 
-1. Fill the private application fields in a local, uncommitted copy of [private-submission-data.template.md](private-submission-data.template.md).
-2. Run a real-key smoke test for OpenAI-compatible and Claude provider paths.
-3. Submit OpenAI Startup Community first because Muharrir is already OpenAI-compatible.
-4. Submit Anthropic Claude for Startups with the native Claude integration story front and center.
+1. Make the repository public and verify default-branch CI.
+2. Fill the private application fields in a local, uncommitted copy of [private-submission-data.template.md](private-submission-data.template.md).
+3. Submit [Codex for Open Source](codex-for-open-source.md) with truthful current repository metrics.
+4. Run real-key smoke tests before submitting provider startup applications.
+5. Submit Claude for Startups or OpenAI for Startups only through a route for which the applicant meets the current account/funding requirements.
 
-## Current Public Links
+## Current Links
+
+The demo asset is public. The main repository link remains private until the
+credential-history release gate is complete.
 
 - Repository: https://github.com/3ssiri/muharrir
 - Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1 (prerelease with demo assets; no signed desktop installers yet)
@@ -46,9 +55,11 @@ Muharrir is technically demo-ready, but not fully submission-ready until the rep
 
 ## Official Program References
 
+- Codex for Open Source: https://developers.openai.com/community/codex-for-oss
+- Codex for Open Source application: https://openai.com/form/codex-for-oss/
 - Anthropic Claude for Startups: https://www.anthropic.com/startups
 - Anthropic Startup Program terms: https://www.anthropic.com/startup-program-official-terms
 - OpenAI Startups: https://openai.com/business/why-openai/startups/
-- OpenAI Startup Community: https://openai.com/leads/startup/
-- OpenAI Researcher Access Program: https://openai.com/form/researcher-access-program/
+- OpenAI developer community: https://developers.openai.com/community
+- OpenAI Researcher Access Program: https://grants.openai.com/prog/openai_researcher_access_program/
 
