@@ -31,7 +31,8 @@
     "docxFailed": "فشل تحليل DOCX: {message}",
     "textRead": "تم قراءة الملف النصي",
     "textFailed": "فشل قراءة الملف: {message}",
-    "messageDeleted": "تم حذف الرسالة"
+    "messageDeleted": "تم حذف الرسالة",
+    "copyFailed": "تعذّر النسخ إلى الحافظة"
   },
   "common": {
     "appName": "مُحسِّن الموجّهات",

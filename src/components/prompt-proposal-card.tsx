@@ -81,10 +81,14 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
         )
     }
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(promptText)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(promptText)
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        } catch {
+            toast.error(t('toasts.copyFailed'))
+        }
     }
 
     const handleExport = () => {

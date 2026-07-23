@@ -13,6 +13,18 @@ Create a private local copy named `private-submission-data.md` and fill it befor
 - Claude API support issue: https://github.com/3ssiri/muharrir/issues/16
 - Claude API support milestone: https://github.com/3ssiri/muharrir/milestone/1
 
+## Codex for Open Source Fields
+
+- First name: TODO
+- Last name: TODO
+- Email associated with ChatGPT account: TODO
+- GitHub username: 3ssiri
+- GitHub repository URL: https://github.com/3ssiri/muharrir
+- Maintainer role: Primary maintainer
+- OpenAI Organization ID: TODO
+- Interests: API credits; Codex Security
+- Draft answers: `docs/applications/codex-for-open-source.md`
+
 ## OpenAI Fields
 
 - OpenAI Organization ID: TODO

@@ -4,19 +4,33 @@ This file tracks the remaining release-gate work for Muharrir after the OSS/gran
 
 ## Current State
 
-- Main CI is enabled and green on `master`.
+- The local grant-readiness branch passes lint, typecheck, unit tests, Playwright,
+  static export, and `cargo check`.
 - `v0.3.0-beta.1` exists as a prerelease with demo media assets.
 - The repository is still private on GitHub.
 - The app is MIT licensed and the README/package/Tauri metadata use the Muharrir identity.
+- The application demo was refreshed with the Muharrir identity and visually
+  checked for obvious keys, personal data, and private documents.
+- A full-history Gitleaks scan found likely provider credentials in old commits.
+  Public visibility is blocked until those credentials are rotated and the
+  history is sanitized.
 - Desktop updater signing is not ready yet. The failed `Build Desktop` run for `v0.3.0-beta.1` built installers, then failed while decoding `TAURI_SIGNING_PRIVATE_KEY` because the secret had an invalid hidden/BOM prefix.
 
 ## Before Public Grant Submission
 
-1. Switch the GitHub repository visibility to public, or confirm the grant program accepts a private review link.
-2. Run a real-key smoke test for one OpenAI-compatible provider.
-3. Run a real-key smoke test for native Claude Messages API support.
-4. Confirm screenshots and videos contain no API keys, private prompts, personal data, or private documents.
-5. Fill private submission fields locally; do not commit account emails, organization IDs, referral codes, funding details, or traction numbers unless they are intentionally public.
+1. Revoke or rotate every provider credential found in historical commits.
+2. Rewrite the affected Git history, force-push the sanitized history, and rerun
+   Gitleaks across all commits.
+3. Merge the grant-readiness changes and confirm default-branch CI is green.
+4. Switch the GitHub repository visibility to public.
+5. Open the prepared contributor issues and refresh public repository metrics.
+6. Fill private submission fields locally; do not commit account emails,
+   organization IDs, referral codes, funding details, or traction numbers.
+7. Submit the Codex for Open Source form using
+   `docs/applications/codex-for-open-source.md`.
+
+Real-key OpenAI-compatible and Claude smoke tests remain gates for provider
+startup applications, not for Codex for Open Source.
 
 ## Signed Desktop Release
 
