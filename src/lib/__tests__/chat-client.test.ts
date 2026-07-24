@@ -138,6 +138,28 @@ describe('streamChat demo mode', () => {
       }
     }
   })
+
+  it('keeps demo enhancement keys and option values identical across locales', async () => {
+    const streamDemoDimensions = async (locale: string) => {
+      const response = await streamChat({
+        messages: [{ role: 'user', content: 'demo' }],
+        apiKey: 'demo',
+        baseUrl: 'https://example.invalid/v1',
+        locale,
+      })
+      const result = await consumeChatStream(response, () => {})
+      return (result.toolInvocations[0].args as { dimensions: any[] }).dimensions
+    }
+
+    const arDims = await streamDemoDimensions('ar')
+    const enDims = await streamDemoDimensions('en')
+
+    // Option values flow back to the model — they must never be translated.
+    const keys = (d: any[]) => d.map((x) => x.key)
+    const values = (d: any[]) => d.flatMap((x) => x.options.map((o: any) => o.value))
+    expect(keys(arDims)).toEqual(keys(enDims))
+    expect(values(arDims)).toEqual(values(enDims))
+  })
 })
 
 describe('streamChat local providers', () => {

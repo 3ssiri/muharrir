@@ -15,8 +15,6 @@
 
 import { validateToolCall, correctFormat } from '@/lib/format-validator';
 import { getProviderApiFormat, isLocalProviderBaseUrl } from '@/lib/providers';
-import arMessages from '@/i18n/locales/ar.json';
-import enMessages from '@/i18n/locales/en.json';
 
 export interface StreamChatParams {
   messages: any[];
@@ -70,8 +68,19 @@ Your only job is to **help the user design and optimize prompts**, not to perfor
 
 // Demo-mode content is localized — see the `demo` namespace in
 // src/i18n/locales/{ar,en}.json. Unknown locales fall back to English.
-function getDemoContent(locale?: string) {
-  return (locale === 'ar' ? arMessages : enMessages).demo;
+// The locale files are loaded lazily so demo mode does not bloat the
+// main client bundle. NOTE: the `demo` namespace is consumed as raw JSON
+// here — never via t()/useTranslations (values contain {{placeholders}}
+// that are not valid ICU syntax).
+const DEMO_LOADERS = {
+  ar: () => import('@/i18n/locales/ar.json'),
+  en: () => import('@/i18n/locales/en.json'),
+} as const;
+
+async function getDemoContent(locale?: string) {
+  const loader = DEMO_LOADERS[locale === 'ar' ? 'ar' : 'en'];
+  const { default: messages } = await loader();
+  return messages.demo;
 }
 
 // Tool definitions in OpenAI function format (the same three tools)
@@ -254,8 +263,8 @@ export function mapError(status: number, raw: string, modelId?: string): string 
 }
 
 // Demo mode stream
-function buildDemoResponse(locale?: string): Response {
-  const demo = getDemoContent(locale);
+async function buildDemoResponse(locale?: string): Promise<Response> {
+  const demo = await getDemoContent(locale);
   const encoder = new TextEncoder();
   const chunks = [
     `0:${JSON.stringify(demo.intro)}\n`,
