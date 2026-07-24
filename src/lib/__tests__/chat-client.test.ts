@@ -347,5 +347,12 @@ describe('default system prompt', () => {
     expect(body.messages[0].content).toContain('# Arabic prompt structure')
     expect(body.messages[0].content).toContain('الدور:')
     expect(body.messages[0].content).toContain('صيغة المخرجات:')
+
+    const content = body.messages[0].content as string
+    const headers = ['الدور:', 'الهدف:', 'السياق:', 'القيود:', 'خطوات العمل:', 'صيغة المخرجات:']
+    const positions = headers.map((h) => content.indexOf(h))
+    expect(positions.every((p) => p >= 0)).toBe(true)
+    expect([...positions]).toEqual([...positions].sort((a, b) => a - b))
+    expect(content).toContain('## Mini example (skeleton)')
   })
 })
