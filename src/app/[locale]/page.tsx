@@ -25,7 +25,7 @@ import { VersionBadge } from '@/components/version-badge'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { KeyboardShortcutsDialog } from '@/components/keyboard-shortcuts-dialog'
 import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { streamChat } from '@/lib/chat-client'
 import { consumeChatStream, classifyChatError, type UiMessage, type ToolInvocation } from '@/lib/chat-stream'
 import { isLocalProviderBaseUrl, selectPreferredLocalChatModel } from '@/lib/providers'
@@ -37,6 +37,7 @@ const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 
 export default function Home() {
   const t = useTranslations();
+  const locale = useLocale();
   const {
     apiKey,
     baseUrl,
@@ -420,6 +421,7 @@ export default function Home() {
         apiKey: apiKey,
         baseUrl: baseUrl,
         correctionModel: correctionModel,
+        locale: locale,
         signal: abortController.signal
       })
 
@@ -805,7 +807,8 @@ export default function Home() {
         systemPrompt: systemPrompt,
         apiKey: apiKey,
         baseUrl: baseUrl,
-        correctionModel: correctionModel
+        correctionModel: correctionModel,
+        locale: locale
       })
 
       if (!response.ok) {
@@ -839,7 +842,7 @@ export default function Home() {
     } finally {
       setIsLoading(false)
     }
-  }, [model, systemPrompt, apiKey, baseUrl, correctionModel, t])
+  }, [model, systemPrompt, apiKey, baseUrl, correctionModel, locale, t])
 
   const handleRetry = useCallback(async (messageIndex: number) => {
     // Find the last user message before the current assistant message
