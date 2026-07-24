@@ -1,6 +1,7 @@
 import { afterEach, describe, it, expect, vi } from 'vitest'
 import { consumeChatStream } from '@/lib/chat-stream'
 import { mapError, extractProviderMessage, normalizeApiKey, streamChat } from '@/lib/chat-client'
+import { validateToolCall } from '@/lib/format-validator'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -88,6 +89,54 @@ describe('streamChat demo mode', () => {
       title: 'Document-to-Prompt Assistant',
       finalPrompt: expect.stringContaining('{{user_idea}}'),
     })
+  })
+
+  it('returns the Arabic demo sample when locale is ar', async () => {
+    const response = await streamChat({
+      messages: [{ role: 'user', content: 'حوّل فكرة دورة إلى موجه' }],
+      apiKey: 'demo',
+      baseUrl: 'https://example.invalid/v1',
+      locale: 'ar',
+    })
+
+    const result = await consumeChatStream(response, () => {})
+
+    expect(result.content).toContain('الوضع التجريبي')
+    expect(result.toolInvocations).toHaveLength(2)
+    expect(result.toolInvocations[1].args).toMatchObject({
+      title: 'مساعد تحويل المستندات إلى موجّهات',
+      finalPrompt: expect.stringContaining('{{الفكرة_الأولية}}'),
+    })
+  })
+
+  it('falls back to the English demo sample for unknown or missing locales', async () => {
+    for (const locale of [undefined, 'fr']) {
+      const response = await streamChat({
+        messages: [{ role: 'user', content: 'demo please' }],
+        apiKey: 'demo',
+        baseUrl: 'https://example.invalid/v1',
+        locale,
+      })
+      const result = await consumeChatStream(response, () => {})
+      expect(result.toolInvocations[1].args).toMatchObject({
+        title: 'Document-to-Prompt Assistant',
+      })
+    }
+  })
+
+  it('streams demo tool args that pass format validation in both locales', async () => {
+    for (const locale of ['ar', 'en']) {
+      const response = await streamChat({
+        messages: [{ role: 'user', content: 'demo' }],
+        apiKey: 'demo',
+        baseUrl: 'https://example.invalid/v1',
+        locale,
+      })
+      const result = await consumeChatStream(response, () => {})
+      for (const tool of result.toolInvocations) {
+        expect(validateToolCall(tool.toolName, tool.args).valid).toBe(true)
+      }
+    }
   })
 })
 

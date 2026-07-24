@@ -15,6 +15,8 @@
 
 import { validateToolCall, correctFormat } from '@/lib/format-validator';
 import { getProviderApiFormat, isLocalProviderBaseUrl } from '@/lib/providers';
+import arMessages from '@/i18n/locales/ar.json';
+import enMessages from '@/i18n/locales/en.json';
 
 export interface StreamChatParams {
   messages: any[];
@@ -24,6 +26,8 @@ export interface StreamChatParams {
   baseUrl: string;
   // Model used by the format-correction loop (configurable in Settings)
   correctionModel?: string;
+  // UI locale — selects the localized demo-mode sample ('ar' or 'en')
+  locale?: string;
   signal?: AbortSignal;
 }
 
@@ -64,102 +68,11 @@ Your only job is to **help the user design and optimize prompts**, not to perfor
 4. **Quality assurance**: the generated prompt must be clear, structured, and ready to use directly.
 5. **Bilingual care**: when the user writes Arabic, preserve natural Arabic phrasing and RTL-friendly structure.`;
 
-const DEMO_INTRO =
-  "Demo Mode\n\nThis is a local simulated run. No external AI provider is called.\n\nPick a direction from the enhancement table, then review the sample structured prompt below.";
-
-const DEMO_ENHANCEMENTS = {
-  dimensions: [
-    {
-      key: 'audience',
-      title: 'Audience / الجمهور',
-      options: [
-        {
-          label: 'Developers',
-          value: 'developers',
-          description: 'Use technical language, constraints, and implementation details.',
-        },
-        {
-          label: 'Educators',
-          value: 'educators',
-          description: 'Use learning goals, examples, and assessment criteria.',
-        },
-        {
-          label: 'Product teams',
-          value: 'product-teams',
-          description: 'Use goals, trade-offs, acceptance criteria, and user impact.',
-        },
-      ],
-      allowCustom: true,
-    },
-    {
-      key: 'output_style',
-      title: 'Output style / نمط المخرجات',
-      options: [
-        {
-          label: 'Structured brief',
-          value: 'structured-brief',
-          description: 'Concise sections with context, task, constraints, and output format.',
-        },
-        {
-          label: 'Agent instructions',
-          value: 'agent-instructions',
-          description: 'Step-by-step instructions suitable for coding or research agents.',
-        },
-        {
-          label: 'Arabic-first',
-          value: 'arabic-first',
-          description: 'Arabic phrasing with clear RTL-friendly structure.',
-        },
-      ],
-      allowCustom: true,
-    },
-    {
-      key: 'quality_bar',
-      title: 'Quality bar / معيار الجودة',
-      options: [
-        {
-          label: 'Fast draft',
-          value: 'fast-draft',
-          description: 'Prioritize a usable first version.',
-        },
-        {
-          label: 'Review-ready',
-          value: 'review-ready',
-          description: 'Include assumptions, risks, and verification steps.',
-        },
-        {
-          label: 'Production-grade',
-          value: 'production-grade',
-          description: 'Add strict constraints, examples, and acceptance checks.',
-        },
-      ],
-      allowCustom: true,
-    },
-  ],
-};
-
-const DEMO_PROMPT = {
-  title: 'Document-to-Prompt Assistant',
-  role: 'You are a bilingual Arabic/English prompt engineering assistant.',
-  objective: 'Turn a vague user idea or uploaded document summary into a clear, reusable AI prompt.',
-  context:
-    'The user may be a developer, educator, writer, or product builder. They need guidance without sending data to a Muharrir server.',
-  constraints: [
-    'Ask only essential clarification questions.',
-    'Preserve Arabic RTL readability when the user writes in Arabic.',
-    'State assumptions explicitly.',
-    'Return a prompt the user can copy directly.',
-  ],
-  workflow: [
-    'Identify the user goal and missing context.',
-    'Offer enhancement choices for audience, output style, and quality bar.',
-    'Generate a final prompt with role, task, constraints, and output format.',
-  ],
-  outputFormat:
-    'Markdown with sections: Role, Objective, Context, Constraints, Workflow, Output Format, and Final Prompt.',
-  finalPrompt:
-    'You are a bilingual prompt engineering assistant. Help me transform the following rough idea into a structured AI prompt. Ask up to three clarification questions if needed, then produce a copy-ready prompt with Role, Objective, Context, Constraints, Workflow, and Output Format. Preserve Arabic readability when Arabic is used. Rough idea: {{user_idea}}',
-};
+// Demo-mode content is localized — see the `demo` namespace in
+// src/i18n/locales/{ar,en}.json. Unknown locales fall back to English.
+function getDemoContent(locale?: string) {
+  return (locale === 'ar' ? arMessages : enMessages).demo;
+}
 
 // Tool definitions in OpenAI function format (the same three tools)
 const TOOLS = [
@@ -341,12 +254,13 @@ export function mapError(status: number, raw: string, modelId?: string): string 
 }
 
 // Demo mode stream
-function buildDemoResponse(): Response {
+function buildDemoResponse(locale?: string): Response {
+  const demo = getDemoContent(locale);
   const encoder = new TextEncoder();
   const chunks = [
-    `0:${JSON.stringify(DEMO_INTRO)}\n`,
-    `9:${JSON.stringify({ toolCallId: 'demo_enhancements', toolName: 'suggest_enhancements', args: DEMO_ENHANCEMENTS })}\n`,
-    `9:${JSON.stringify({ toolCallId: 'demo_prompt', toolName: 'propose_prompt', args: DEMO_PROMPT })}\n`,
+    `0:${JSON.stringify(demo.intro)}\n`,
+    `9:${JSON.stringify({ toolCallId: 'demo_enhancements', toolName: 'suggest_enhancements', args: demo.enhancements })}\n`,
+    `9:${JSON.stringify({ toolCallId: 'demo_prompt', toolName: 'propose_prompt', args: demo.prompt })}\n`,
   ];
   const stream = new ReadableStream({
     async start(controller) {
@@ -519,7 +433,7 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
 
   // Demo mode
   if (apiKey === 'demo') {
-    return buildDemoResponse();
+    return buildDemoResponse(params.locale);
   }
 
   const isLocalProvider = isLocalProviderBaseUrl(baseUrl);
