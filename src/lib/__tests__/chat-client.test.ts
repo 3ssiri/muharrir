@@ -328,3 +328,24 @@ describe('streamChat Anthropic provider', () => {
     })
   })
 })
+
+describe('default system prompt', () => {
+  it('includes the Arabic prompt structure section', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response('data: [DONE]\n\n'))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await streamChat({
+      messages: [{ role: 'user', content: 'حوّل فكرة إلى موجه' }],
+      apiKey: 'test-key',
+      baseUrl: 'https://example.invalid/v1',
+      model: 'test-model',
+    })
+
+    const [, init] = fetchMock.mock.calls[0]
+    const body = JSON.parse(init.body as string)
+    expect(body.messages[0].role).toBe('system')
+    expect(body.messages[0].content).toContain('# Arabic prompt structure')
+    expect(body.messages[0].content).toContain('الدور:')
+    expect(body.messages[0].content).toContain('صيغة المخرجات:')
+  })
+})
