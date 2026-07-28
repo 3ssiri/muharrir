@@ -12,38 +12,27 @@ This file tracks the remaining release-gate work for Muharrir after the OSS/gran
 - Local Ollama discovery and completion were smoke-tested on 2026-07-29 with
   `qwen2.5:3b`; broader local-model tool-calling quality remains model-specific.
 - `v0.3.0-beta.1` exists as a prerelease with demo media assets.
-- Both `3ssiri/muharrir` and the legacy fork are temporarily private on GitHub.
+- `3ssiri/muharrir` is public; the legacy fork remains private and is not part
+  of the grant submission.
 - The app is MIT licensed and the README/package/Tauri metadata use the Muharrir identity.
 - The application demo was refreshed with the Muharrir identity and visually
   checked for obvious keys, personal data, and private documents.
 - All writable branches and tags were history-rewritten and force-pushed after
   removing historical credentials. Full-history scans of the rewritten
   repositories are clean.
-- GitHub-side pull-request refs and cached commit views still need Support
-  purging before public visibility is restored.
-- Most historical credentials are already unauthorized; one third-party
-  credential remains valid and its account is not accessible locally.
+- The public repository, README, license, maintainer profile, and grant-readiness
+  CI run were verified without authentication on 2026-07-29.
+- Grant-readiness CI is green:
+  https://github.com/3ssiri/muharrir/actions/runs/30404651528
 - Desktop updater signing is not ready yet. The failed `Build Desktop` run for `v0.3.0-beta.1` built installers, then failed while decoding `TAURI_SIGNING_PRIVATE_KEY` because the secret had an invalid hidden/BOM prefix.
 
-## Before Public Grant Submission
+## Before Grant Submission
 
-1. Report the still-valid historical third-party credential to its provider
-   (optional courtesy — no account access exists locally, so self-revocation
-   is impossible).
-2. Submit the prepared GitHub Support request to purge affected pull-request
-   refs, cached commit views, and unreachable objects.
-3. After Support confirms the purge, clone and scan the remote repositories
-   again and require a clean result.
-4. Merge the post-cleanup Gitleaks CI hardening and confirm all checks are green.
-   Status 2026-07-28: hardening is already merged — commit `e33b24b` (from
-   `codex/post-history-security-hardening`) is an ancestor of `master`, and the
-   Gitleaks job runs first in `ci.yml`. Local checks on the current working
-   tree are green: `lint` passed, `typecheck` passed, `test:unit` 57/57 passed.
-5. Switch the main GitHub repository visibility to public; the legacy fork can
-   remain private.
-6. Refresh public repository metrics and verify all application links without
-   authentication.
-7. Submit the Codex for Open Source form using
+1. Review the current Codex for Open Source terms and confirm the application
+   attestations as the applicant.
+2. Copy the verified private applicant fields from the ignored local submission
+   file into the form; do not commit them.
+3. Submit the Codex for Open Source form using
    `docs/applications/codex-for-open-source.md`. Evaluate the separate Codex
    Open Source Fund form in `docs/applications/codex-open-source-fund.md` only
    if it is confirmed to be a non-duplicative alternative under the current

@@ -19,9 +19,9 @@ API credits.
 - Repository: https://github.com/3ssiri/muharrir
 - Role: Primary maintainer
 - License: MIT
-- Project state: Early-stage beta candidate
-- Current visibility: Private pending completion of the credential-history
-  release gate; do not submit until it is public.
+- Project state: Early-stage public beta candidate
+- Current visibility: Public; repository and maintainer links verified without
+  authentication on 2026-07-29.
 - Interests: API credits; Codex Security
 
 Do not invent adoption metrics. Refresh stars, forks, releases, issues, and CI
@@ -29,17 +29,17 @@ status immediately before submitting.
 
 ## Verified Repository Snapshot
 
-Snapshot taken while the repository is private on 2026-07-29:
+Public snapshot verified on 2026-07-29:
 
 - 1 star and 0 forks.
 - 9 open issues, including labeled `good first issue` and `help wanted` work.
 - 6 GitHub releases, including `v0.3.0-beta.1` under the Muharrir identity.
-- 17 merged pull requests.
-- Latest default-branch CI is green:
-  https://github.com/3ssiri/muharrir/actions/runs/30027325752
+- 18 merged pull requests.
+- Grant-readiness default-branch CI is green:
+  https://github.com/3ssiri/muharrir/actions/runs/30404651528
 
-These are audit facts, not traction claims. Refresh them after the repository is
-public and after the final default-branch push. The official program accepts
+These are audit facts, not traction claims. Refresh them immediately before
+pressing submit. The official program accepts
 active OSS projects based on meaningful usage, broad adoption, **or clear
 importance to the ecosystem**; Muharrir's application should make the last case
 honestly through Arabic-first accessibility, local-first privacy, and ongoing

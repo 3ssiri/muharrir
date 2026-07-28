@@ -65,7 +65,7 @@ Do not invent these values. Fill them from the real account/company before submi
 
 - Run one real Claude Console API-key smoke test before claiming production Claude usage.
 - Run one real OpenAI-compatible provider smoke test before submitting OpenAI API usage claims.
-- Switch the GitHub repository to public and verify that all application links
-  work without authentication.
+- Repository, maintainer profile, README, license, and grant-readiness CI were
+  verified publicly without authentication on 2026-07-29.
 - Do not claim signed desktop installers until the Tauri signing secret is corrected and a release workflow produces artifacts.
 - Keep provider privacy claims conservative: prompts are local until the user sends them to the selected provider.

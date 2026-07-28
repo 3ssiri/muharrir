@@ -23,9 +23,10 @@ context. Keep private identity and account fields outside the repository.
 
 ## Submission Status
 
-**Not ready to submit yet.** The repository is temporarily private pending the
-credential-history purge. Publish it and verify the public link and latest CI
-before submitting either OpenAI OSS application.
+**Technically ready, but not the default submission route.** The repository,
+maintainer profile, public assets, and grant-readiness CI are publicly reachable.
+Submit Codex for Open Source first. Use this separate form only if the applicant
+confirms it will not duplicate the same request.
 
 ## Project
 

@@ -18,11 +18,11 @@ real-key testing requirements.
 |---|---:|---|
 | Local demo | Ready | Demo mode works without a provider key. |
 | Local models | Ready | Ollama can be detected and selected without an API key. |
-| Codex for OSS fit | Ready after public CI | A dedicated form packet is prepared; refresh public metrics immediately before submission. |
+| Codex for OSS fit | Ready | The repository is public, CI is green, and a dedicated form packet is prepared. |
 | Separate Codex Fund form | Verify overlap | The live form describes grants up to $25,000 in API credits, but the current Codex for OSS route already includes fund consideration. |
 | OpenAI fit | Strong | The app is already built around OpenAI-compatible provider settings. |
 | Anthropic fit | Stronger | Native Claude Messages API support is implemented; run one real-key smoke test before submitting. |
-| Public repo | Verify | Codex for Open Source explicitly requires a public repository and GitHub profile. |
+| Public repo | Ready | Repository and maintainer profile were verified without authentication on 2026-07-29. |
 | Website/demo URL | Ready | Repository, release, and public demo links are available. |
 | Traction | Early-stage | Do not invent user counts; use the honest wording in the packet. |
 
@@ -41,19 +41,17 @@ real-key testing requirements.
 
 ## Recommended Submission Order
 
-1. Make the repository public and verify default-branch CI.
-2. Fill the private application fields in a local, uncommitted copy of [private-submission-data.template.md](private-submission-data.template.md).
-3. Submit [Codex for Open Source](codex-for-open-source.md) with truthful current
+1. Review the current program terms and the verified private application fields.
+2. Submit [Codex for Open Source](codex-for-open-source.md) with truthful current
    repository metrics. Use the separate
    [Codex Open Source Fund](codex-open-source-fund.md) form only after confirming
    it is a non-duplicative alternative under the current terms.
-4. Run real-key smoke tests before submitting provider startup applications.
-5. Submit Claude for Startups or OpenAI for Startups only through a route for which the applicant meets the current account/funding requirements.
+3. Run real-key smoke tests before submitting provider startup applications.
+4. Submit Claude for Startups or OpenAI for Startups only through a route for which the applicant meets the current account/funding requirements.
 
 ## Current Links
 
-The demo asset is public. The main repository link remains private until the
-credential-history release gate is complete.
+The repository, maintainer profile, release, and demo assets are public.
 
 - Repository: https://github.com/3ssiri/muharrir
 - Release: https://github.com/3ssiri/muharrir/releases/tag/v0.3.0-beta.1 (prerelease with demo assets; no signed desktop installers yet)

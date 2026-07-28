@@ -5,13 +5,14 @@ another AI builder program.
 
 ## Codex for Open Source
 
-- [ ] GitHub repository is public.
+- [x] GitHub repository is public.
 - [x] GitHub profile is publicly reachable.
 - [x] Applicant is the primary maintainer.
 - [x] Repository uses an OSI-approved MIT license.
 - [x] “Why does this repository qualify?” draft is within 500 characters.
 - [x] API-credit use draft is within 500 characters.
-- [ ] Current public stars, forks, issues, releases, and CI status are verified.
+- [x] Current public stars, forks, issues, releases, PRs, and CI status were
+  verified on 2026-07-29.
 - [x] Email associated with the applicant's ChatGPT account is ready.
 - [x] OpenAI Organization ID is ready.
 - [ ] Program terms have been reviewed by the applicant.
@@ -21,7 +22,7 @@ another AI builder program.
 - [x] Separate fund packet is prepared in `codex-open-source-fund.md`.
 - [x] Project description and API-credit use are conservative and use synthetic
   data only.
-- [ ] Repository and personal GitHub links are publicly reachable.
+- [x] Repository and personal GitHub links are publicly reachable.
 - [ ] Applicant, optional LinkedIn, and collaborator fields are verified.
 - [ ] Current fund form terms have been reviewed by the applicant.
 - [ ] Applicant has confirmed this will not duplicate a Codex for Open Source
@@ -29,7 +30,7 @@ another AI builder program.
 
 ## Public Assets
 
-- [ ] Repository is public and application links work without authentication.
+- [x] Repository is public and application links work without authentication.
 - [x] License is consistent in README, `LICENSE`, and `package.json`.
 - [x] README has screenshots, quick start, privacy summary, and provider setup.
 - [x] `docs/PRIVACY.md` is current.
@@ -37,8 +38,8 @@ another AI builder program.
 - [x] Roadmap is current.
 - [x] Demo video is recorded and uploaded.
 - [x] Stable release or beta tag exists.
-- [x] CI status is green for the latest default-branch workflow as of
-  2026-07-29; recheck after the final public push.
+- [x] Grant-readiness CI is green on the public default branch as of
+  2026-07-29: https://github.com/3ssiri/muharrir/actions/runs/30404651528
 - [x] Signed desktop release is explicitly not claimed.
 
 ## Product Proof
@@ -53,7 +54,7 @@ another AI builder program.
 - [x] Arabic RTL flow is shown.
 - [x] English flow is shown.
 - [x] Current application screenshots and video were visually checked for API keys, personal data, and private documents.
-- [ ] Repository visibility has been checked immediately before submission.
+- [x] Repository visibility was checked after publication on 2026-07-29.
 
 ## Anthropic-Specific
 
