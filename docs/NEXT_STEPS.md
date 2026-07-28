@@ -16,19 +16,24 @@ This file tracks the remaining release-gate work for Muharrir after the OSS/gran
   repositories are clean.
 - GitHub-side pull-request refs and cached commit views still need Support
   purging before public visibility is restored.
-- Most historical credentials are already unauthorized; one Huan API
-  credential remains valid and must be revoked or reported to the provider.
+- Most historical credentials are already unauthorized; one third-party
+  credential remains valid and its account is not accessible locally.
 - Desktop updater signing is not ready yet. The failed `Build Desktop` run for `v0.3.0-beta.1` built installers, then failed while decoding `TAURI_SIGNING_PRIVATE_KEY` because the secret had an invalid hidden/BOM prefix.
 
 ## Before Public Grant Submission
 
-1. Revoke or report the still-valid Huan API credential and resolve the
-   unreachable Gala endpoint.
+1. Report the still-valid historical third-party credential to its provider
+   (optional courtesy — no account access exists locally, so self-revocation
+   is impossible).
 2. Submit the prepared GitHub Support request to purge affected pull-request
    refs, cached commit views, and unreachable objects.
 3. After Support confirms the purge, clone and scan the remote repositories
    again and require a clean result.
 4. Merge the post-cleanup Gitleaks CI hardening and confirm all checks are green.
+   Status 2026-07-28: hardening is already merged — commit `e33b24b` (from
+   `codex/post-history-security-hardening`) is an ancestor of `master`, and the
+   Gitleaks job runs first in `ci.yml`. Local checks on the current working
+   tree are green: `lint` passed, `typecheck` passed, `test:unit` 57/57 passed.
 5. Switch the main GitHub repository visibility to public; the legacy fork can
    remain private.
 6. Refresh public repository metrics.

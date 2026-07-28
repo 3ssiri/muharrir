@@ -274,7 +274,7 @@ import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/p
 
 - [ ] **Step 2: احذف الكود الميت (TEST_CONFIG)**
 
-احذف ثابت `TEST_CONFIG` بالكامل (الكائن `const TEST_CONFIG = { ... }` بقيمة `baseUrl: 'https://ai.huan666.de/v1'`).
+احذف ثابت `TEST_CONFIG` بالكامل (الكائن `const TEST_CONFIG = { ... }` بقيمة `baseUrl` لبروكسي طرف ثالث قديم).
 
 - [ ] **Step 3: وسّع تفكيك المتجر**
 

@@ -57,12 +57,12 @@ Resolution completed on 2026-07-23:
 - Made both repositories private while GitHub-side cleanup is pending.
 - Confirmed both repositories report zero forks.
 
-Credential validation without exposing values found that the historical
-DeepSeek, OAIPRO, ephone, and VVEAI credentials now return unauthorized. The
-Gala endpoint is unreachable. One historical `ai.huan666.de` credential still
-returns a successful models response; its account credentials were not found
-locally or in prior project sessions, so it still requires owner/provider
-revocation.
+Credential validation without exposing values found that most historical
+third-party provider credentials now return unauthorized and one endpoint is
+unreachable. One historical third-party credential still returns a successful
+models response; its account credentials were not found locally or in prior
+project sessions, so it still requires owner/provider revocation. Provider
+names and endpoints are intentionally omitted from this public report.
 
 GitHub's read-only pull-request refs cannot be overwritten by a force push.
 `3ssiri/muharrir` pull request 1 and pull requests 1–4 in the legacy fork still
@@ -108,8 +108,8 @@ versions are available; do not force incompatible overrides.
 
 Before public launch:
 
-1. Revoke or report the still-valid Huan API credential and resolve the
-   unreachable Gala endpoint.
+1. Report the still-valid historical third-party credential to its provider
+   (owner-side only; no account access exists locally).
 2. Ask GitHub Support to purge the documented pull-request refs and cached
    commit views.
 3. Re-run a clean clone full-history scan after GitHub confirms the purge.
