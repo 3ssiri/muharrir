@@ -1,6 +1,6 @@
 # Codex for Open Source Application
 
-Last verified: 2026-07-23.
+Last verified: 2026-07-29.
 
 Official links:
 
@@ -19,21 +19,41 @@ API credits.
 - Repository: https://github.com/3ssiri/muharrir
 - Role: Primary maintainer
 - License: MIT
-- Project state: Early-stage public beta
+- Project state: Early-stage beta candidate
+- Current visibility: Private pending completion of the credential-history
+  release gate; do not submit until it is public.
 - Interests: API credits; Codex Security
 
 Do not invent adoption metrics. Refresh stars, forks, releases, issues, and CI
 status immediately before submitting.
 
+## Verified Repository Snapshot
+
+Snapshot taken while the repository is private on 2026-07-29:
+
+- 1 star and 0 forks.
+- 9 open issues, including labeled `good first issue` and `help wanted` work.
+- 6 GitHub releases, including `v0.3.0-beta.1` under the Muharrir identity.
+- 17 merged pull requests.
+- Latest default-branch CI is green:
+  https://github.com/3ssiri/muharrir/actions/runs/30027325752
+
+These are audit facts, not traction claims. Refresh them after the repository is
+public and after the final default-branch push. The official program accepts
+active OSS projects based on meaningful usage, broad adoption, **or clear
+importance to the ecosystem**; Muharrir's application should make the last case
+honestly through Arabic-first accessibility, local-first privacy, and ongoing
+maintenance evidence.
+
 ## Why Does This Repository Qualify?
 
-Maximum: 500 characters.
+Maximum: 500 characters. Current draft: 457 characters.
 
 > Muharrir is an MIT-licensed, local-first Arabic/English prompt-engineering workspace. It addresses a gap in OSS AI tooling: strong RTL UX, bilingual guided prompting, local document parsing, provider choice, and web/desktop builds without a project-owned backend. The project has automated unit, browser, and Rust checks plus contribution-ready issues. It is early-stage; its ecosystem value is accessibility for Arabic-first and privacy-conscious builders.
 
 ## How Will You Use API Credits?
 
-Maximum: 500 characters.
+Maximum: 500 characters. Current draft: 391 characters.
 
 > We will use API credits for core OSS maintenance: Codex-assisted issue triage and PR review, regression-test generation for Arabic/English flows, release and migration checks, dependency and security remediation, and provider-adapter fixtures. Automation will use repository code and synthetic test data only; no user prompts, API keys, personal data, or private documents will be submitted.
 

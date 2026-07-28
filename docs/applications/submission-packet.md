@@ -16,6 +16,7 @@ and Anthropic forms. Use `codex-for-open-source.md` for the exact OSS form.
 ## Official Form Links
 
 - Codex for Open Source: https://openai.com/form/codex-for-oss/
+- Codex Open Source Fund: https://openai.com/form/codex-open-source-fund/
 - OpenAI Startups: https://openai.com/business/why-openai/startups/
 - OpenAI Researcher Access Program: https://grants.openai.com/prog/openai_researcher_access_program/
 - Claude for Startups: https://claude.com/programs/startups
@@ -64,6 +65,7 @@ Do not invent these values. Fill them from the real account/company before submi
 
 - Run one real Claude Console API-key smoke test before claiming production Claude usage.
 - Run one real OpenAI-compatible provider smoke test before submitting OpenAI API usage claims.
-- Switch the GitHub repository to public, or confirm the grant program accepts a private review link.
+- Switch the GitHub repository to public and verify that all application links
+  work without authentication.
 - Do not claim signed desktop installers until the Tauri signing secret is corrected and a release workflow produces artifacts.
 - Keep provider privacy claims conservative: prompts are local until the user sends them to the selected provider.

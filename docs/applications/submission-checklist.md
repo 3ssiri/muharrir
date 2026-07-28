@@ -16,9 +16,20 @@ another AI builder program.
 - [x] OpenAI Organization ID is ready.
 - [ ] Program terms have been reviewed by the applicant.
 
+## Codex Open Source Fund
+
+- [x] Separate fund packet is prepared in `codex-open-source-fund.md`.
+- [x] Project description and API-credit use are conservative and use synthetic
+  data only.
+- [ ] Repository and personal GitHub links are publicly reachable.
+- [ ] Applicant, optional LinkedIn, and collaborator fields are verified.
+- [ ] Current fund form terms have been reviewed by the applicant.
+- [ ] Applicant has confirmed this will not duplicate a Codex for Open Source
+  request.
+
 ## Public Assets
 
-- [ ] Repository is public or accessible through a private review link.
+- [ ] Repository is public and application links work without authentication.
 - [x] License is consistent in README, `LICENSE`, and `package.json`.
 - [x] README has screenshots, quick start, privacy summary, and provider setup.
 - [x] `docs/PRIVACY.md` is current.
@@ -26,7 +37,8 @@ another AI builder program.
 - [x] Roadmap is current.
 - [x] Demo video is recorded and uploaded.
 - [x] Stable release or beta tag exists.
-- [ ] CI status is green for the latest default-branch workflow.
+- [x] CI status is green for the latest default-branch workflow as of
+  2026-07-29; recheck after the final public push.
 - [x] Signed desktop release is explicitly not claimed.
 
 ## Product Proof
@@ -34,7 +46,9 @@ another AI builder program.
 - [x] Demo mode works without an API key.
 - [ ] OpenAI-compatible provider path is tested.
 - [ ] Native Claude provider path is tested with a real Claude Console API key.
-- [ ] Local Ollama path is tested.
+- [x] Local Ollama discovery and completion path was tested on 2026-07-29:
+  Playwright detected the local runtime and `qwen2.5:3b` returned a successful
+  `/v1/chat/completions` response.
 - [x] PDF/DOCX local parsing is tested.
 - [x] Arabic RTL flow is shown.
 - [x] English flow is shown.

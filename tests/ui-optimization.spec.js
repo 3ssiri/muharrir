@@ -106,7 +106,7 @@ test.describe('اختبار تحسين واجهة المستخدم', () => {
 
     await page.getByRole('textbox', { name: /مهمتك/ }).fill('جهّز موجهًا منظّمًا لفكرة منتج تعليمي');
     await page.getByRole('button', { name: 'إرسال' }).click();
-    await expect(page.getByText('Document-to-Prompt Assistant')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('مساعد تحويل المستندات إلى موجّهات')).toBeVisible({ timeout: 10000 });
 
     await page.getByRole('tab', { name: 'معاينة' }).click();
     await expect(page.getByText('الموجّه النهائي', { exact: true })).toBeVisible();

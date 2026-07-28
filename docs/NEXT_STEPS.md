@@ -6,6 +6,11 @@ This file tracks the remaining release-gate work for Muharrir after the OSS/gran
 
 - The local grant-readiness branch passes lint, typecheck, unit tests, Playwright,
   static export, and `cargo check`.
+- A CI-equivalent Ubuntu 22.04 run on 2026-07-29 passed `npm ci`, lint,
+  typecheck, 57 unit tests, Next.js 16.2.11 static export, and all 9 Playwright
+  smoke tests with Node 20.20.2/npm 10.8.2.
+- Local Ollama discovery and completion were smoke-tested on 2026-07-29 with
+  `qwen2.5:3b`; broader local-model tool-calling quality remains model-specific.
 - `v0.3.0-beta.1` exists as a prerelease with demo media assets.
 - Both `3ssiri/muharrir` and the legacy fork are temporarily private on GitHub.
 - The app is MIT licensed and the README/package/Tauri metadata use the Muharrir identity.
@@ -36,9 +41,13 @@ This file tracks the remaining release-gate work for Muharrir after the OSS/gran
    tree are green: `lint` passed, `typecheck` passed, `test:unit` 57/57 passed.
 5. Switch the main GitHub repository visibility to public; the legacy fork can
    remain private.
-6. Refresh public repository metrics.
+6. Refresh public repository metrics and verify all application links without
+   authentication.
 7. Submit the Codex for Open Source form using
-   `docs/applications/codex-for-open-source.md`.
+   `docs/applications/codex-for-open-source.md`. Evaluate the separate Codex
+   Open Source Fund form in `docs/applications/codex-open-source-fund.md` only
+   if it is confirmed to be a non-duplicative alternative under the current
+   terms.
 
 The applicant name, ChatGPT email, OpenAI Organization ID, and OpenAI Project ID
 were recovered from the authenticated accounts and stored only in the ignored

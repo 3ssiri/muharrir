@@ -8,14 +8,18 @@ Use these files as the source package before copying answers into external forms
 ## Current Readiness Verdict
 
 Muharrir is technically demo-ready. Codex for Open Source is the primary OSS
-route; provider startup programs remain secondary routes with additional
-account, funding, and real-key testing requirements.
+route and includes API-credit consideration through the Codex Open Source Fund.
+A separate fund form remains live, but should be treated as a potentially
+overlapping alternative rather than a second default submission. Provider
+startup programs remain secondary routes with additional account, funding, and
+real-key testing requirements.
 
 | Area | Status | Notes |
 |---|---:|---|
 | Local demo | Ready | Demo mode works without a provider key. |
 | Local models | Ready | Ollama can be detected and selected without an API key. |
 | Codex for OSS fit | Ready after public CI | A dedicated form packet is prepared; refresh public metrics immediately before submission. |
+| Separate Codex Fund form | Verify overlap | The live form describes grants up to $25,000 in API credits, but the current Codex for OSS route already includes fund consideration. |
 | OpenAI fit | Strong | The app is already built around OpenAI-compatible provider settings. |
 | Anthropic fit | Stronger | Native Claude Messages API support is implemented; run one real-key smoke test before submitting. |
 | Public repo | Verify | Codex for Open Source explicitly requires a public repository and GitHub profile. |
@@ -25,6 +29,7 @@ account, funding, and real-key testing requirements.
 ## Files
 
 - [codex-for-open-source.md](codex-for-open-source.md): Exact Codex for Open Source form requirements and paste-ready 500-character answers.
+- [codex-open-source-fund.md](codex-open-source-fund.md): Separate packet for the OpenAI Codex Open Source Fund application.
 - [provider-program-fit.md](provider-program-fit.md): Which Anthropic/OpenAI routes fit Muharrir and what each requires.
 - [anthropic-startups.md](anthropic-startups.md): Draft answers for Anthropic Claude for Startups.
 - [openai-startups.md](openai-startups.md): Draft answers for OpenAI startup/community routes.
@@ -38,7 +43,10 @@ account, funding, and real-key testing requirements.
 
 1. Make the repository public and verify default-branch CI.
 2. Fill the private application fields in a local, uncommitted copy of [private-submission-data.template.md](private-submission-data.template.md).
-3. Submit [Codex for Open Source](codex-for-open-source.md) with truthful current repository metrics.
+3. Submit [Codex for Open Source](codex-for-open-source.md) with truthful current
+   repository metrics. Use the separate
+   [Codex Open Source Fund](codex-open-source-fund.md) form only after confirming
+   it is a non-duplicative alternative under the current terms.
 4. Run real-key smoke tests before submitting provider startup applications.
 5. Submit Claude for Startups or OpenAI for Startups only through a route for which the applicant meets the current account/funding requirements.
 
@@ -57,6 +65,7 @@ credential-history release gate is complete.
 
 - Codex for Open Source: https://developers.openai.com/community/codex-for-oss
 - Codex for Open Source application: https://openai.com/form/codex-for-oss/
+- Codex Open Source Fund application: https://openai.com/form/codex-open-source-fund/
 - Anthropic Claude for Startups: https://www.anthropic.com/startups
 - Anthropic Startup Program terms: https://www.anthropic.com/startup-program-official-terms
 - OpenAI Startups: https://openai.com/business/why-openai/startups/
