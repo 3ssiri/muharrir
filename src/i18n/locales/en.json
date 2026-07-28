@@ -236,6 +236,26 @@
       "name": "Brainstorm",
       "description": "Generate diverse ideas and solutions",
       "starter": "Role: [a brainstorming partner]\nChallenge or goal: [...]\nConstraints: [...]\nTask: [e.g. 10 diverse ideas, each with pros and cons]\nOutput format: [a numbered list]"
+    },
+    "code_review": {
+      "name": "Code Review",
+      "description": "Quality, performance, and security checks",
+      "starter": "Role: [an expert code reviewer]\nCode: [paste it here]\nContext: [language, framework, and purpose]\nTask: [review quality, performance, and security; suggest improvements]\nOutput format: [findings grouped by severity + improved code]"
+    },
+    "lesson_plan": {
+      "name": "Lesson Planning",
+      "description": "Lesson plans and class activities",
+      "starter": "Role: [an expert teacher in curriculum design]\nSubject and topic: [...]\nLevel and duration: [...]\nTask: [a lesson plan with learning goals, activities, and assessment]\nOutput format: [sections: goals, warm-up, activities, assessment, homework]"
+    },
+    "paper_summary": {
+      "name": "Paper Summarization",
+      "description": "Methodical research summaries",
+      "starter": "Role: [a specialist researcher]\nPaper: [paste the text or abstract]\nTask: [a methodical summary: problem, methodology, results, limitations]\nRequirements: [cite sources when referencing other work]\nOutput format: [structured sections + a brief critical appraisal]"
+    },
+    "video_script": {
+      "name": "Video Scripting",
+      "description": "Scripts for YouTube and short-form platforms",
+      "starter": "Role: [a video scriptwriter]\nTopic and platform: [...]\nTarget duration: [...]\nAudience: [...]\nTask: [a scene-based script: opening hook, content, closing call to action]\nOutput format: [table: time, scene, narration, shot directions]"
     }
   },
   "welcome": {
