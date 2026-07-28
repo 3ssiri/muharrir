@@ -41,4 +41,10 @@ export const PRESET_MODES: Record<string, PresetMode> = {
   academic: { id: 'academic', icon: '🎓', decorators: { thinking_depth: 'reasoning', tone: 'formal', output_format: 'structured', validation: ['fact_check', 'cite_sources'] } },
   teaching: { id: 'teaching', icon: '👩‍🏫', decorators: { thinking_depth: 'step_by_step', tone: 'friendly', output_format: 'structured' } },
   brainstorm: { id: 'brainstorm', icon: '💡', decorators: { thinking_depth: 'debate', tone: 'creative', output_format: 'markdown' } },
+
+  // — Persona packs —
+  code_review: { id: 'code_review', icon: '🔍', decorators: { thinking_depth: 'step_by_step', tone: 'technical', output_format: 'code', evaluation: ['critique'] } },
+  lesson_plan: { id: 'lesson_plan', icon: '📚', decorators: { thinking_depth: 'step_by_step', tone: 'friendly', output_format: 'structured' } },
+  paper_summary: { id: 'paper_summary', icon: '📑', decorators: { thinking_depth: 'reasoning', tone: 'formal', output_format: 'structured', validation: ['cite_sources'] } },
+  video_script: { id: 'video_script', icon: '🎬', decorators: { thinking_depth: 'none', tone: 'creative', output_format: 'markdown', evaluation: ['refine'] } },
 };

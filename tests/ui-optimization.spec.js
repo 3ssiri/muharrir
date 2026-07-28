@@ -94,7 +94,7 @@ test.describe('اختبار تحسين واجهة المستخدم', () => {
     await page.getByRole('button', { name: 'إرسال' }).click();
 
     await expect(page.getByText('اقتراحات التحسين')).toBeVisible({ timeout: 10000 });
-    await expect(page.getByText('Document-to-Prompt Assistant')).toBeVisible();
+    await expect(page.getByText('مساعد تحويل المستندات إلى موجّهات')).toBeVisible();
   });
 
   test('نسخ وحفظ وتصدير مقترح الوضع التجريبي', async ({ page }) => {
@@ -121,7 +121,7 @@ test.describe('اختبار تحسين واجهة المستخدم', () => {
     await expect(page.getByText('تمت الإضافة إلى المفضّلة')).toBeVisible();
 
     await page.getByRole('button', { name: 'المفضّلة', exact: true }).click();
-    await expect(page.getByText('Document-to-Prompt Assistant')).toBeVisible();
+    await expect(page.getByText('مساعد تحويل المستندات إلى موجّهات')).toBeVisible();
   });
 
   test('اختبار رفع ملفات نصية وPDF وDOCX محليًا', async ({ page }) => {

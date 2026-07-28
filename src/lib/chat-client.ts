@@ -24,6 +24,8 @@ export interface StreamChatParams {
   baseUrl: string;
   // Model used by the format-correction loop (configurable in Settings)
   correctionModel?: string;
+  // UI locale — selects the localized demo-mode sample ('ar' or 'en')
+  locale?: string;
   signal?: AbortSignal;
 }
 
@@ -62,104 +64,60 @@ Your only job is to **help the user design and optimize prompts**, not to perfor
 2. **Stay in role**: you are a prompt optimization assistant, not a task executor.
 3. **No text analysis**: do not output phrases like "I understand" or "let me analyze"; call the tool directly.
 4. **Quality assurance**: the generated prompt must be clear, structured, and ready to use directly.
-5. **Bilingual care**: when the user writes Arabic, preserve natural Arabic phrasing and RTL-friendly structure.`;
+5. **Bilingual care**: when the user writes Arabic, preserve natural Arabic phrasing and RTL-friendly structure.
 
-const DEMO_INTRO =
-  "Demo Mode\n\nThis is a local simulated run. No external AI provider is called.\n\nPick a direction from the enhancement table, then review the sample structured prompt below.";
+# Arabic prompt structure
 
-const DEMO_ENHANCEMENTS = {
-  dimensions: [
-    {
-      key: 'audience',
-      title: 'Audience / الجمهور',
-      options: [
-        {
-          label: 'Developers',
-          value: 'developers',
-          description: 'Use technical language, constraints, and implementation details.',
-        },
-        {
-          label: 'Educators',
-          value: 'educators',
-          description: 'Use learning goals, examples, and assessment criteria.',
-        },
-        {
-          label: 'Product teams',
-          value: 'product-teams',
-          description: 'Use goals, trade-offs, acceptance criteria, and user impact.',
-        },
-      ],
-      allowCustom: true,
-    },
-    {
-      key: 'output_style',
-      title: 'Output style / نمط المخرجات',
-      options: [
-        {
-          label: 'Structured brief',
-          value: 'structured-brief',
-          description: 'Concise sections with context, task, constraints, and output format.',
-        },
-        {
-          label: 'Agent instructions',
-          value: 'agent-instructions',
-          description: 'Step-by-step instructions suitable for coding or research agents.',
-        },
-        {
-          label: 'Arabic-first',
-          value: 'arabic-first',
-          description: 'Arabic phrasing with clear RTL-friendly structure.',
-        },
-      ],
-      allowCustom: true,
-    },
-    {
-      key: 'quality_bar',
-      title: 'Quality bar / معيار الجودة',
-      options: [
-        {
-          label: 'Fast draft',
-          value: 'fast-draft',
-          description: 'Prioritize a usable first version.',
-        },
-        {
-          label: 'Review-ready',
-          value: 'review-ready',
-          description: 'Include assumptions, risks, and verification steps.',
-        },
-        {
-          label: 'Production-grade',
-          value: 'production-grade',
-          description: 'Add strict constraints, examples, and acceptance checks.',
-        },
-      ],
-      allowCustom: true,
-    },
-  ],
-};
+When the user writes in Arabic, fill every \`propose_prompt\` field in natural
+Modern Standard Arabic — write natively, never word-by-word translation.
 
-const DEMO_PROMPT = {
-  title: 'Document-to-Prompt Assistant',
-  role: 'You are a bilingual Arabic/English prompt engineering assistant.',
-  objective: 'Turn a vague user idea or uploaded document summary into a clear, reusable AI prompt.',
-  context:
-    'The user may be a developer, educator, writer, or product builder. They need guidance without sending data to a Muharrir server.',
-  constraints: [
-    'Ask only essential clarification questions.',
-    'Preserve Arabic RTL readability when the user writes in Arabic.',
-    'State assumptions explicitly.',
-    'Return a prompt the user can copy directly.',
-  ],
-  workflow: [
-    'Identify the user goal and missing context.',
-    'Offer enhancement choices for audience, output style, and quality bar.',
-    'Generate a final prompt with role, task, constraints, and output format.',
-  ],
-  outputFormat:
-    'Markdown with sections: Role, Objective, Context, Constraints, Workflow, Output Format, and Final Prompt.',
-  finalPrompt:
-    'You are a bilingual prompt engineering assistant. Help me transform the following rough idea into a structured AI prompt. Ask up to three clarification questions if needed, then produce a copy-ready prompt with Role, Objective, Context, Constraints, Workflow, and Output Format. Preserve Arabic readability when Arabic is used. Rough idea: {{user_idea}}',
-};
+## Section headers in \`finalPrompt\`
+
+Use these exact Arabic headers, in this order, each on its own line:
+
+الدور:
+الهدف:
+السياق:
+القيود:
+خطوات العمل:
+صيغة المخرجات:
+
+Skip السياق or خطوات العمل only when they add no value.
+
+## Phrasing rules
+
+- Full, explicit sentences — no telegram style.
+- Widely-used technical terms stay in English (API, SDK, JSON) with a short
+  Arabic gloss on first use.
+- User-fillable slots use double-brace placeholders: {{موضوع_المقال}}.
+- RTL-friendly layout: one header per line, numbered steps, bulleted constraints.
+- Address the reader with imperative masculine singular (اكتب، لخّص، صمّم).
+
+## Mini example (skeleton)
+
+الدور: أنت خبير تسويق رقمي متخصص في السوق الخليجي.
+الهدف: صياغة إعلان قصير مقنع لمنتج {{اسم_المنتج}}.
+القيود:
+- لا تتجاوز 50 كلمة.
+- نبرة ودّية بلا مبالغة.
+صيغة المخرجات: عنوان جذّاب + نصّ الإعلان + 3 وسوم مقترحة.`;
+
+// Demo-mode content is localized — see the `demo` namespace in
+// src/i18n/locales/{ar,en}.json. Unknown locales fall back to English.
+// The locale files are loaded lazily so demo mode does not bloat the
+// main client bundle. NOTE: the `demo` namespace is consumed as raw JSON
+// here — never via t()/useTranslations (values contain {{placeholders}}
+// that are not valid ICU syntax).
+const DEMO_LOADERS = {
+  ar: () => import('@/i18n/locales/ar.json'),
+  en: () => import('@/i18n/locales/en.json'),
+} as const;
+
+async function getDemoContent(locale?: string) {
+  const loader = DEMO_LOADERS[locale === 'ar' ? 'ar' : 'en'];
+  const { default: messages } = await loader();
+  return messages.demo;
+}
 
 // Tool definitions in OpenAI function format (the same three tools)
 const TOOLS = [
@@ -341,12 +299,13 @@ export function mapError(status: number, raw: string, modelId?: string): string 
 }
 
 // Demo mode stream
-function buildDemoResponse(): Response {
+async function buildDemoResponse(locale?: string): Promise<Response> {
+  const demo = await getDemoContent(locale);
   const encoder = new TextEncoder();
   const chunks = [
-    `0:${JSON.stringify(DEMO_INTRO)}\n`,
-    `9:${JSON.stringify({ toolCallId: 'demo_enhancements', toolName: 'suggest_enhancements', args: DEMO_ENHANCEMENTS })}\n`,
-    `9:${JSON.stringify({ toolCallId: 'demo_prompt', toolName: 'propose_prompt', args: DEMO_PROMPT })}\n`,
+    `0:${JSON.stringify(demo.intro)}\n`,
+    `9:${JSON.stringify({ toolCallId: 'demo_enhancements', toolName: 'suggest_enhancements', args: demo.enhancements })}\n`,
+    `9:${JSON.stringify({ toolCallId: 'demo_prompt', toolName: 'propose_prompt', args: demo.prompt })}\n`,
   ];
   const stream = new ReadableStream({
     async start(controller) {
@@ -519,7 +478,7 @@ export async function streamChat(params: StreamChatParams): Promise<Response> {
 
   // Demo mode
   if (apiKey === 'demo') {
-    return buildDemoResponse();
+    return buildDemoResponse(params.locale);
   }
 
   const isLocalProvider = isLocalProviderBaseUrl(baseUrl);
