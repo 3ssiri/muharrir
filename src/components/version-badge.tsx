@@ -12,44 +12,51 @@ interface VersionInfo {
   hasUpdate: boolean
 }
 
+// Fetch the version directly from the GitHub API (client-side) instead of a server route
+// (removed). Local comparison is not available in static export/Tauri mode.
+async function fetchVersionInfo(): Promise<VersionInfo | null> {
+  try {
+    let remoteVersion: string | null = null
+    try {
+      const response = await fetch(
+        'https://api.github.com/repos/3ssiri/muharrir/commits?per_page=1',
+        { headers: { Accept: 'application/vnd.github.v3+json' } }
+      )
+      if (response.ok) {
+        const linkHeader = response.headers.get('Link')
+        const match = linkHeader?.match(/page=(\d+)>; rel="last"/)
+        if (match) {
+          remoteVersion = `v1.${match[1]}`
+        }
+      }
+    } catch {
+      // Ignore network errors when GitHub is unreachable
+    }
+
+    return remoteVersion ? { localVersion: remoteVersion, remoteVersion, hasUpdate: false } : null
+  } catch (error) {
+    console.error('Failed to fetch version:', error)
+    return null
+  }
+}
+
 export function VersionBadge() {
   const t = useTranslations()
   const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Fetch the version directly from the GitHub API (client-side) instead of a server route
-  // (removed). Local comparison is not available in static export/Tauri mode.
-  const fetchVersion = async () => {
-    try {
-      let remoteVersion: string | null = null
-      try {
-        const response = await fetch(
-          'https://api.github.com/repos/3ssiri/muharrir/commits?per_page=1',
-          { headers: { Accept: 'application/vnd.github.v3+json' } }
-        )
-        if (response.ok) {
-          const linkHeader = response.headers.get('Link')
-          const match = linkHeader?.match(/page=(\d+)>; rel="last"/)
-          if (match) {
-            remoteVersion = `v1.${match[1]}`
-          }
-        }
-      } catch {
-        // Ignore network errors when GitHub is unreachable
-      }
-
-      if (remoteVersion) {
-        setVersionInfo({ localVersion: remoteVersion, remoteVersion, hasUpdate: false })
-      }
-    } catch (error) {
-      console.error('Failed to fetch version:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
-    fetchVersion()
+    let cancelled = false
+    fetchVersionInfo()
+      .then((info) => {
+        if (!cancelled && info) setVersionInfo(info)
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   if (loading) {

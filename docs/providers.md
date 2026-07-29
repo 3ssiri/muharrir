@@ -39,13 +39,35 @@ Anthropic is handled as a native Claude Messages API provider:
 4. Set `apiFormat` only when the provider is not OpenAI-compatible.
 5. Add at least two useful default models when the provider is remote.
 6. Add `docsUrl` for key creation.
-7. Run `npm run test:unit`.
+7. If the provider's `/models` response is not OpenAI-shaped (`{ data: [{ id }] }`), extend `parseModelsResponse` and add a sample payload to `src/lib/__tests__/fixtures/provider-models.ts`.
+8. Run `npm run test:unit`.
 
-## Browser CORS
+## Browser CORS Troubleshooting
 
 Some providers reject browser-originated requests even when the API key and model are valid. This is a provider CORS policy, not a Muharrir backend error.
 
-What users can try:
+### Symptoms
+
+- The settings dialog shows "Connection failed" followed by the browser CORS hint.
+- The browser console shows `Access to fetch at '...' from origin '...' has been blocked by CORS policy`.
+- The JavaScript error is typically `TypeError: Failed to fetch` with no HTTP status code, because the browser never lets the response through.
+
+### CORS vs other failures
+
+| What you see | Likely cause |
+|---|---|
+| `TypeError: Failed to fetch`, no status code, CORS message in console | Provider blocks browser origins (CORS) |
+| `HTTP 401` / `authentication_error` | Invalid or malformed API key — check for stray spaces or newlines |
+| `HTTP 402` / "insufficient credits" | Provider balance or quota exhausted |
+| `HTTP 404` | Wrong base URL — use the API endpoint, not a dashboard URL |
+| `HTTP 429` | Rate limited — retry later |
+| Unexpected response format (missing `data` array) | The provider's `/models` endpoint is not OpenAI-shaped |
+
+### Why it happens
+
+Browsers enforce cross-origin rules: every provider decides whether to send `Access-Control-Allow-Origin` headers for browser-hosted apps. Desktop (Tauri/Rust) and server-to-server calls are not subject to browser CORS, which is why the same key can work in the desktop app and fail in the browser.
+
+### What users can try
 
 - Use the Tauri desktop app, where connection tests run through Rust and avoid browser CORS limits.
 - Use a provider that permits direct browser requests.
@@ -63,4 +85,3 @@ OpenRouter is included as a built-in preset:
 - API keys: `https://openrouter.ai/keys`
 
 OpenRouter model names often include the upstream provider prefix. Keep that prefix in user-facing examples.
-

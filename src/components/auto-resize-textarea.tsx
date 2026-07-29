@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { useTranslations } from 'next-intl'
 import { Maximize2 } from '@/components/icons'
 import { Textarea } from '@/components/ui/textarea'
@@ -37,7 +37,12 @@ export function AutoResizeTextarea({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isExpanded, setIsExpanded] = useState(false)
   const [showExpandButton, setShowExpandButton] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
+  // Hydration-safe "mounted" flag without setState-in-effect
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
 
   // Handle keyboard events: Enter to submit, Shift+Enter for a new line
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -48,11 +53,6 @@ export function AutoResizeTextarea({
       }
     }
   }
-
-  // Ensure the component is mounted to avoid hydration errors
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
 
   // Adjust the height automatically
   useEffect(() => {

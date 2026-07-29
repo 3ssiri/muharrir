@@ -83,7 +83,7 @@ next-intl باللغتين `['ar','en']`، الافتراضية `ar`، `localePr
 
 ## التطوير والجودة والنشر
 
-- **التنسيق والأنماط:** TypeScript صارم (`strict: true`) مع alias `@/* → ./src/*`؛ ESLint 9 بإعداد `eslint-config-next/core-web-vitals` مع تعطيل مؤقت لأربع قواعد React Compiler الجديدة (انظر التعليق في [eslint.config.mjs](eslint.config.mjs)). Tailwind CSS 3 + tailwindcss-animate + class-variance-authority.
+- **التنسيق والأنماط:** TypeScript صارم (`strict: true`) مع alias `@/* → ./src/*`؛ ESLint 9 بإعداد `eslint-config-next/core-web-vitals` وتُفرَض قواعد React Compiler الأربع (`react-hooks/refs` و`preserve-manual-memoization` و`set-state-in-effect` و`static-components`) — اكتشاف «العميل فقط» يكون عبر `useSyncExternalStore`، وإعادة الضبط عند فتح الحوارات عبر نمط adjust-state-during-render، والقيم المشتقّة تُحسب أثناء التصيير. Tailwind CSS 3 + tailwindcss-animate + class-variance-authority.
 - **CI ([ci.yml](.github/workflows/ci.yml))** على كل PR ودفع إلى main/master: فحص الأسرار (Gitleaks بكامل التاريخ) → بناء الويب (`npm ci` → lint → typecheck → test:unit → build → Playwright smoke بعامل واحد) → فحص Rust (`cargo check` على ubuntu مع إنشاء `out/` وهمي). يجب أن تمرّ كل هذه البوابات قبل أي دمج.
 - **النشر:** تاج `v*` → [build-desktop.yml](.github/workflows/build-desktop.yml) يبني مثبّتات الأنظمة الثلاثة موقّعة للتحديث التلقائي ويرفعها إلى GitHub Releases. سجلّ التغييرات في [CHANGELOG.md](CHANGELOG.md) (عربي، من الأحدث للأقدم) وملاحظات الإصدارات في [docs/releases/](docs/releases/).
 - **سكربتات مساعدة:** تسجيل ديمو/GIF عبر Puppeteer في [scripts/](scripts/) (`record-demo`، `record-gif`)، وأدوات تحقق في [scripts/tests/](scripts/tests/).

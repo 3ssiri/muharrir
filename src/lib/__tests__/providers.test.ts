@@ -6,8 +6,16 @@ import {
   isAnthropicProviderBaseUrl,
   isLocalProviderBaseUrl,
   normalizeBaseUrl,
+  parseModelsResponse,
   selectPreferredLocalChatModel,
 } from '@/lib/providers'
+import {
+  anthropicModelsResponse,
+  errorPayloadResponse,
+  nonObjectResponse,
+  ollamaModelsResponse,
+  openAiModelsResponse,
+} from './fixtures/provider-models'
 
 describe('providers', () => {
   it('normalizes whitespace and trailing slashes from base URLs', () => {
@@ -74,5 +82,29 @@ describe('providers', () => {
   it('falls back to a non-empty local model when no known chat model exists', () => {
     expect(selectPreferredLocalChatModel(['bge-m3:latest'])).toBe('bge-m3:latest')
     expect(selectPreferredLocalChatModel([])).toBe('')
+  })
+})
+
+describe('parseModelsResponse with provider fixtures', () => {
+  it('parses OpenAI-format model lists', () => {
+    expect(parseModelsResponse(openAiModelsResponse)).toEqual(['gpt-4o', 'gpt-4o-mini'])
+  })
+
+  it('parses Anthropic Messages-format model lists', () => {
+    expect(parseModelsResponse(anthropicModelsResponse)).toEqual(['claude-haiku-4-5', 'claude-sonnet-5'])
+  })
+
+  it('parses local Ollama lists and feeds preferred chat-model selection', () => {
+    const models = parseModelsResponse(ollamaModelsResponse)
+
+    expect(models).toEqual(['nomic-embed-text:latest', 'qwen2.5:3b'])
+    expect(selectPreferredLocalChatModel(models ?? [])).toBe('qwen2.5:3b')
+  })
+
+  it('rejects malformed payloads instead of throwing', () => {
+    expect(parseModelsResponse(errorPayloadResponse)).toBeNull()
+    expect(parseModelsResponse(nonObjectResponse)).toBeNull()
+    expect(parseModelsResponse(null)).toBeNull()
+    expect(parseModelsResponse({ data: 'not-an-array' })).toBeNull()
   })
 })

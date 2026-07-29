@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef, useLayoutEffect } from 'react'
+import { useEffect, useState, useRef, useLayoutEffect, useMemo } from 'react'
 import { Plus, MessageSquare, Trash2, Menu, ChevronLeft, ChevronRight, Search, X } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -29,7 +29,6 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
     const [sidebarWidth, setSidebarWidth] = useState(256) // default 256px (w-64)
     const [isResizing, setIsResizing] = useState(false)
     const [searchQuery, setSearchQuery] = useState('') // search term
-    const [filteredSessions, setFilteredSessions] = useState<ChatSession[]>([]) // sessions after filtering
     const scrollPositionRef = useRef<number>(0) // save the scroll position
     const searchInputRef = useRef<HTMLInputElement>(null) // search field reference
     const isLoadingRef = useRef(false) // prevent repeated loading
@@ -48,13 +47,23 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
 
             const allSessions = await db.chatSessions.orderBy('updatedAt').reverse().toArray()
             setSessions(allSessions)
-            setFilteredSessions(allSessions)
 
             // Scroll restoration is handled uniformly via useLayoutEffect
         } finally {
             isLoadingRef.current = false
         }
     }
+
+    // Search filtering (derived during render)
+    const filteredSessions = useMemo(() => {
+        const query = searchQuery.trim().toLowerCase()
+        if (!query) return sessions
+
+        return sessions.filter(session =>
+            session.title?.toLowerCase().includes(query) ||
+            session.previewText?.toLowerCase().includes(query)
+        )
+    }, [searchQuery, sessions])
 
     // Use useLayoutEffect to restore the scroll position synchronously right after the DOM updates
     useLayoutEffect(() => {
@@ -66,25 +75,13 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         }
     }, [sessions, filteredSessions])
 
-    // Search filtering
-    useEffect(() => {
-        if (!searchQuery.trim()) {
-            setFilteredSessions(sessions)
-            return
-        }
-
-        const query = searchQuery.toLowerCase()
-        const filtered = sessions.filter(session =>
-            session.title?.toLowerCase().includes(query) ||
-            session.previewText?.toLowerCase().includes(query)
-        )
-        setFilteredSessions(filtered)
-    }, [searchQuery, sessions])
-
     // Load the collapsed state and width from localStorage
     useEffect(() => {
+        // Reading persisted UI prefs from an external store at mount; lazy useState
+        // initializers would mismatch the statically prerendered HTML.
         const savedCollapsed = localStorage.getItem('sidebar-collapsed')
         if (savedCollapsed !== null) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsCollapsed(savedCollapsed === 'true')
         }
 
@@ -189,7 +186,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
         }
     }
 
-    const SidebarContent = ({ showToggle = false }: { showToggle?: boolean }) => (
+    const renderSidebarContent = (showToggle = false) => (
         <div className="flex flex-col h-full py-4">
             <div className={`px-4 mb-4 flex items-center gap-2 ${isCollapsed ? 'justify-center' : ''}`}>
                 {!isCollapsed && (
@@ -346,7 +343,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                     transition: isCollapsed ? 'width 0.3s' : 'none'
                 }}
             >
-                <SidebarContent showToggle={true} />
+                {renderSidebarContent(true)}
 
                 {/* Draggable resize divider */}
                 {!isCollapsed && (
@@ -367,7 +364,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="p-0 w-72">
-                    <SidebarContent showToggle={false} />
+                    {renderSidebarContent(false)}
                 </SheetContent>
             </Sheet>
         </>

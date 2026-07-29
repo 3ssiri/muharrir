@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useSyncExternalStore } from 'react'
 import { Send, Trash2, StopCircle, Code2, Sparkles, Star, FileText, MessageSquare, Upload, X, AlertCircle, RefreshCw } from '@/components/icons'
 import { useAppStore } from '@/lib/store'
 import { ChatSidebar } from '@/components/chat-sidebar'
@@ -28,7 +28,7 @@ import { ApiKeyRequiredDialog } from '@/components/api-key-required-dialog'
 import { useTranslations, useLocale } from 'next-intl'
 import { streamChat } from '@/lib/chat-client'
 import { consumeChatStream, classifyChatError, type UiMessage, type ToolInvocation } from '@/lib/chat-stream'
-import { isLocalProviderBaseUrl, selectPreferredLocalChatModel } from '@/lib/providers'
+import { isLocalProviderBaseUrl, parseModelsResponse, selectPreferredLocalChatModel } from '@/lib/providers'
 import { estimateTokens } from '@/lib/token-estimate'
 import { log } from '@/lib/logger'
 import { isTauriApp } from '@/lib/tauri-bridge'
@@ -70,7 +70,9 @@ export default function Home() {
   // Always-current snapshot of messages, so memoized callbacks passed to
   // MessageItem can stay referentially stable (don't close over `messages`).
   const messagesRef = useRef(messages)
-  messagesRef.current = messages
+  useEffect(() => {
+    messagesRef.current = messages
+  })
   const [isLoading, setIsLoading] = useState(false)
   const [isToolRendering, setIsToolRendering] = useState(false) // tool rendering state
   const abortControllerRef = useRef<AbortController | null>(null)
@@ -79,10 +81,16 @@ export default function Home() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false) // shortcuts dialog state
   const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false) // API key alert dialog state
   const [settingsOpen, setSettingsOpen] = useState(false) // settings dialog state
-  const [isDesktopApp, setIsDesktopApp] = useState(false)
+  // Hydration-safe desktop detection without setState-in-effect
+  const isDesktopApp = useSyncExternalStore(
+    () => () => {},
+    () => isTauriApp(),
+    () => false
+  )
   const [isCheckingForUpdate, setIsCheckingForUpdate] = useState(false)
   const [ollamaModels, setOllamaModels] = useState<string[]>([])
-  const [isCheckingOllama, setIsCheckingOllama] = useState(false)
+  // Detection starts on mount, so the first paint already shows "checking"
+  const [isCheckingOllama, setIsCheckingOllama] = useState(true)
 
   // File upload state - supports multiple files
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ file: File; preview?: string; text?: string }>>([])
@@ -99,36 +107,26 @@ export default function Home() {
     sessionIdRef.current = sessionId
   }, [sessionId])
 
+  // Probe a local Ollama install on mount; state updates land in promise
+  // callbacks so the effect body stays free of synchronous setState
   useEffect(() => {
-    setIsDesktopApp(isTauriApp())
-  }, [])
-
-  const detectOllama = useCallback(async () => {
-    setIsCheckingOllama(true)
-    try {
-      const response = await fetch('http://localhost:11434/v1/models')
-      if (!response.ok) {
-        setOllamaModels([])
-        return
-      }
-      const data: { data?: Array<{ id?: unknown }> } = await response.json()
-      const models = Array.isArray(data?.data)
-        ? data.data
-            .map((item) => item.id)
-            .filter((id): id is string => typeof id === 'string' && id.length > 0)
-            .sort()
-        : []
-      setOllamaModels(models)
-    } catch {
-      setOllamaModels([])
-    } finally {
-      setIsCheckingOllama(false)
+    let cancelled = false
+    fetch('http://localhost:11434/v1/models')
+      .then(async (response) => (response.ok ? ((await response.json()) as unknown) : null))
+      .then((payload) => {
+        if (cancelled) return
+        setOllamaModels(payload ? (parseModelsResponse(payload) ?? []) : [])
+      })
+      .catch(() => {
+        if (!cancelled) setOllamaModels([])
+      })
+      .finally(() => {
+        if (!cancelled) setIsCheckingOllama(false)
+      })
+    return () => {
+      cancelled = true
     }
   }, [])
-
-  useEffect(() => {
-    detectOllama()
-  }, [detectOllama])
 
   // Abort the in-flight request when the component unmounts
   useEffect(() => {
@@ -289,10 +287,18 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  // Reset messages when the session is cleared (adjust-state-during-render)
+  const [prevSessionId, setPrevSessionId] = useState(sessionId)
+  if (sessionId !== prevSessionId) {
+    setPrevSessionId(sessionId)
+    if (!sessionId) {
+      setMessages([])
+    }
+  }
+
   // Load chat history when sessionId changes
   useEffect(() => {
     if (!sessionId) {
-      setMessages([])
       return
     }
 
@@ -607,7 +613,7 @@ export default function Home() {
     }
   }
 
-  const validateUploadFile = useCallback((file: File) => {
+  const validateUploadFile = (file: File) => {
     const isImage = file.type.startsWith('image/')
     const isPDF = file.type === 'application/pdf'
     const isDoc = file.type.includes('wordprocessing') || file.name.endsWith('.docx')
@@ -624,7 +630,7 @@ export default function Home() {
     }
 
     return true
-  }, [t])
+  }
 
   const handleFileSelect = async (file: File, preview?: string) => {
     if (!validateUploadFile(file)) return

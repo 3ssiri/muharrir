@@ -30,6 +30,16 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  // Reset search state when the dialog opens (adjust-state-during-render pattern)
+  const [wasOpen, setWasOpen] = useState(open)
+  if (open !== wasOpen) {
+    setWasOpen(open)
+    if (open) {
+      setSearchQuery('')
+      setSelectedIndex(0)
+    }
+  }
+
   // Search within chats
   useEffect(() => {
     if (!open) return
@@ -76,11 +86,10 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
     searchFavorites()
   }, [searchQuery, open])
 
-  // Reset the state
+  // Focus the input when the dialog opens (query/index reset happens
+  // during render via the wasOpen adjustment above)
   useEffect(() => {
     if (open) {
-      setSearchQuery('')
-      setSelectedIndex(0)
       setTimeout(() => inputRef.current?.focus(), 100)
     }
   }, [open])

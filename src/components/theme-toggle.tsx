@@ -3,15 +3,16 @@
 import { Moon, Sun } from '@/components/icons'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  // Hydration-safe "mounted" flag without setState-in-effect
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
 
   const handleThemeChange = () => {
     // Use the View Transitions API (if the browser supports it)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Star, Search, Copy, Trash2, Edit2 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -22,35 +22,33 @@ export function FavoritesPage() {
   const dateLocale = locale === 'ar' ? ar : enUS;
   const [favorites, setFavorites] = useState<FavoritePrompt[]>([])
   const [searchQuery, setSearchQuery] = useState('')
-  const [filteredFavorites, setFilteredFavorites] = useState<FavoritePrompt[]>([])
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editTitle, setEditTitle] = useState('')
   const [editContent, setEditContent] = useState('')
 
-  const loadFavorites = async () => {
-    const allFavorites = await db.favoritePrompts.orderBy('updatedAt').reverse().toArray()
-    setFavorites(allFavorites)
-    setFilteredFavorites(allFavorites)
-  }
+  // Filter search results (derived during render)
+  const filteredFavorites = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+    if (!query) return favorites
 
-  useEffect(() => {
-    loadFavorites()
-  }, [])
-
-  // Filter search results
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setFilteredFavorites(favorites)
-      return
-    }
-
-    const query = searchQuery.toLowerCase()
-    const filtered = favorites.filter(fav =>
+    return favorites.filter(fav =>
       fav.title?.toLowerCase().includes(query) ||
       fav.content?.toLowerCase().includes(query)
     )
-    setFilteredFavorites(filtered)
   }, [searchQuery, favorites])
+
+  const loadFavorites = async () => {
+    const allFavorites = await db.favoritePrompts.orderBy('updatedAt').reverse().toArray()
+    setFavorites(allFavorites)
+  }
+
+  useEffect(() => {
+    const load = async () => {
+      const allFavorites = await db.favoritePrompts.orderBy('updatedAt').reverse().toArray()
+      setFavorites(allFavorites)
+    }
+    load()
+  }, [])
 
   const handleCopy = async (content: string) => {
     await navigator.clipboard.writeText(content)

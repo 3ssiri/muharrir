@@ -28,7 +28,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useAppStore } from '@/lib/store'
 import { isTauriApp, openExternal } from '@/lib/tauri-bridge'
-import { BUILTIN_PROVIDERS, findProviderByBaseUrl, getProviderApiFormat, isLocalProviderBaseUrl, selectPreferredLocalChatModel, type Provider } from '@/lib/providers'
+import { BUILTIN_PROVIDERS, findProviderByBaseUrl, getProviderApiFormat, isLocalProviderBaseUrl, parseModelsResponse, selectPreferredLocalChatModel, type Provider } from '@/lib/providers'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTranslations, useLocale } from 'next-intl'
@@ -186,8 +186,11 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
     const [templateToDelete, setTemplateToDelete] = useState<string>('')
 
-    // Initial sync
-    useEffect(() => {
+    // Initial sync: copy store config into local form state when the dialog
+    // opens (adjust-state-during-render pattern, no setState-in-effect)
+    const [wasOpen, setWasOpen] = useState(open)
+    if (open !== wasOpen) {
+        setWasOpen(open)
         if (open) {
             // Check if current systemPrompt is one of the default prompts
             // Check by exact match or by starting text to handle old versions
@@ -220,7 +223,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                 }
             }
         }
-    }, [open, apiKey, baseUrl, model, systemPrompt, correctionModel, autoRetry, maxRetries, DEFAULT_SYSTEM_PROMPT])
+    }
 
     const normalizeUrl = (url: string) => {
         let cleanUrl = url.trim()
@@ -277,11 +280,8 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
             }
 
             const data = await response.json()
-            if (data && Array.isArray(data.data)) {
-                const models = data.data
-                    .map((m: { id?: unknown }) => m.id)
-                    .filter((id: unknown): id is string => typeof id === 'string' && id.length > 0)
-                    .sort()
+            const models = parseModelsResponse(data)
+            if (models) {
                 setAvailableModels(models)
                 if (models.length > 0) {
                     const preferredModel = selectPreferredLocalChatModel(models)
@@ -293,7 +293,7 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
                 setCheckStatus('success')
                 setCheckMessage(t('settings.connectionSuccess', { count: models.length }))
             } else {
-                throw new Error('تنسيق الاستجابة لا يطابق معيار OpenAI (missing data array)')
+                throw new Error(t('settings.unexpectedResponseFormat'))
             }
         } catch (error: any) {
             setCheckStatus('error')

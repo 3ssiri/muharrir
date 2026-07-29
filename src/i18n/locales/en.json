@@ -378,6 +378,7 @@
     "connecting": "Connecting...",
     "connectionSuccess": "Connection successful! Retrieved {count} models.",
     "connectionFailed": "Connection failed",
+    "unexpectedResponseFormat": "Unexpected response format: the provider did not return an OpenAI-style model list (missing data array)",
     "testConnection": "Test Connection",
     "clickToTest": "Click to test connection and retrieve model list",
     "selectModel": "Select Model",

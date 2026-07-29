@@ -92,3 +92,21 @@ export function selectPreferredLocalChatModel(models: string[]): string {
     return a.localeCompare(b)
   })[0]
 }
+
+/**
+ * يستخرج معرّفات النماذج من استجابة `{baseUrl}/models` بمعيار OpenAI
+ * (`{ data: [{ id: "..." }] }`). يعيد `null` عندما لا يطابق التنسيق،
+ * ويعيد قائمة مرتّبة بلا تكرار عند النجاح. يتوافق أيضًا مع استجابتَي
+ * Anthropic `/v1/models` وOllama `/v1/models` لأنهما تحملان `data[].id`.
+ */
+export function parseModelsResponse(payload: unknown): string[] | null {
+  if (!payload || typeof payload !== 'object') return null
+  const data = (payload as { data?: unknown }).data
+  if (!Array.isArray(data)) return null
+  const ids = data
+    .map((entry) =>
+      entry && typeof entry === 'object' ? (entry as { id?: unknown }).id : undefined
+    )
+    .filter((id): id is string => typeof id === 'string' && id.length > 0)
+  return [...new Set(ids)].sort()
+}

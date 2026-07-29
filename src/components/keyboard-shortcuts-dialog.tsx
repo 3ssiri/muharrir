@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useSyncExternalStore } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useTranslations } from 'next-intl'
 import { Command, Search, Plus, MessageSquare, Keyboard } from '@/components/icons'
@@ -13,12 +13,12 @@ interface KeyboardShortcutsDialogProps {
 export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcutsDialogProps) {
   const t = useTranslations()
 
-  // Detect the operating system
-  const [isMac, setIsMac] = useState(false)
-
-  useEffect(() => {
-    setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0)
-  }, [])
+  // Detect the operating system (client-only value, hydration-safe)
+  const isMac = useSyncExternalStore(
+    () => () => {},
+    () => navigator.platform.toUpperCase().indexOf('MAC') >= 0,
+    () => false
+  )
 
   const modKey = isMac ? '⌘' : 'Ctrl'
 

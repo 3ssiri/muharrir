@@ -378,6 +378,7 @@
     "connecting": "جارٍ الاتصال...",
     "connectionSuccess": "تم الاتصال بنجاح! تم جلب {count} نموذجًا.",
     "connectionFailed": "فشل الاتصال",
+    "unexpectedResponseFormat": "تنسيق الاستجابة غير متوقع: لم يُرجع المزوّد قائمة نماذج بمعيار OpenAI (missing data array)",
     "testConnection": "اختبار الاتصال",
     "clickToTest": "انقر لاختبار الاتصال وجلب قائمة النماذج",
     "selectModel": "اختر النموذج",

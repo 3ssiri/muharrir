@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
@@ -27,7 +27,7 @@ export function CompareDialog({ favorites, trigger }: CompareDialogProps) {
   const a = withId.find((f) => String(f.id) === aId)
   const b = withId.find((f) => String(f.id) === bId)
 
-  const ops = useMemo(() => (a && b ? diffLines(a.content, b.content) : []), [a, b])
+  const ops = a && b ? diffLines(a.content, b.content) : []
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
