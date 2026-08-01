@@ -1,6 +1,6 @@
 # Codex for Open Source Application
 
-Last verified: 2026-07-29.
+Last verified: 2026-08-02.
 
 Official links:
 
@@ -29,14 +29,15 @@ status immediately before submitting.
 
 ## Verified Repository Snapshot
 
-Public snapshot verified on 2026-07-29:
+Public snapshot verified on 2026-08-02:
 
 - 1 star and 0 forks.
 - 9 open issues, including labeled `good first issue` and `help wanted` work.
-- 6 GitHub releases, including `v0.3.0-beta.1` under the Muharrir identity.
+- 7 GitHub releases, including `v0.3.0-beta.1` and `v0.3.0-beta.2` under the
+  Muharrir identity (source/demo prereleases; signed desktop installers not claimed).
 - 18 merged pull requests.
-- Grant-readiness default-branch CI is green:
-  https://github.com/3ssiri/muharrir/actions/runs/30404651528
+- Default-branch CI is green (latest checked run):
+  https://github.com/3ssiri/muharrir/actions/runs/30722771633
 
 These are audit facts, not traction claims. Refresh them immediately before
 pressing submit. The official program accepts

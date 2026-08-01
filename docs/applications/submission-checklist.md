@@ -12,7 +12,8 @@ another AI builder program.
 - [x] “Why does this repository qualify?” draft is within 500 characters.
 - [x] API-credit use draft is within 500 characters.
 - [x] Current public stars, forks, issues, releases, PRs, and CI status were
-  verified on 2026-07-29.
+  verified on 2026-08-02 (1 star, 0 forks, 9 open issues, 7 releases including
+  `v0.3.0-beta.2`, 18 merged PRs; CI green on master).
 - [x] Email associated with the applicant's ChatGPT account is ready.
 - [x] OpenAI Organization ID is ready.
 - [ ] Program terms have been reviewed by the applicant.
@@ -37,10 +38,11 @@ another AI builder program.
 - [x] `SECURITY.md` exists and does not overpromise.
 - [x] Roadmap is current.
 - [x] Demo video is recorded and uploaded.
-- [x] Stable release or beta tag exists.
-- [x] Grant-readiness CI is green on the public default branch as of
-  2026-07-29: https://github.com/3ssiri/muharrir/actions/runs/30404651528
-- [x] Signed desktop release is explicitly not claimed.
+- [x] Stable release or beta tag exists (`v0.3.0-beta.2` latest prerelease).
+- [x] Default-branch CI is green as of 2026-08-02:
+  https://github.com/3ssiri/muharrir/actions/runs/30722771633
+- [x] Signed desktop release is explicitly not claimed until Build Desktop
+  produces verified `.sig` artifacts (signing secrets re-uploaded 2026-08-02).
 
 ## Product Proof
 

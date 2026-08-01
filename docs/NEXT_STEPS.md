@@ -33,10 +33,16 @@ submission attestations and a **signed** desktop release — see
   CI run were verified without authentication on 2026-07-29.
 - Grant-readiness CI is green:
   https://github.com/3ssiri/muharrir/actions/runs/30404651528
-- Desktop updater signing is not ready yet. The failed `Build Desktop` run for `v0.3.0-beta.1` built installers, then failed while decoding `TAURI_SIGNING_PRIVATE_KEY` because the secret had an invalid hidden/BOM prefix.
+- Signing secrets were re-uploaded from the local validated key
+  (`%USERPROFILE%\.tauri\muharrir.key`, preflight passed, matches
+  `tauri.conf.json` pubkey) on 2026-08-02. Password secret set empty — if the
+  key was generated with a passphrase, update
+  `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` before relying on the run.
+- Manual `Build Desktop` dispatch to verify signing:
+  https://github.com/3ssiri/muharrir/actions/runs/30723375654
 - Post-`v0.3.0-beta.1` product work is tagged as `v0.3.0-beta.2` (see
   [releases/v0.3.0-beta.2.md](releases/v0.3.0-beta.2.md)). Remaining gates:
-  grant form submission (applicant) and signed desktop secrets/artifacts.
+  applicant submits Codex OSS form; wait for signed desktop artifacts green.
 
 ## Before Grant Submission
 
