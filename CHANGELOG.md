@@ -4,14 +4,30 @@
 
 ## غير مُصدَر (Unreleased)
 
-- Align public-facing app and desktop metadata on the Muharrir name and `0.3.0-beta.1`.
-- Add root governance/privacy entry points for public OSS review.
-- Clarify grant checklists, repository visibility, and deferred signed desktop release status.
-- Add a desktop release workflow preflight for malformed Tauri signing secrets.
-- اعتماد قواعد React Compiler الأربع في eslint-config-next 16 وإصلاح كل المخالفات (أعلام ترطيب آمنة عبر `useSyncExternalStore`، ترشيح بحث مشتق أثناء التصيير، إعادة تعيين الحالة أثناء التصيير، وعدم إنشاء مكوّنات داخل التصيير).
-- استخراج `parseModelsResponse` مشتركًا مع نماذج استجابات ثابتة (fixtures) للمزوّدين وتغطية وحدة، ودليل موسّع لاستكشاف CORS في المتصفح في `docs/providers.md`.
-- توسيع تغطية إمكانية الوصول: تسميات `aria-label` لكل الأزرار الأيقونية، تشغيل عناصر قائمة المحادثات بلوحة المفاتيح، ومواصفة Playwright جديدة `tests/accessibility.spec.js`.
-- دليل إصدار سطح المكتب الموقَّع [docs/RELEASING.md](docs/RELEASING.md) وفحص مسبق مستقل لسرّ التوقيع `scripts/tests/validate-signing-secret.js` مربوط بسير عمل البناء قبل بدء المصفوفة.
+_(فارغ — انظر `0.3.0-beta.2` أدناه.)_
+
+## 0.3.0-beta.2 — 2026-08-02
+
+ملاحظات الإصدار: [docs/releases/v0.3.0-beta.2.md](docs/releases/v0.3.0-beta.2.md).
+
+### المزوّدون
+- دعم أصلي لواجهة Anthropic Claude Messages (أدوات + بثّ) للمزوّد المدمج.
+- استخراج `parseModelsResponse` مشتركًا مع نماذج استجابات ثابتة (fixtures) وتغطية وحدة.
+- دليل موسّع لاستكشاف CORS في المتصفح في `docs/providers.md`.
+
+### العربية والقوالب
+- قالب بنية موجّه عربي في الـ system prompt الافتراضي.
+- الوضع التجريبي موطَّن بالكامل (عيّنة عربية عند لغة الواجهة `ar`).
+- حزم شخصيات في معرض القوالب: مطوّرون، معلّمون، باحثون، صنّاع محتوى.
+
+### الجودة وإمكانية الوصول
+- اعتماد قواعد React Compiler الأربع في eslint-config-next 16 وإصلاح المخالفات (`useSyncExternalStore`، ترشيح مشتق أثناء التصيير، إعادة تعيين أثناء التصيير، لا مكوّنات داخل التصيير).
+- تسميات `aria-label` للأزرار الأيقونية، تشغيل قائمة المحادثات بلوحة المفاتيح، ومواصفة `tests/accessibility.spec.js`.
+
+### إصدار سطح المكتب (تحضير — بلا مثبّتات موقَّعة بعد)
+- دليل [docs/RELEASING.md](docs/RELEASING.md).
+- فحص مسبق لسرّ التوقيع `scripts/tests/validate-signing-secret.js` مربوط بسير عمل البناء.
+- محاذاة هوية Muharrir وبوابات الحوكمة/الخصوصية لحالة OSS العامة (من مسار ما بعد beta.1).
 
 ## 0.3.0-beta.1 — 2026-07-08
 

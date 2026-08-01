@@ -18,6 +18,9 @@ submission attestations and a **signed** desktop release — see
 - Local Ollama discovery and completion were smoke-tested on 2026-07-29 with
   `qwen2.5:3b`; broader local-model tool-calling quality remains model-specific.
 - `v0.3.0-beta.1` exists as a prerelease with demo media assets.
+- `v0.3.0-beta.2` tags the post-beta.1 product work on `master` (Claude adapter,
+  Arabic templates, persona packs, React Compiler rules, a11y, release runbook).
+  Source/demo only — **not** signed desktop installers.
 - `3ssiri/muharrir` is public; the legacy fork remains private and is not part
   of the grant submission.
 - The app is MIT licensed and the README/package/Tauri metadata use the Muharrir identity.
@@ -31,7 +34,9 @@ submission attestations and a **signed** desktop release — see
 - Grant-readiness CI is green:
   https://github.com/3ssiri/muharrir/actions/runs/30404651528
 - Desktop updater signing is not ready yet. The failed `Build Desktop` run for `v0.3.0-beta.1` built installers, then failed while decoding `TAURI_SIGNING_PRIVATE_KEY` because the secret had an invalid hidden/BOM prefix.
-- Post-`v0.3.0-beta.1` work on `master` (not yet tagged): native Claude adapter, Arabic prompt templates, persona packs, React Compiler lint rules, provider `/models` fixtures, a11y Playwright coverage, and the desktop release runbook/signing preflight.
+- Post-`v0.3.0-beta.1` product work is tagged as `v0.3.0-beta.2` (see
+  [releases/v0.3.0-beta.2.md](releases/v0.3.0-beta.2.md)). Remaining gates:
+  grant form submission (applicant) and signed desktop secrets/artifacts.
 
 ## Before Grant Submission
 

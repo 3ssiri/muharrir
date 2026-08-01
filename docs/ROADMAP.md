@@ -25,9 +25,9 @@ on contributor feedback and real usage.
 
 - Welcome public beta users and turn feedback into reproducible issues.
 - Publish contributor-friendly issues, including small documentation and test tasks.
-- Refresh the application demo so every frame uses the Muharrir name.
 - Smoke-test native Claude and one OpenAI-compatible provider with real keys.
 - Keep dependencies current and triage remaining transitive security advisories.
+- After `v0.3.0-beta.2`: fix Tauri signing secrets and cut a signed stable release.
 
 ## Next
 
