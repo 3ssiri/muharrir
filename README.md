@@ -7,7 +7,9 @@
 
   Turn vague ideas, documents, and requirements into structured, reusable AI prompts through guided multi-step refinement.
 
-  **محرر مساحة عمل محلية أولا بالعربية والإنجليزية لتحويل الأفكار والمستندات والمتطلبات الغامضة إلى موجهات ذكاء اصطناعي منظمة وقابلة لإعادة الاستخدام.**
+  <p dir="rtl" lang="ar" align="right">
+    <strong>محرّر: مساحة عمل محلية أولًا بالعربية والإنجليزية لتحويل الأفكار والمستندات والمتطلبات الغامضة إلى موجّهات ذكاء اصطناعي منظّمة وقابلة لإعادة الاستخدام.</strong>
+  </p>
 </div>
 
 ---
@@ -76,8 +78,11 @@ You can try the first-use flow without a real API key:
 3. Send a rough idea, for example:
 
 ```text
-حوّل فكرة دورة قصيرة عن أساسيات الذكاء الاصطناعي إلى موجه منظم
+# Arabic sample (read right-to-left)
+حوّل فكرة دورة قصيرة عن أساسيات الذكاء الاصطناعي إلى موجّه منظّم
 ```
+
+<p dir="rtl" lang="ar" align="right">نص المثال أعلاه عربي؛ في الطرفية الضعيفة افتح الملف على GitHub أو في محرّر يدعم ثنائي الاتجاه.</p>
 
 Demo mode is simulated locally. It does not call OpenAI, DeepSeek, or any other provider.
 
