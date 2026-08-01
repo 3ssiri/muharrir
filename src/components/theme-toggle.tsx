@@ -2,11 +2,13 @@
 
 import { Moon, Sun } from '@/components/icons'
 import { useTheme } from 'next-themes'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { useSyncExternalStore } from 'react'
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
+  const t = useTranslations()
   // Hydration-safe "mounted" flag without setState-in-effect
   const mounted = useSyncExternalStore(
     () => () => {},
@@ -58,7 +60,7 @@ export function ThemeToggle() {
   }
 
   if (!mounted) {
-    return <Button variant="ghost" size="icon" className="h-9 w-9" disabled />
+    return <Button variant="ghost" size="icon" className="h-9 w-9" disabled aria-label={t('a11y.toggleTheme')} />
   }
 
   return (
@@ -67,6 +69,8 @@ export function ThemeToggle() {
       size="icon"
       className="h-9 w-9 relative overflow-hidden"
       onClick={handleThemeChange}
+      aria-label={t('a11y.toggleTheme')}
+      title={t('a11y.toggleTheme')}
     >
       <Sun className={`h-4 w-4 absolute transition-all [transition-duration:800ms] ease-in-out ${
         theme === 'dark'

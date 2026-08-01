@@ -203,6 +203,7 @@ export function FileUpload({
                   size="icon"
                   className="h-7 w-7 shrink-0"
                   onClick={() => onFileRemove(index)}
+                  aria-label={t('a11y.removeFile')}
                 >
                   <X className="w-3 h-3" />
                 </Button>
@@ -220,6 +221,7 @@ export function FileUpload({
             className="h-10 w-10 shrink-0"
             onClick={() => fileInputRef.current?.click()}
             title={t('fileUploadComponent.uploadFile')}
+            aria-label={t('fileUploadComponent.uploadFile')}
           >
             <Upload className="w-4 h-4" />
           </Button>

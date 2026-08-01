@@ -25,6 +25,7 @@ This file tracks the remaining release-gate work for Muharrir after the OSS/gran
 - Grant-readiness CI is green:
   https://github.com/3ssiri/muharrir/actions/runs/30404651528
 - Desktop updater signing is not ready yet. The failed `Build Desktop` run for `v0.3.0-beta.1` built installers, then failed while decoding `TAURI_SIGNING_PRIVATE_KEY` because the secret had an invalid hidden/BOM prefix.
+- Post-`v0.3.0-beta.1` work on `master` (not yet tagged): native Claude adapter, Arabic prompt templates, persona packs, React Compiler lint rules, provider `/models` fixtures, a11y Playwright coverage, and the desktop release runbook/signing preflight.
 
 ## Before Grant Submission
 
@@ -47,7 +48,9 @@ startup applications, not for Codex for Open Source.
 
 ## Signed Desktop Release
 
-Signed desktop installers are a separate gate from the source/demo beta.
+Signed desktop installers are a separate gate from the source/demo beta. The full
+runbook (secrets, key regeneration caveats, tag push, artifact verification, smoke
+tests) lives in [RELEASING.md](RELEASING.md).
 
 1. Regenerate or re-copy the Tauri signing key as plain text.
 2. Update GitHub Actions secrets:

@@ -223,6 +223,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                                         variant="secondary"
                                         className="h-8 w-8 opacity-80 hover:opacity-100"
                                         onClick={() => setIsFullscreen(true)}
+                                        aria-label={t('a11y.fullscreen')}
                                     >
                                         <Maximize2 className="w-4 h-4" />
                                     </Button>
@@ -305,6 +306,7 @@ export function PromptProposalCard({ toolInvocation, addToolResult }: PromptProp
                             size="icon"
                             variant="ghost"
                             onClick={() => setIsFullscreen(false)}
+                            aria-label={t('common.close')}
                         >
                             <X className="w-5 h-5" />
                         </Button>

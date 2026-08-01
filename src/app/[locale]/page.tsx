@@ -961,6 +961,7 @@ export default function Home() {
                       onClick={handleCheckForUpdate}
                       disabled={isCheckingForUpdate}
                       className="text-muted-foreground hover:text-primary"
+                      aria-label={t('updater.check')}
                     >
                       <RefreshCw className={`w-5 h-5 ${isCheckingForUpdate ? 'animate-spin' : ''}`} />
                     </Button>
@@ -977,7 +978,7 @@ export default function Home() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" onClick={handleNewChat} className="text-muted-foreground hover:text-destructive">
+                  <Button variant="ghost" size="icon" onClick={handleNewChat} className="text-muted-foreground hover:text-destructive" aria-label={t('header.clearChat')}>
                     <Trash2 className="w-5 h-5" />
                   </Button>
                 </TooltipTrigger>
@@ -1163,6 +1164,7 @@ export default function Home() {
                       size="icon"
                       className="h-7 w-7 shrink-0"
                       onClick={() => handleFileRemove(index)}
+                      aria-label={t('a11y.removeFile')}
                     >
                       <X className="w-3 h-3" />
                     </Button>

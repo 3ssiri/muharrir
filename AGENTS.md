@@ -34,7 +34,7 @@ npm run test:ui                                     # واجهة Playwright ال
 ```
 ⚠️ `webServer` مفعّل في [playwright.config.js](playwright.config.js) — يبدأ Playwright خادم dev تلقائيًّا على المنفذ المخصص `:9173` (منفذ غير شائع لتجنّب التعارض مع تطبيقات محلية أخرى تحتجز 3000/3001؛ قابل للتغيير عبر `PLAYWRIGHT_PORT`) ويعيد استعماله محليًّا. لا حاجة لتشغيل `npm run dev` يدويًّا قبل اختبارات Playwright. لتوجيه الاختبارات إلى خادم قائم، اضبط `PLAYWRIGHT_BASE_URL` (مثلًا `http://localhost:3002`) وعندئذٍ يُلغى بدء الخادم التلقائي. خادم الفحص يُسخَّن على `/ar/` بدل الجذر لتفادي سباق الترجمة الباردة. اختبارات Vitest (في [src/lib/__tests__/](src/lib/__tests__/)، مضبوطة في [vitest.config.ts](vitest.config.ts) ببيئة `node`) لا تحتاج خادمًا.
 
-**الإصدار:** ادفع تاجًا `v*` (مثل `v1.0.0`) لتشغيل [build-desktop.yml](.github/workflows/build-desktop.yml) الذي يبني للأنظمة الثلاثة (Windows MSI/EXE، macOS universal، Linux AppImage/deb/rpm). يتطلب أسرار التوقيع `TAURI_SIGNING_PRIVATE_KEY` و`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`، ويتخطّى التاجات التي تحتوي `-` (البيتا/الـ prerelease) إلا عند التشغيل اليدوي.
+**الإصدار:** ادفع تاجًا `v*` (مثل `v1.0.0`) لتشغيل [build-desktop.yml](.github/workflows/build-desktop.yml) الذي يبني للأنظمة الثلاثة (Windows MSI/EXE، macOS universal، Linux AppImage/deb/rpm). يتطلب أسرار التوقيع `TAURI_SIGNING_PRIVATE_KEY` و`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`، ويتخطّى التاجات التي تحتوي `-` (البيتا/الـ prerelease) إلا عند التشغيل اليدوي. دليل الإصدار الكامل (الأسرار، التحقق من المخرجات، اختبار ما بعد النشر) في [docs/RELEASING.md](docs/RELEASING.md).
 
 ## البنية المعمارية (الصورة الكبيرة)
 

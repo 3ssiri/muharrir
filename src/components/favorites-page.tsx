@@ -140,13 +140,13 @@ export function FavoritesPage() {
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-semibold text-lg">{fav.title}</h3>
                     <div className="flex gap-1">
-                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => handleCopy(fav.content)}>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => handleCopy(fav.content)} aria-label={t('favorites.copy')}>
                         <Copy className="w-4 h-4" />
                       </Button>
-                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => handleEdit(fav)}>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => handleEdit(fav)} aria-label={t('common.edit')}>
                         <Edit2 className="w-4 h-4" />
                       </Button>
-                      <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => handleDelete(fav.id!)}>
+                      <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => handleDelete(fav.id!)} aria-label={t('favorites.unfavorite')}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>

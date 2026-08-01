@@ -8,6 +8,10 @@
 - Add root governance/privacy entry points for public OSS review.
 - Clarify grant checklists, repository visibility, and deferred signed desktop release status.
 - Add a desktop release workflow preflight for malformed Tauri signing secrets.
+- اعتماد قواعد React Compiler الأربع في eslint-config-next 16 وإصلاح كل المخالفات (أعلام ترطيب آمنة عبر `useSyncExternalStore`، ترشيح بحث مشتق أثناء التصيير، إعادة تعيين الحالة أثناء التصيير، وعدم إنشاء مكوّنات داخل التصيير).
+- استخراج `parseModelsResponse` مشتركًا مع نماذج استجابات ثابتة (fixtures) للمزوّدين وتغطية وحدة، ودليل موسّع لاستكشاف CORS في المتصفح في `docs/providers.md`.
+- توسيع تغطية إمكانية الوصول: تسميات `aria-label` لكل الأزرار الأيقونية، تشغيل عناصر قائمة المحادثات بلوحة المفاتيح، ومواصفة Playwright جديدة `tests/accessibility.spec.js`.
+- دليل إصدار سطح المكتب الموقَّع [docs/RELEASING.md](docs/RELEASING.md) وفحص مسبق مستقل لسرّ التوقيع `scripts/tests/validate-signing-secret.js` مربوط بسير عمل البناء قبل بدء المصفوفة.
 
 ## 0.3.0-beta.1 — 2026-07-08
 

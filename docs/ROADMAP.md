@@ -14,6 +14,12 @@ on contributor feedback and real usage.
 - Browser-side PDF/DOCX parsing and local IndexedDB history.
 - Shared Next.js/Tauri web and desktop codebase with OS Keychain integration.
 - Lint, typecheck, unit, Playwright, static-export, and Rust CI checks.
+- Arabic-first prompt proposal templates, a localized demo mode, and persona
+  prompt packs for developers, educators, researchers, and creators.
+- Provider `/models` fixtures and a browser CORS troubleshooting guide.
+- All four eslint-config-next 16 React Compiler rules enabled, with violations fixed.
+- Expanded keyboard and screen-reader accessibility coverage, including a
+  Playwright accessibility spec.
 
 ## Now
 
@@ -25,12 +31,9 @@ on contributor feedback and real usage.
 
 ## Next
 
-- Improve Arabic-first prompt proposal templates and examples.
-- Add provider fixtures and clearer browser CORS troubleshooting.
-- Adopt the stricter React Compiler lint rules incrementally.
-- Expand accessibility coverage for keyboard and screen-reader workflows.
-- Prepare a signed multi-platform Tauri release and verify updater artifacts.
-- Add prompt packs for developers, educators, researchers, and creators.
+- Publish a signed multi-platform Tauri release (runbook and signing-secret
+  preflight are in place; awaiting valid CI signing secrets) and verify updater
+  artifacts on real devices.
 
 ## Later
 

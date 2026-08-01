@@ -465,9 +465,9 @@ export function SettingsDialog({ open: externalOpen, onOpenChange }: SettingsDia
         <>
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" data-settings-trigger>
+                <Button variant="ghost" size="icon" data-settings-trigger aria-label={t('header.settings')}>
                     <Settings className="h-[1.2rem] w-[1.2rem]" />
-                    <span className="sr-only">Settings</span>
+                    <span className="sr-only">{t('header.settings')}</span>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[700px] h-[80vh] flex flex-col p-0 gap-0 overflow-hidden">

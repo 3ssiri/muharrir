@@ -1,6 +1,6 @@
 # Arabic Prompt Templates & Prompt Packs Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Make prompt proposals read naturally in Arabic (system-prompt template + localized demo) and add four persona prompt packs to the preset gallery.
 
@@ -18,7 +18,7 @@
 - Modify: `src/lib/chat-client.ts` (`StreamChatParams.locale`, `getDemoContent`, `buildDemoResponse(locale)`, delete `DEMO_*` constants)
 - Test: `src/lib/__tests__/chat-client.test.ts`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `src/lib/__tests__/chat-client.test.ts`, extend the imports and the existing
 `describe('streamChat demo mode')` block:
@@ -79,13 +79,13 @@ import { validateToolCall } from '@/lib/format-validator'
   })
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `npx vitest run src/lib/__tests__/chat-client.test.ts`
 Expected: FAIL — `locale` is not part of `StreamChatParams` (TS error) and the
 Arabic demo content does not exist.
 
-- [ ] **Step 3: Add the `demo` namespace to `en.json` (verbatim move)**
+- [x] **Step 3: Add the `demo` namespace to `en.json` (verbatim move)**
 
 In `src/i18n/locales/en.json`, add a top-level `demo` key (keep alphabetical
 neighbors sensible; the existing top-level order is not strict). Content is the
@@ -150,7 +150,7 @@ current hardcoded demo moved verbatim:
 }
 ```
 
-- [ ] **Step 4: Add the `demo` namespace to `ar.json` (new Arabic sample)**
+- [x] **Step 4: Add the `demo` namespace to `ar.json` (new Arabic sample)**
 
 In `src/i18n/locales/ar.json`, add the same-shaped top-level `demo` key:
 
@@ -213,7 +213,7 @@ In `src/i18n/locales/ar.json`, add the same-shaped top-level `demo` key:
 }
 ```
 
-- [ ] **Step 5: Wire `locale` through `chat-client.ts`**
+- [x] **Step 5: Wire `locale` through `chat-client.ts`**
 
 In `src/lib/chat-client.ts`:
 
@@ -269,13 +269,13 @@ function buildDemoResponse(locale?: string): Response {
   }
 ```
 
-- [ ] **Step 6: Run tests to verify they pass**
+- [x] **Step 6: Run tests to verify they pass**
 
 Run: `npx vitest run src/lib/__tests__/chat-client.test.ts`
 Expected: PASS — all demo-mode tests, including the pre-existing English one
 (it calls `streamChat` without `locale` → English fallback).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/i18n/locales/en.json src/i18n/locales/ar.json src/lib/chat-client.ts src/lib/__tests__/chat-client.test.ts
@@ -290,7 +290,7 @@ git commit -m "feat: localize demo mode with full Arabic sample"
 - Modify: `src/lib/chat-client.ts` (`DEFAULT_SYSTEM_PROMPT`)
 - Test: `src/lib/__tests__/chat-client.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Add a new describe block at the end of `src/lib/__tests__/chat-client.test.ts`:
 
@@ -317,12 +317,12 @@ describe('default system prompt', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npx vitest run src/lib/__tests__/chat-client.test.ts -t "Arabic prompt structure"`
 Expected: FAIL — the current system prompt has no such section.
 
-- [ ] **Step 3: Append the Arabic section to `DEFAULT_SYSTEM_PROMPT`**
+- [x] **Step 3: Append the Arabic section to `DEFAULT_SYSTEM_PROMPT`**
 
 In `src/lib/chat-client.ts`, append the following to the end of the
 `DEFAULT_SYSTEM_PROMPT` template literal (after principle 5 "Bilingual care",
@@ -377,12 +377,12 @@ Skip السياق or خطوات العمل only when they add no value.
 parsing immediately. The `{{موضوع_المقال}}` placeholder contains no backticks
 and needs no escaping.)
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npx vitest run src/lib/__tests__/chat-client.test.ts`
 Expected: PASS (whole file green).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/chat-client.ts src/lib/__tests__/chat-client.test.ts
@@ -396,7 +396,7 @@ git commit -m "feat: add Arabic prompt structure template to default system prom
 **Files:**
 - Modify: `src/app/[locale]/page.tsx` (import, hook, both `streamChat` call sites at ~line 416 and ~line 802)
 
-- [ ] **Step 1: Import `useLocale` and read it in the component**
+- [x] **Step 1: Import `useLocale` and read it in the component**
 
 Change line 28 from:
 
@@ -416,7 +416,7 @@ Inside `Home()`, right after `const t = useTranslations();` (line 39), add:
   const locale = useLocale();
 ```
 
-- [ ] **Step 2: Pass `locale` at both call sites**
+- [x] **Step 2: Pass `locale` at both call sites**
 
 First call site (~line 416, inside `onFormSubmit`):
 
@@ -447,7 +447,7 @@ Second call site (~line 802, inside the retry/regenerate handler):
       })
 ```
 
-- [ ] **Step 3: Verify types and lint**
+- [x] **Step 3: Verify types and lint**
 
 Run: `npm run typecheck`
 Expected: no errors.
@@ -455,7 +455,7 @@ Expected: no errors.
 Run: `npm run lint`
 Expected: no errors (warnings pre-existing only, if any).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add "src/app/[locale]/page.tsx"
@@ -472,7 +472,7 @@ git commit -m "feat: pass UI locale to chat client for localized demo"
 - Modify: `src/i18n/locales/en.json` (`presets` namespace)
 - Test: `src/lib/__tests__/preset-modes.test.ts` (new)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `src/lib/__tests__/preset-modes.test.ts`:
 
@@ -505,12 +505,12 @@ describe('preset modes locale coverage', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npx vitest run src/lib/__tests__/preset-modes.test.ts`
 Expected: FAIL — the four persona modes do not exist yet.
 
-- [ ] **Step 3: Add the four modes to `PRESET_MODES`**
+- [x] **Step 3: Add the four modes to `PRESET_MODES`**
 
 In `src/lib/preset-modes.ts`, append inside `PRESET_MODES` (after the
 `brainstorm` entry, before the closing brace):
@@ -523,7 +523,7 @@ In `src/lib/preset-modes.ts`, append inside `PRESET_MODES` (after the
   video_script: { id: 'video_script', icon: '🎬', decorators: { thinking_depth: 'none', tone: 'creative', output_format: 'markdown', evaluation: ['refine'] } },
 ```
 
-- [ ] **Step 4: Add Arabic locale entries**
+- [x] **Step 4: Add Arabic locale entries**
 
 In `src/i18n/locales/ar.json`, inside the `presets` object (after `brainstorm`),
 add:
@@ -551,7 +551,7 @@ add:
 }
 ```
 
-- [ ] **Step 5: Add English locale entries**
+- [x] **Step 5: Add English locale entries**
 
 In `src/i18n/locales/en.json`, inside the `presets` object (after `brainstorm`),
 add:
@@ -579,12 +579,12 @@ add:
 }
 ```
 
-- [ ] **Step 6: Run test to verify it passes**
+- [x] **Step 6: Run test to verify it passes**
 
 Run: `npx vitest run src/lib/__tests__/preset-modes.test.ts`
 Expected: PASS.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/lib/preset-modes.ts src/i18n/locales/ar.json src/i18n/locales/en.json src/lib/__tests__/preset-modes.test.ts
@@ -599,7 +599,7 @@ git commit -m "feat: add persona prompt packs to preset gallery"
 - Modify: `tests/ui-optimization.spec.js` (3 assertions)
 - Modify: `docs/releases/unreleased.md`
 
-- [ ] **Step 1: Update the three demo-title assertions**
+- [x] **Step 1: Update the three demo-title assertions**
 
 The spec runs on the Arabic UI, which now shows the Arabic demo sample. In
 `tests/ui-optimization.spec.js`, replace all three occurrences of:
@@ -616,13 +616,13 @@ await expect(page.getByText('مساعد تحويل المستندات إلى م�
 
 (Lines ~97, ~109, ~124. Keep each line's own options such as `{ timeout: 10000 }`.)
 
-- [ ] **Step 2: Run the Playwright spec**
+- [x] **Step 2: Run the Playwright spec**
 
 Run: `npx playwright test tests/ui-optimization.spec.js`
 Expected: PASS (Playwright auto-starts the dev server on port 9173 — no manual
 `npm run dev` needed).
 
-- [ ] **Step 3: Update the changelog**
+- [x] **Step 3: Update the changelog**
 
 In `docs/releases/unreleased.md`, under `## Added` append:
 
@@ -639,7 +639,7 @@ Under `## Changed` append:
 - Demo mode content moved from hardcoded strings into the `demo` i18n namespace; Playwright demo assertions now match the Arabic sample.
 ```
 
-- [ ] **Step 4: Run the full gate**
+- [x] **Step 4: Run the full gate**
 
 Run each and confirm green:
 
@@ -653,7 +653,7 @@ npm run build
 Expected: lint clean, typecheck clean, all unit tests pass, static export to
 `out/` succeeds.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add tests/ui-optimization.spec.js docs/releases/unreleased.md

@@ -155,6 +155,8 @@ Useful docs:
 - [Security policy](SECURITY.md)
 - [Code of conduct](CODE_OF_CONDUCT.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Next steps / release gates](docs/NEXT_STEPS.md)
+- [Desktop release runbook](docs/RELEASING.md)
 - [Provider and CORS guide](docs/providers.md)
 - [Testing guide](docs/test-guide.md)
 - [Changelog](CHANGELOG.md)

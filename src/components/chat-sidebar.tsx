@@ -208,6 +208,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                         onClick={toggleCollapse}
                         className="shrink-0"
                         data-sidebar-toggle
+                        aria-label={isCollapsed ? t('sidebar.expandSidebar') : t('sidebar.collapseSidebar')}
                         title={isCollapsed ? t('sidebar.expandSidebar') : t('sidebar.collapseSidebar')}
                     >
                         {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -264,10 +265,20 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                     {filteredSessions.map((session) => (
                         <div
                             key={session.id}
-                            className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-3 rounded-lg cursor-pointer transition-colors duration-150 border ${currentSessionId === session.id
+                            className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-3 rounded-lg cursor-pointer transition-colors duration-150 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${currentSessionId === session.id
                                 ? 'bg-accent border-primary/40'
                                 : 'hover:bg-muted border-transparent'
                                 } ${isCollapsed ? 'overflow-visible' : ''}`}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                                // Activate with Enter/Space only when the item itself is focused
+                                if (e.target !== e.currentTarget) return
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault()
+                                    e.currentTarget.click()
+                                }
+                            }}
                             onClick={() => {
                                 // Save the scroll position before clicking
                                 const viewport = document.querySelector('[data-radix-scroll-area-viewport]')
@@ -286,6 +297,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                                     <Button
                                         variant="ghost"
                                         size="icon"
+                                        aria-label={t('a11y.deleteSession')}
                                         className="absolute end-0 top-1/2 -translate-y-1/2 ltr:translate-x-full rtl:-translate-x-full opacity-0 group-hover:opacity-100 h-7 w-7 bg-destructive/90 hover:bg-destructive text-destructive-foreground transition-all shrink-0 rounded-full z-50 ms-1"
                                         onClick={(e) => handleDelete(e, session.id!)}
                                     >
@@ -305,6 +317,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
                                     <Button
                                         variant="ghost"
                                         size="icon"
+                                        aria-label={t('a11y.deleteSession')}
                                         className="opacity-0 group-hover:opacity-100 h-7 w-7 hover:bg-destructive/10 hover:text-destructive transition-all shrink-0 self-start mt-0.5"
                                         onClick={(e) => handleDelete(e, session.id!)}
                                     >
@@ -359,7 +372,7 @@ export function ChatSidebar({ currentSessionId, onSessionSelect, onNewChat }: Ch
             {/* Mobile Sidebar */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className="md:hidden absolute start-4 top-4 z-20">
+                    <Button variant="ghost" size="icon" aria-label={t('a11y.openMenu')} className="md:hidden absolute start-4 top-4 z-20">
                         <Menu className="w-5 h-5" />
                     </Button>
                 </SheetTrigger>

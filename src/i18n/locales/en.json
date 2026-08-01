@@ -7,7 +7,13 @@
     "upload": "Upload file",
     "send": "Send",
     "stop": "Stop generating",
-    "expandInput": "Expand input field (show full content)"
+    "expandInput": "Expand input field (show full content)",
+    "toggleTheme": "Toggle theme",
+    "switchLanguage": "Switch language",
+    "openMenu": "Open conversations menu",
+    "deleteSession": "Delete conversation",
+    "removeFile": "Remove file",
+    "fullscreen": "View fullscreen"
   },
   "compare": {
     "button": "Compare",
