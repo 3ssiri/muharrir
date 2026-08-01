@@ -2,6 +2,12 @@
 
 This file tracks the remaining release-gate work for Muharrir after the OSS/grant-readiness pass.
 
+Implementation plans under `docs/superpowers/plans/` that already landed on
+`master` are marked complete (providers list, local provider onboarding, OSS
+grant readiness, Arabic prompt templates). Active gates below are grant
+submission attestations and a **signed** desktop release — see
+[RELEASING.md](RELEASING.md).
+
 ## Current State
 
 - The local grant-readiness branch passes lint, typecheck, unit tests, Playwright,

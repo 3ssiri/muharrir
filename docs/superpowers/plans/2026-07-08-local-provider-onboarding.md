@@ -1,6 +1,6 @@
 # Local Provider Onboarding Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking. **Status: SHIPPED on master** (plan checkboxes closed after landing).
 
 **Goal:** Make Muharrir clearly detect and use local Ollama/LM Studio providers without an API key, while explaining fallback behavior when a local model does not call tools.
 

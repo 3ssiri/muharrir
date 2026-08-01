@@ -1,6 +1,6 @@
 # OSS Grant Readiness Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking. **Status: SHIPPED on master** (plan checkboxes closed after landing).
 
 **Goal:** Prepare Muharrir for a later public open-source release and grant application while keeping the repository private until the readiness gate passes.
 
@@ -46,7 +46,7 @@
 - Create: `docs/oss-grant-readiness/DECISIONS.md`
 - Modify: `docs/oss-grant-readiness/execution-checklist.md`
 
-- [ ] **Step 1: Add decision log**
+- [x] **Step 1: Add decision log**
 
 Create `docs/oss-grant-readiness/DECISIONS.md` with:
 
@@ -68,11 +68,11 @@ Muharrir remains private while OSS readiness work is completed. The repository s
 | 2026-07-08 | Document the Tauri API key fallback honestly. | Keychain is preferred, but the current fallback can use localStorage when Keychain is unavailable. | Accepted |
 ```
 
-- [ ] **Step 2: Mark phase 0 decisions**
+- [x] **Step 2: Mark phase 0 decisions**
 
 In `docs/oss-grant-readiness/execution-checklist.md`, mark the decided phase 0 items as complete and link to the decision log.
 
-- [ ] **Step 3: Verify docs**
+- [x] **Step 3: Verify docs**
 
 Run: `git diff -- docs/oss-grant-readiness/DECISIONS.md docs/oss-grant-readiness/execution-checklist.md`
 
@@ -85,11 +85,11 @@ Expected: the decision log exists and phase 0 reflects accepted decisions.
 - Modify: `package.json`
 - Modify: `package-lock.json`
 
-- [ ] **Step 1: Replace proprietary license with MIT**
+- [x] **Step 1: Replace proprietary license with MIT**
 
 Set `LICENSE` to the standard MIT license using copyright holder `Ali Assiri`.
 
-- [ ] **Step 2: Update package metadata**
+- [x] **Step 2: Update package metadata**
 
 Set `package.json` fields:
 
@@ -122,7 +122,7 @@ Set `package.json` fields:
 
 Keep existing scripts and dependencies.
 
-- [ ] **Step 3: Add typecheck script**
+- [x] **Step 3: Add typecheck script**
 
 Add:
 
@@ -130,13 +130,13 @@ Add:
 "typecheck": "tsc --noEmit"
 ```
 
-- [ ] **Step 4: Sync lockfile metadata**
+- [x] **Step 4: Sync lockfile metadata**
 
 Run: `npm install --package-lock-only`
 
 Expected: lockfile root package metadata matches `package.json` without changing installed dependencies.
 
-- [ ] **Step 5: Verify identity**
+- [x] **Step 5: Verify identity**
 
 Run: `node -e "const p=require('./package.json'); console.log(p.name, p.private, p.license, p.scripts.typecheck)"`
 
@@ -147,11 +147,11 @@ Expected output contains: `muharrir true MIT tsc --noEmit`.
 **Files:**
 - Modify: `.github/workflows/ci.yml`
 
-- [ ] **Step 1: Use reproducible install**
+- [x] **Step 1: Use reproducible install**
 
 Change web job dependency installation from `npm install` to `npm ci`.
 
-- [ ] **Step 2: Add checks before build**
+- [x] **Step 2: Add checks before build**
 
 Add steps in order:
 
@@ -166,7 +166,7 @@ Add steps in order:
   run: npm run test:unit
 ```
 
-- [ ] **Step 3: Verify workflow syntax**
+- [x] **Step 3: Verify workflow syntax**
 
 Run: `git diff -- .github/workflows/ci.yml`
 
@@ -178,19 +178,19 @@ Expected: web job runs `npm ci`, lint, typecheck, unit tests, then build.
 - Read: `package.json`
 - Read: `.github/workflows/ci.yml`
 
-- [ ] **Step 1: Run unit tests**
+- [x] **Step 1: Run unit tests**
 
 Run: `npm run test:unit`
 
 Expected: all Vitest tests pass.
 
-- [ ] **Step 2: Run typecheck**
+- [x] **Step 2: Run typecheck**
 
 Run: `npm run typecheck`
 
 Expected: TypeScript exits successfully.
 
-- [ ] **Step 3: Run lint**
+- [x] **Step 3: Run lint**
 
 Run: `npm run lint`
 
@@ -205,15 +205,15 @@ Expected: ESLint exits successfully.
 - Create: `SECURITY.md`
 - Create: `CODE_OF_CONDUCT.md`
 
-- [ ] **Step 1: Add contributor guide**
+- [x] **Step 1: Add contributor guide**
 
 Document setup with `npm ci`, `npm run dev`, `npm run test:unit`, `npm run lint`, `npm run typecheck`, and `npm run build`. Include rules for i18n keys, static export, Tauri guards, and provider additions.
 
-- [ ] **Step 2: Add security policy**
+- [x] **Step 2: Add security policy**
 
 Document that API keys and secrets must not be pasted into issues, and that vulnerability reports should be sent privately to the maintainer before public disclosure.
 
-- [ ] **Step 3: Add code of conduct**
+- [x] **Step 3: Add code of conduct**
 
 Use a concise contributor covenant style policy suitable for a small OSS project.
 
@@ -223,11 +223,11 @@ Use a concise contributor covenant style policy suitable for a small OSS project
 - Create: `docs/PRIVACY.md`
 - Create: `docs/ROADMAP.md`
 
-- [ ] **Step 1: Add privacy documentation**
+- [x] **Step 1: Add privacy documentation**
 
 Document local IndexedDB storage, browser localStorage behavior, Tauri Keychain behavior, current localStorage fallback, file parsing in the browser, and provider API boundaries.
 
-- [ ] **Step 2: Add roadmap**
+- [x] **Step 2: Add roadmap**
 
 Use Now, Next, Later sections with achievable items: license/docs/CI, demo mode, screenshots, provider docs, prompt packs, privacy center, PWA offline support.
 
@@ -239,11 +239,11 @@ Use Now, Next, Later sections with achievable items: license/docs/CI, demo mode,
 - Create: `.github/ISSUE_TEMPLATE/feature_request.yml`
 - Create: `.github/ISSUE_TEMPLATE/documentation.yml`
 
-- [ ] **Step 1: Add PR template**
+- [x] **Step 1: Add PR template**
 
 Include summary, verification commands, privacy/security checklist, i18n checklist, and static export/Tauri checklist.
 
-- [ ] **Step 2: Add issue templates**
+- [x] **Step 2: Add issue templates**
 
 Use GitHub issue forms for bugs, feature requests, and documentation improvements. Include warnings not to share API keys or private prompts.
 
@@ -254,19 +254,19 @@ Use GitHub issue forms for bugs, feature requests, and documentation improvement
 **Files:**
 - Modify: `README.md`
 
-- [ ] **Step 1: Reposition product**
+- [x] **Step 1: Reposition product**
 
 Use the headline: `Local-first Arabic/English prompt engineering workspace`.
 
-- [ ] **Step 2: Add quick start and demo mode**
+- [x] **Step 2: Add quick start and demo mode**
 
 Document `npm ci`, `npm run dev`, and using `demo` as the API key for a no-provider trial.
 
-- [ ] **Step 3: Add Web vs Desktop table**
+- [x] **Step 3: Add Web vs Desktop table**
 
 Explain API key storage, CORS expectations, and Tauri Keychain behavior.
 
-- [ ] **Step 4: Add privacy and contribution links**
+- [x] **Step 4: Add privacy and contribution links**
 
 Link `docs/PRIVACY.md`, `SECURITY.md`, `CONTRIBUTING.md`, and `docs/ROADMAP.md`.
 
@@ -276,15 +276,15 @@ Link `docs/PRIVACY.md`, `SECURITY.md`, `CONTRIBUTING.md`, and `docs/ROADMAP.md`.
 - Modify: `src/lib/chat-client.ts`
 - Test: `src/lib/__tests__/chat-client.test.ts`
 
-- [ ] **Step 1: Add failing test for structured demo stream**
+- [x] **Step 1: Add failing test for structured demo stream**
 
 Add a Vitest test that calls demo mode and expects streamed protocol chunks for at least one realistic assistant text section.
 
-- [ ] **Step 2: Implement stronger demo response**
+- [x] **Step 2: Implement stronger demo response**
 
 Replace the thin demo text with a realistic Arabic/English-friendly response that describes questions, enhancement options, and a final structured prompt sample.
 
-- [ ] **Step 3: Verify demo tests**
+- [x] **Step 3: Verify demo tests**
 
 Run: `npm run test:unit -- src/lib/__tests__/chat-client.test.ts`
 
@@ -297,7 +297,7 @@ Expected: chat-client tests pass.
 **Files:**
 - Read: all changed files
 
-- [ ] **Step 1: Run required checks**
+- [x] **Step 1: Run required checks**
 
 Run:
 
@@ -310,7 +310,7 @@ npm run build
 
 Expected: all commands pass without API keys.
 
-- [ ] **Step 2: Search for conflicting license language**
+- [x] **Step 2: Search for conflicting license language**
 
 Run:
 
@@ -320,7 +320,7 @@ rg -n "proprietary|confidential|all rights reserved" . --glob "!node_modules/**"
 
 Expected: no active project files claim proprietary/confidential licensing after MIT migration, except historical planning text that explicitly describes the old state.
 
-- [ ] **Step 3: Update readiness checklist**
+- [x] **Step 3: Update readiness checklist**
 
 Mark completed tasks in `docs/oss-grant-readiness/execution-checklist.md` and leave undecided public-release items unchecked.
 

@@ -1,6 +1,6 @@
 # Providers List + Manual Provider — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking. **Status: SHIPPED on master** (plan checkboxes closed after landing).
 
 **Goal:** استبدال قائمة النماذج القديمة بكتالوج 15 مزوّدًا متوافقًا مع OpenAI، مع منتقي مزوّد في الإعدادات وإمكانية إضافة مزوّد يدويًّا وحفظه.
 
@@ -31,12 +31,12 @@
 
 **Files:** (معدّلة سابقًا) `settings-dialog.tsx`, `tauri-bridge.ts`, `lib.rs`, `Cargo.toml`, `capabilities/default.json`, `package.json`, `package-lock.json`, `ar.json`, `en.json`.
 
-- [ ] **Step 1: تأكّد من الملفات المعدّلة**
+- [x] **Step 1: تأكّد من الملفات المعدّلة**
 
 Run: `git status --short`
 Expected: تظهر ملفات قسم «حول» المذكورة أعلاه كـ modified (M) دون غيرها.
 
-- [ ] **Step 2: التزِم**
+- [x] **Step 2: التزِم**
 
 ```bash
 git add -A
@@ -50,7 +50,7 @@ git commit -m "feat(about): تبويب «حول» (حقوق النشر + الب�
 **Files:**
 - Create: `src/lib/providers.ts`
 
-- [ ] **Step 1: أنشئ الملف بالمحتوى الكامل**
+- [x] **Step 1: أنشئ الملف بالمحتوى الكامل**
 
 ```ts
 // كتالوج المزوّدات المتوافقة مع OpenAI + أدوات البحث عنها.
@@ -100,12 +100,12 @@ export function findProviderByBaseUrl(
 }
 ```
 
-- [ ] **Step 2: تحقّق من التصريف**
+- [x] **Step 2: تحقّق من التصريف**
 
 Run: `npm run build`
 Expected: PASS (exit 0). `next build` يفحص أنواع كل ملفات `**/*.ts` بما فيها الملف الجديد.
 
-- [ ] **Step 3: التزِم**
+- [x] **Step 3: التزِم**
 
 ```bash
 git add src/lib/providers.ts
@@ -119,7 +119,7 @@ git commit -m "feat(providers): كتالوج 15 مزوّدًا متوافقًا 
 **Files:**
 - Modify: `src/lib/store.ts`
 
-- [ ] **Step 1: استورد نوع Provider**
+- [x] **Step 1: استورد نوع Provider**
 
 أضف بعد سطر الاستيراد الأول الموجود (`import { isTauriApp, ... } from './tauri-bridge'`):
 
@@ -127,7 +127,7 @@ git commit -m "feat(providers): كتالوج 15 مزوّدًا متوافقًا 
 import type { Provider } from './providers'
 ```
 
-- [ ] **Step 2: أضف الحقل إلى واجهة الإعدادات**
+- [x] **Step 2: أضف الحقل إلى واجهة الإعدادات**
 
 في `interface AppSettings { ... }`، أضف بعد `maxRetries: number`:
 
@@ -135,7 +135,7 @@ import type { Provider } from './providers'
   customProviders: Provider[] // مزوّدات أضافها المستخدم يدويًّا (محفوظة)
 ```
 
-- [ ] **Step 3: أضف الإجراءات إلى واجهة الحالة**
+- [x] **Step 3: أضف الإجراءات إلى واجهة الحالة**
 
 في `interface AppState extends AppSettings { ... }`، أضف قبل `resetSettings`:
 
@@ -144,7 +144,7 @@ import type { Provider } from './providers'
   removeCustomProvider: (id: string) => void
 ```
 
-- [ ] **Step 4: حدّث الافتراضيات**
+- [x] **Step 4: حدّث الافتراضيات**
 
 في `const defaultSettings: AppSettings = { ... }`:
 - غيّر `model: 'deepseek-v3.2-exp'` إلى `model: 'deepseek-chat'`
@@ -157,7 +157,7 @@ import type { Provider } from './providers'
 
 (أي يصبح كائن `defaultSettings` يحوي `customProviders: []` و`model: 'deepseek-chat'` و`availableModels: ['deepseek-chat', 'deepseek-reasoner']`، مع بقية الحقول كما هي.)
 
-- [ ] **Step 5: نفّذ الإجراءات داخل المتجر**
+- [x] **Step 5: نفّذ الإجراءات داخل المتجر**
 
 في جسم `create(...)`، أضف قبل `resetSettings: () => set(defaultSettings),`:
 
@@ -177,12 +177,12 @@ import type { Provider } from './providers'
 
 > ملاحظة: `customProviders` يُحفظ تلقائيًّا (الـ `partialize` الحالي يستثني `apiKey` فقط في Tauri؛ `customProviders` ضمن `rest`). إضافة الحقل آمنة على الحالة المحفوظة القديمة (الدمج السطحي يستخدم `[]`).
 
-- [ ] **Step 6: تحقّق**
+- [x] **Step 6: تحقّق**
 
 Run: `npm run build`
 Expected: PASS (exit 0).
 
-- [ ] **Step 7: التزِم**
+- [x] **Step 7: التزِم**
 
 ```bash
 git add src/lib/store.ts
@@ -197,7 +197,7 @@ git commit -m "feat(store): مزوّدات مخصّصة محفوظة + تحدي�
 - Modify: `src/i18n/locales/ar.json`
 - Modify: `src/i18n/locales/en.json`
 
-- [ ] **Step 1: أضف مفاتيح العربية**
+- [x] **Step 1: أضف مفاتيح العربية**
 
 في `src/i18n/locales/ar.json`، داخل كائن `"settings"`، استبدل السطر:
 
@@ -221,7 +221,7 @@ git commit -m "feat(store): مزوّدات مخصّصة محفوظة + تحدي�
   },
 ```
 
-- [ ] **Step 2: أضف مفاتيح الإنجليزية**
+- [x] **Step 2: أضف مفاتيح الإنجليزية**
 
 في `src/i18n/locales/en.json`، داخل كائن `"settings"`، استبدل السطر:
 
@@ -245,12 +245,12 @@ git commit -m "feat(store): مزوّدات مخصّصة محفوظة + تحدي�
   },
 ```
 
-- [ ] **Step 3: تحقّق (JSON صالح + بناء)**
+- [x] **Step 3: تحقّق (JSON صالح + بناء)**
 
 Run: `npm run build`
 Expected: PASS (exit 0). أي فاصلة ناقصة/زائدة في JSON تُفشل البناء.
 
-- [ ] **Step 4: التزِم**
+- [x] **Step 4: التزِم**
 
 ```bash
 git add src/i18n/locales/ar.json src/i18n/locales/en.json
@@ -264,7 +264,7 @@ git commit -m "i18n: مفاتيح منتقي المزوّد (ar/en)"
 **Files:**
 - Modify: `src/components/settings-dialog.tsx`
 
-- [ ] **Step 1: أضف استيراد الكتالوج**
+- [x] **Step 1: أضف استيراد الكتالوج**
 
 بعد السطر `import { openExternal } from '@/lib/tauri-bridge'`، أضف:
 
@@ -272,11 +272,11 @@ git commit -m "i18n: مفاتيح منتقي المزوّد (ar/en)"
 import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/providers'
 ```
 
-- [ ] **Step 2: احذف الكود الميت (TEST_CONFIG)**
+- [x] **Step 2: احذف الكود الميت (TEST_CONFIG)**
 
 احذف ثابت `TEST_CONFIG` بالكامل (الكائن `const TEST_CONFIG = { ... }` بقيمة `baseUrl` لبروكسي طرف ثالث قديم).
 
-- [ ] **Step 3: وسّع تفكيك المتجر**
+- [x] **Step 3: وسّع تفكيك المتجر**
 
 استبدل سطر `useAppStore()` الحالي:
 
@@ -290,7 +290,7 @@ import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/p
     const { apiKey, baseUrl, model, systemPrompt, availableModels, correctionModel, autoRetry, maxRetries, customProviders, addCustomProvider, removeCustomProvider, setApiKey, setBaseUrl, setModel, setSystemPrompt, setAvailableModels, setCorrectionModel, setAutoRetry, setMaxRetries } = useAppStore()
 ```
 
-- [ ] **Step 4: أضف حالة نموذج الإضافة اليدوية**
+- [x] **Step 4: أضف حالة نموذج الإضافة اليدوية**
 
 بعد سطر `const [localConfig, setLocalConfig] = useState({ ... })`، أضف:
 
@@ -302,11 +302,11 @@ import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/p
     const selectedProviderId = selectedProvider?.id ?? 'custom'
 ```
 
-- [ ] **Step 5: احذف الدالة الميتة `applyPreset`**
+- [x] **Step 5: احذف الدالة الميتة `applyPreset`**
 
 احذف دالة `applyPreset` بالكامل (`const applyPreset = (type: 'deepseek' | 'openai' | 'demo') => { ... }`) — غير مستخدَمة.
 
-- [ ] **Step 6: احذف `loadTestConfig` وأضِف معالِجات المزوّد**
+- [x] **Step 6: احذف `loadTestConfig` وأضِف معالِجات المزوّد**
 
 استبدل دالة `loadTestConfig` الحالية:
 
@@ -349,7 +349,7 @@ import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/p
     }
 ```
 
-- [ ] **Step 7: استبدل زرّ «testPreset» بمنتقي المزوّد + نموذج الإضافة**
+- [x] **Step 7: استبدل زرّ «testPreset» بمنتقي المزوّد + نموذج الإضافة**
 
 استبدل كتلة الزرّ الحالية في تبويب الاتصال:
 
@@ -410,7 +410,7 @@ import { BUILTIN_PROVIDERS, findProviderByBaseUrl, type Provider } from '@/lib/p
 
 > الحقول `Select`, `SelectTrigger`, `SelectContent`, `SelectItem`, `SelectValue`, `Input`, `Label`, `Button` مستورَدة فعلًا في الملف. مفتاح `settings.testPreset` لم يعد مستخدَمًا (اتركه في ملفات الترجمة دون حذف — غير ضارّ).
 
-- [ ] **Step 8: تحقّق (بناء + lint)**
+- [x] **Step 8: تحقّق (بناء + lint)**
 
 Run: `npm run build`
 Expected: PASS (exit 0).
@@ -418,7 +418,7 @@ Expected: PASS (exit 0).
 Run: `npm run lint`
 Expected: PASS (تحذيرات فقط، بلا أخطاء). لا أخطاء `no-unused-vars` (حُذف `TEST_CONFIG`/`applyPreset`/`loadTestConfig`).
 
-- [ ] **Step 9: التزِم**
+- [x] **Step 9: التزِم**
 
 ```bash
 git add src/components/settings-dialog.tsx
@@ -431,7 +431,7 @@ git commit -m "feat(settings): منتقي المزوّد + إضافة مزوّد
 
 **Files:** لا تعديلات جديدة (تحقّق فقط).
 
-- [ ] **Step 1: بناء + lint نهائي**
+- [x] **Step 1: بناء + lint نهائي**
 
 Run: `npm run build`
 Expected: PASS (exit 0)، توليد `7/7` صفحات.
@@ -439,18 +439,18 @@ Expected: PASS (exit 0)، توليد `7/7` صفحات.
 Run: `npm run lint`
 Expected: PASS (تحذيرات فقط).
 
-- [ ] **Step 2: قائمة فحص يدوية (في `npm run dev`)**
+- [x] **Step 2: قائمة فحص يدوية (في `npm run dev`)**
 
 افتح الإعدادات → تبويب «الاتصال»:
-- [ ] قائمة «المزوّد» تعرض 15 مزوّدًا مدمجًا.
-- [ ] اختيار «OpenAI» يملأ `baseUrl = https://api.openai.com/v1` ويغيّر قائمة النماذج إلى نماذج OpenAI.
-- [ ] «➕ إضافة مزوّد يدويًّا» يفتح النموذج؛ إدخال اسم + Base URL ثم «حفظ المزوّد» يضيفه ويختاره.
-- [ ] إعادة فتح النافذة (أو التطبيق): المزوّد المخصّص ما زال في القائمة (محفوظ).
-- [ ] اختيار المزوّد المخصّص يُظهر «حذف المزوّد»؛ الحذف يزيله من القائمة.
-- [ ] كتابة Base URL لا يطابق أيًّا منها يعرض «مخصّص» في المنتقي.
-- [ ] الحالة الافتراضية (أول تشغيل نظيف) تعرض «DeepSeek» مختارًا.
+- [x] قائمة «المزوّد» تعرض 15 مزوّدًا مدمجًا.
+- [x] اختيار «OpenAI» يملأ `baseUrl = https://api.openai.com/v1` ويغيّر قائمة النماذج إلى نماذج OpenAI.
+- [x] «➕ إضافة مزوّد يدويًّا» يفتح النموذج؛ إدخال اسم + Base URL ثم «حفظ المزوّد» يضيفه ويختاره.
+- [x] إعادة فتح النافذة (أو التطبيق): المزوّد المخصّص ما زال في القائمة (محفوظ).
+- [x] اختيار المزوّد المخصّص يُظهر «حذف المزوّد»؛ الحذف يزيله من القائمة.
+- [x] كتابة Base URL لا يطابق أيًّا منها يعرض «مخصّص» في المنتقي.
+- [x] الحالة الافتراضية (أول تشغيل نظيف) تعرض «DeepSeek» مختارًا.
 
-- [ ] **Step 3: تحديث المهام**
+- [x] **Step 3: تحديث المهام**
 
 علّم مهمة الخطة (#6) كمكتملة بعد نجاح القائمة اليدوية.
 
