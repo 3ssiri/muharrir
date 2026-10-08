@@ -1,6 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { Rubik } from "next/font/google";
+import localFont from "next/font/local";
 import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/components/theme-provider';
 import { IconProvider } from '@/components/icon-provider';
@@ -10,10 +10,18 @@ import "../globals.css";
 
 // Rubik covers both Arabic and Latin, giving a single cohesive, modern typeface
 // across the whole bilingual UI. Used for body text and (heavier) headings alike.
-const rubik = Rubik({
-  subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+// Local files so production builds never fetch Google Fonts (next.js#99114).
+const rubik = localFont({
+  src: [
+    { path: "../../fonts/rubik/Rubik-Light.woff2", weight: "300", style: "normal" },
+    { path: "../../fonts/rubik/Rubik-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../../fonts/rubik/Rubik-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../../fonts/rubik/Rubik-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../../fonts/rubik/Rubik-Bold.woff2", weight: "700", style: "normal" },
+    { path: "../../fonts/rubik/Rubik-ExtraBold.woff2", weight: "800", style: "normal" },
+  ],
   variable: "--font-sans",
+  display: "swap",
 });
 
 // PWA: make the app installable (manifest + theme color).
