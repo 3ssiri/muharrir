@@ -93,16 +93,16 @@ Release recommendation: before a broad public release, document setup guidance f
 
 ### Tracked: Upstream Transitive Dependency Advisories
 
-The readiness pass upgraded Next.js from 16.2.10 to 16.2.11, removing the direct
-framework advisories reported for versions below 16.2.11, and aligned ESLint
-with the Next.js 16 configuration.
+A later non-breaking `npm audit fix` (with `--legacy-peer-deps` to work around
+an npm 10 arborist crash on Vitest peer resolution) moved Next.js from 16.2.11
+to 16.4.0 within `^16.2.11`, which also pulled Sharp `0.35.5` and
+`source-map-js` `1.2.2`. That closes the Next.js `next/og` RCE
+(`GHSA-vcvr-r3jv-pc5j`) and the previous PostCSS/Sharp transitive findings.
 
-`npm audit --omit=dev` still reports advisories through Next.js-pinned
-transitive versions of PostCSS and optional Sharp. Muharrir uses static export,
-trusted project CSS, `images.unoptimized`, and no server actions or runtime
-image optimizer, which limits the current exposure but does not erase the
-upstream findings. Monitor Next.js releases and update when patched transitive
-versions are available; do not force incompatible overrides.
+`npm audit --omit=dev --audit-level=high` is clean after classifying Puppeteer
+as a devDependency (demo recording only; remaining Puppeteer/extract-zip highs
+require a breaking v25 bump). Leftover production moderates are Mammoth's
+`sprintf-js` chain (a breaking downgrade). Dev-only leftovers need Tailwind 4.
 
 ## Release Gate Recommendation
 
