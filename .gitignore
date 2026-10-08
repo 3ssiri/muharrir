@@ -97,4 +97,5 @@ WORKFLOW_SUMMARY.md
 docs/applications/private-submission-data.md
 *.patch
 *.txt
+!**/OFL.txt
 nul
