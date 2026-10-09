@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Search, MessageSquare, Star, X } from '@/components/icons'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -25,8 +25,8 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
   const dateLocale = locale === 'ar' ? ar : enUS;
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState<'chats' | 'favorites'>('chats')
-  const [chatResults, setChatResults] = useState<ChatSession[]>([])
-  const [favoriteResults, setFavoriteResults] = useState<FavoritePrompt[]>([])
+  const [allSessions, setAllSessions] = useState<ChatSession[]>([])
+  const [allFavorites, setAllFavorites] = useState<FavoritePrompt[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -40,51 +40,46 @@ export function SpotlightSearch({ open, onOpenChange, onSessionSelect, onNavigat
     }
   }
 
-  // Search within chats
+  // Load both tables once per dialog open, instead of re-reading the entire
+  // IndexedDB tables on every keystroke.
   useEffect(() => {
     if (!open) return
 
-    const searchChats = async () => {
-      const allSessions = await db.chatSessions.orderBy('updatedAt').reverse().toArray()
+    const loadData = async () => {
+      const [sessions, favorites] = await Promise.all([
+        db.chatSessions.orderBy('updatedAt').reverse().toArray(),
+        db.favoritePrompts.orderBy('updatedAt').reverse().toArray(),
+      ])
+      setAllSessions(sessions)
+      setAllFavorites(favorites)
+    }
 
-      if (!searchQuery.trim()) {
-        setChatResults(allSessions.slice(0, 10))
-        return
-      }
+    loadData()
+  }, [open])
 
-      const query = searchQuery.toLowerCase()
-      const filtered = allSessions.filter(session =>
+  const chatResults = useMemo(() => {
+    if (!searchQuery.trim()) return allSessions.slice(0, 10)
+
+    const query = searchQuery.toLowerCase()
+    return allSessions
+      .filter(session =>
         session.title?.toLowerCase().includes(query) ||
         session.previewText?.toLowerCase().includes(query)
       )
-      setChatResults(filtered.slice(0, 10))
-    }
+      .slice(0, 10)
+  }, [allSessions, searchQuery])
 
-    searchChats()
-  }, [searchQuery, open])
+  const favoriteResults = useMemo(() => {
+    if (!searchQuery.trim()) return allFavorites.slice(0, 10)
 
-  // Search within favorites
-  useEffect(() => {
-    if (!open) return
-
-    const searchFavorites = async () => {
-      const allFavorites = await db.favoritePrompts.orderBy('updatedAt').reverse().toArray()
-
-      if (!searchQuery.trim()) {
-        setFavoriteResults(allFavorites.slice(0, 10))
-        return
-      }
-
-      const query = searchQuery.toLowerCase()
-      const filtered = allFavorites.filter(fav =>
+    const query = searchQuery.toLowerCase()
+    return allFavorites
+      .filter(fav =>
         fav.title?.toLowerCase().includes(query) ||
         fav.content?.toLowerCase().includes(query)
       )
-      setFavoriteResults(filtered.slice(0, 10))
-    }
-
-    searchFavorites()
-  }, [searchQuery, open])
+      .slice(0, 10)
+  }, [allFavorites, searchQuery])
 
   // Focus the input when the dialog opens (query/index reset happens
   // during render via the wasOpen adjustment above)
